@@ -4,7 +4,7 @@ class DisplayRAMP(BasePage):
 
   graph_gpp_vs_emult = QtCore.pyqtSignal()
 
-  def __init__(self, graph_gpp_vs_emult_func, next_page_function, page_title, params_to_graph, gpp_or_reco):
+  def __init__(self, graph_gpp_vs_emult_func, next_page_function, page_title, params_to_graph, gpp_or_reco, optional_graph_name):
     BasePage.__init__(self, next_page_function, page_title)
 
     self.graph_gpp_vs_emult.connect(graph_gpp_vs_emult_func)
@@ -32,7 +32,7 @@ class DisplayRAMP(BasePage):
     switch_graph_layout.addWidget(prev_ramp_button)
     switch_graph_layout.addWidget(next_ramp_button)
 
-    choose_graph_gpp_vs_emult_label = QtWidgets.QLabel("Would you Like to graph GPP vs. Emult?")
+    choose_graph_gpp_vs_emult_label = QtWidgets.QLabel("Would you Like to graph " + optional_graph_name)
     self.choose_graph_gpp_vs_emult = QtWidgets.QComboBox()
     self.choose_graph_gpp_vs_emult.addItems(["Yes", "No"])
     next_page = QtWidgets.QPushButton("Next")
