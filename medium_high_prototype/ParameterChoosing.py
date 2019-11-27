@@ -7,10 +7,10 @@ class ParameterChoosing(BasePage):
 
     self.params = params
     self.param_checkboxes = []
-    
+
     for param in self.params:
       self.param_checkboxes.append(QtWidgets.QCheckBox(param))
-    
+
     self.select_parameters_label = QtWidgets.QLabel("Select Parameters To Optimize:")
     self.select_parameters_label.setStyleSheet("text-decoration: underline;")
 
@@ -18,14 +18,15 @@ class ParameterChoosing(BasePage):
     for i in range(len(self.param_checkboxes)):
       param_checkbox = self.param_checkboxes[i]
       num_checkboxes = len(self.param_checkboxes)
+      param_checkbox.setChecked(True)
       if i < num_checkboxes / 2:
         grid_layout.addWidget(param_checkbox, i, 0)
       else:
-        grid_layout.addWidget(param_checkbox, i - num_checkboxes / 2, 1) 
- 
+        grid_layout.addWidget(param_checkbox, i - num_checkboxes / 2, 1)
+
     self.optimize_button = QtWidgets.QPushButton("Optimize Parameters")
     self.optimize_button.clicked.connect(self.next_page)
-  
+
     main_layout = QtWidgets.QHBoxLayout()
     main_layout.addWidget(self.select_parameters_label)
     main_layout.addLayout(grid_layout)
@@ -52,4 +53,3 @@ class ParameterChoosing(BasePage):
       self.select_parameters_label.setStyleSheet("color: red; text-decoration: underline;")
     else:
       BasePage.next_page(self)
-      

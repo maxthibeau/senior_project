@@ -18,7 +18,7 @@ class ParameterDifference(BasePage):
       self.params.append(param)
       self.param_to_data[param] = [random.random(), random.random()]
 
-    self.gpp_or_reco = gpp_or_reco      
+    self.gpp_or_reco = gpp_or_reco
     assert gpp_or_reco in ("GPP", "RECO")
 
     self.figure = plt.figure()
@@ -71,13 +71,13 @@ class ParameterDifference(BasePage):
     data_to_plot = self.param_to_data[current_param]
     ax = self.figure.add_subplot(111)
     ax.clear()
-    ax.scatter((0, 1), data_to_plot)
+    ax.scatter(["Original","Updated Fit"], data_to_plot)
     ax.set_title(self.gpp_or_reco + " vs. " + current_param)
     ax.set_xlabel(current_param)
     ax.set_ylabel(self.gpp_or_reco)
     ax.set_ylim((-.1, 1.1))
     ax.plot((1, 0), (0, 0), color='orange', ls='dashed')
-    ax.plot((0, 1), (1, 1), color='orange', ls='dashed') 
+    ax.plot((0, 1), (1, 1), color='orange', ls='dashed')
     self.canvas.draw()
 
   def next_page(self):

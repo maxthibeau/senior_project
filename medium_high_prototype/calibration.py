@@ -20,7 +20,7 @@ class Controller:
 
   def show_config_file_selection(self):
     self.select_config_file = SelectConfigFile(self.show_pft_selection, "Select Configuration File")
-    self.select_config_file.show()        
+    self.select_config_file.show()
 
   def show_pft_selection(self):
     self.select_pft = SelectPFT(self.show_gpp_outlier_smoothing, "Select Plant Functional Type")
@@ -41,7 +41,7 @@ class Controller:
   def show_gpp_vs_emult(self):
     self.graph_gpp_vs_emult = DisplaySingleGraph(self.show_gpp_parameter_choosing, "GPP Vs. Emult")
     self.graph_gpp_vs_emult.show()
-  
+
   def show_gpp_parameter_choosing(self):
     self.gpp_parameter_choosing = ParameterChoosing(self.show_gpp_parameter_difference, "Choose GPP Optimization Parameters", ["LUEmax", "VPDlow", "VPDhigh", "SMRZlow", "SMRZhigh", "TMINlow", "TMINhigh", "FT"])
     self.gpp_parameter_choosing.show()
@@ -66,7 +66,7 @@ class Controller:
     self.plot_reco_ramps = DisplayRAMP(self.display_rh_over_c_vs_kmult, self.show_reco_parameter_choosing, "RECO Ramp Functions", ["TSOIL", "SMSF"], "RECO", "Rh/C Vs. Kmult")
     self.plot_reco_ramps.show()
 
-  def display_rh_over_c_vs_kmult(self): 
+  def display_rh_over_c_vs_kmult(self):
     self.display_rh_over_c_vs_kmult = DisplaySingleGraph(self.show_reco_parameter_choosing, "Rh/c vs. Kmult")
     self.display_rh_over_c_vs_kmult.show()
 
@@ -79,7 +79,7 @@ class Controller:
     self.reco_parameter_difference.show()
 
   def redisplay_reco_ramp_funcs(self):
-    self.replot_reco_ramps = DisplayRAMP(self.redisplay_rh_over_c_vs_kmult, self.plot_soc_estimation, "RECO Ramp Functions", ["TSOIL", "SMSF"], "RECO", "Rh/C Vs. Kmult")    
+    self.replot_reco_ramps = DisplayRAMP(self.redisplay_rh_over_c_vs_kmult, self.plot_soc_estimation, "RECO Ramp Functions", ["TSOIL", "SMSF"], "RECO", "Rh/C Vs. Kmult")
     self.replot_reco_ramps.show()
 
   def redisplay_rh_over_c_vs_kmult(self):
@@ -103,9 +103,9 @@ class Controller:
 def main(argv):
   app = QtWidgets.QApplication(sys.argv)
   controller = Controller()
-  # controller.show_opening_screen()
-  controller.enter_reco_hyperparameters()
-  sys.exit(app.exec_())   
+  controller.show_opening_screen()
+  # controller.enter_reco_hyperparameters()
+  sys.exit(app.exec_())
 
 if __name__ == '__main__':
   main(sys.argv)
