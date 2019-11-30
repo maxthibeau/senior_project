@@ -8,6 +8,8 @@ from DisplaySingleGraph import *
 from ParameterChoosing import *
 from ParameterDifference import *
 from EnterRecoHyperparams import *
+from NumericalSpinups import *
+from SimulationStatistics import *
 
 class Controller:
 
@@ -87,14 +89,16 @@ class Controller:
     self.redisplay_rh_over_c_vs_kmult.show()
 
   def plot_soc_estimation(self):
-    self.plot_soc_estimation = DisplaySingleGraph(self.next_thing, "Estimated_SOC vs. Calculated_SOC")
+    self.plot_soc_estimation = DisplaySingleGraph(self.perform_numerical_spinups, "Estimated_SOC vs. Calculated_SOC")
     self.plot_soc_estimation.show()
 
   def perform_numerical_spinups(self):
-    pass
+    self.numerical_spinups = NumericalSpinups(self.show_simulation_statistics,"Numerical Spin-Up Iterations")
+    self.numerical_spinups.show()
 
   def show_simulation_statistics(self):
-    pass
+    self.num_spins = SimulationStatistics(self.show_pft_selection,"Simulation Statistics",self.next_thing)
+    self.num_spins.show()
 
   def next_thing(self):
     print ("next thing?")
@@ -103,8 +107,9 @@ class Controller:
 def main(argv):
   app = QtWidgets.QApplication(sys.argv)
   controller = Controller()
-  controller.show_opening_screen()
-  # controller.enter_reco_hyperparameters()
+  # controller.show_opening_screen()
+  #controller.enter_reco_hyperparameters()
+  controller.plot_soc_estimation()
   sys.exit(app.exec_())
 
 if __name__ == '__main__':
