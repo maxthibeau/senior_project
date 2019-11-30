@@ -107,9 +107,9 @@ class Controller:
 def main(argv):
   app = QtWidgets.QApplication(sys.argv)
   controller = Controller()
-  # controller.show_opening_screen()
+  controller.show_opening_screen()
   #controller.enter_reco_hyperparameters()
-  controller.plot_soc_estimation()
+  #controller.plot_soc_estimation()
   sys.exit(app.exec_())
 
 if __name__ == '__main__':

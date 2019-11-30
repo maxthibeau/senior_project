@@ -9,11 +9,20 @@ class SelectConfigFile(BasePage):
     self.file_name = QtWidgets.QLabel("Select Configuration File")
     get_config_file_button = QtWidgets.QPushButton("Browse")
     get_config_file_button.clicked.connect(self.get_file)
- 
+
     # layout of config file grabbing
-    top_layout = QtWidgets.QHBoxLayout()    
+    top_layout = QtWidgets.QHBoxLayout()
     top_layout.addWidget(self.file_name)
     top_layout.addWidget(get_config_file_button)
+
+    # layout for output config file
+    self.output_name = QtWidgets.QLabel("Output Config File Name")
+    self.output_textbox = QtWidgets.QLineEdit(self)
+    self.output_textbox.setPlaceholderText("[PFT name][date].HDF5")
+    self.output_textbox.textChanged.connect(self.outputcheck)
+    output_layout = QtWidgets.QHBoxLayout()
+    output_layout.addWidget(self.output_name)
+    output_layout.addWidget(self.output_textbox)
 
     # move on to next page
     next_button = QtWidgets.QPushButton("Select PFT")
@@ -22,6 +31,7 @@ class SelectConfigFile(BasePage):
     # combine elements into layout
     main_layout = QtWidgets.QVBoxLayout()
     main_layout.addLayout(top_layout)
+    main_layout.addLayout(output_layout)
     main_layout.addWidget(next_button)
     self.setLayout(main_layout)
 
@@ -30,6 +40,17 @@ class SelectConfigFile(BasePage):
     if filename != '':
       self.file_name.setText(filename)
       self.file_name.setStyleSheet("color: black;")
+
+  def outputcheck(self,text):
+     if not self.valid_name(text):
+         self.output_label.setText("Please enter a valid output file name")
+         self.output_label.setStyleSheet("color: red;")
+         
+  def valid_name(self,text):
+      try:
+        return text != ''
+      except ValueError:
+        return False
 
   def next_page(self):
     if self.file_name.text() == 'Select Configuration File' or self.file_name.text() == 'Please select a valid config file':
