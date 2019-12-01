@@ -77,7 +77,7 @@ class Controller:
     self.reco_parameter_choosing.show()
 
   def show_reco_parameter_difference(self):
-    self.reco_parameter_difference = ParameterDifference(self.redisplay_reco_ramp_funcs, self.next_thing, "Differences in RECO Parameters After Otimization", self.reco_parameter_choosing.parameters_to_optimize(), "RECO")
+    self.reco_parameter_difference = ParameterDifference(self.redisplay_reco_ramp_funcs, self.redisplay_reco_ramp_funcs, "Differences in RECO Parameters After Otimization", self.reco_parameter_choosing.parameters_to_optimize(), "RECO")
     self.reco_parameter_difference.show()
 
   def redisplay_reco_ramp_funcs(self):
