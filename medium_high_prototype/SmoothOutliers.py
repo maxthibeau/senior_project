@@ -32,12 +32,13 @@ class SmoothOutliers(BasePage):
 
     self.window_size_label = QtWidgets.QLabel("Window Size (needs to be a float > 0):")
     self.window_size = QtWidgets.QLineEdit(self)
+    self.window_size.setPlaceholderText("Required")
 
     self.smoothing_selection_layout = QtWidgets.QHBoxLayout()
     self.smoothing_selection_layout.addWidget(self.window_selector_label)
     self.smoothing_selection_layout.addWidget(self.window_selector)
     self.smoothing_selection_layout.addWidget(self.window_size_label)
-    self.smoothing_selection_layout.addWidget(self.window_size)    
+    self.smoothing_selection_layout.addWidget(self.window_size)
 
     # give user navigation abilities
     smooth_button = QtWidgets.QPushButton("Smooth Data")
@@ -83,7 +84,7 @@ class SmoothOutliers(BasePage):
 
   def smooth_data(self):
     if self.get_window_size() != None:
-      self.data_after_outlier_removal = [random.random() for i in range(10)] 
+      self.data_after_outlier_removal = [random.random() for i in range(10)]
       self.draw_plot()
 
   def next_page(self):

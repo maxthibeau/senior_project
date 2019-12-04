@@ -36,7 +36,7 @@ class ParameterDifference(BasePage):
 
     choose_redisplay_ramp_label = QtWidgets.QLabel("Would you Like to Redisplay " + gpp_or_reco + " RAMP functions?")
     self.choose_redisplay_ramp = QtWidgets.QComboBox()
-    self.choose_redisplay_ramp.addItems(["Yes", "No"])
+    self.choose_redisplay_ramp.addItems(["No", "Yes"])
     next_page = QtWidgets.QPushButton("Next")
     next_page.clicked.connect(self.next_page)
 

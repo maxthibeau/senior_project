@@ -45,7 +45,7 @@ class SelectConfigFile(BasePage):
      if not self.valid_name(text):
          self.output_label.setText("Please enter a valid output file name")
          self.output_label.setStyleSheet("color: red;")
-         
+
   def valid_name(self,text):
       try:
         return text != ''
@@ -56,6 +56,9 @@ class SelectConfigFile(BasePage):
     if self.file_name.text() == 'Select Configuration File' or self.file_name.text() == 'Please select a valid config file':
       self.file_name.setStyleSheet("color: red;")
       self.file_name.setText("Please select a valid config file")
+    elif not self.valid_name(self.output_textbox.text):
+      self.output_name.setStyleSheet("color: red;")
+      self.output_name.setText("Please enter a valid output file name")
     else:
       self.next_window.emit()
       self.hide()

@@ -108,6 +108,7 @@ def main(argv):
   app = QtWidgets.QApplication(sys.argv)
   controller = Controller()
   controller.show_opening_screen()
+  #controller.show_pft_selection()
   #controller.enter_reco_hyperparameters()
   #controller.plot_soc_estimation()
   sys.exit(app.exec_())
