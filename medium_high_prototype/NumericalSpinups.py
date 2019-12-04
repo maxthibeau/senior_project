@@ -5,11 +5,13 @@ class NumericalSpinups(BasePage):
    def __init__(self, next_page_function, page_title):
       BasePage.__init__(self, next_page_function, page_title)
       self.page_label = QtWidgets.QLabel("Choose a Number of Numerical Iterations: ")
+      self.page_label.setToolTip('About 10 should do')
 
       self.Num_textbox = QtWidgets.QSpinBox(self)
 
       # move on to next page
       next_button = QtWidgets.QPushButton("Simulate")
+      next_button.setToolTip('Run the simulation')
       next_button.clicked.connect(self.next_page)
 
       main_layout = QtWidgets.QVBoxLayout(self)
