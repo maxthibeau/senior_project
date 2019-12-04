@@ -19,6 +19,7 @@ class DisplaySingleGraph(BasePage):
     self.canvas.draw()
 
     next_button = QtWidgets.QPushButton("Next")
+    next_button.setToolTip('Continue')
     next_button.clicked.connect(self.next_page)
 
     main_layout = QtWidgets.QVBoxLayout()
