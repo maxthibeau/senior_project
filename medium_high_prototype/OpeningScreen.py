@@ -12,6 +12,7 @@ class OpeningScreen(BasePage):
 
     # Button to next page
     begin_calibration_button = QtWidgets.QPushButton("Begin Calibration")
+    begin_calibration_button.setToolTip('Start the calibration process')
     begin_calibration_button.clicked.connect(self.next_page)
 
     # create layout
