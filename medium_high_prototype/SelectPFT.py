@@ -10,6 +10,7 @@ class SelectPFT(BasePage):
 
     # these widgets select a pft
     self.pft_selector_label = QtWidgets.QLabel("Select PFT")
+    self.pft_selector_label.setToolTip('Select Plant Function Type')
     self.pft_selector = QtWidgets.QComboBox()
     self.pft_selector.addItem("Evergreen Needleleaf")
     self.pft_selector.addItem("Evergreen Broadleaf")
@@ -27,6 +28,7 @@ class SelectPFT(BasePage):
     
     # give user navigation abilities
     next_page = QtWidgets.QPushButton("Next")
+    next_page.setToolTip('Continue')
     next_page.clicked.connect(self.next_page)
 
     # combine navigation buttons into one layout
