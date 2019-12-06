@@ -27,8 +27,10 @@ class ParameterDifference(BasePage):
     self.plot_chosen_ramp_function()
 
     next_param_button = QtWidgets.QPushButton("Next RAMP")
+    next_param_button.setToolTip('Go to next Ramp')
     next_param_button.clicked.connect(self.increment_current_param_plotted_index)
     prev_param_button = QtWidgets.QPushButton("Previous RAMP")
+    prev_param_button.setToolTip('Go to pevious Ramp')
     prev_param_button.clicked.connect(self.decrement_current_param_plotted_index)
     switch_graph_layout = QtWidgets.QHBoxLayout()
     switch_graph_layout.addWidget(prev_param_button)
@@ -38,6 +40,7 @@ class ParameterDifference(BasePage):
     self.choose_redisplay_ramp = QtWidgets.QComboBox()
     self.choose_redisplay_ramp.addItems(["No", "Yes"])
     next_page = QtWidgets.QPushButton("Next")
+    next_page.setToolTip('Continue')
     next_page.clicked.connect(self.next_page)
 
     bottom_layout = QtWidgets.QHBoxLayout()

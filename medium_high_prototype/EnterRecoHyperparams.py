@@ -6,9 +6,11 @@ class EnterRecoHyperparams(BasePage):
   def __init__(self, next_page_function, page_title):
     BasePage.__init__(self, next_page_function, page_title)
     page_label = QtWidgets.QLabel("Choose a Prh and Pk")
+    page_label.setToolTip('Prh (Percentile of RH/Kmult to use in SOC pools) and Pk (Percentile to use as minimum threshold for acceptable Kmult values)')
     second_page_label = QtWidgets.QLabel("(Between 0 and 1)")
 
     self.Prh_label = QtWidgets.QLabel("Prh:")
+    self.Prh_label.setToolTip('Percentile of RH/Kmult to use in SOC pools')
     self.Prh_textbox = QtWidgets.QLineEdit(self)
     self.Prh_textbox.textChanged.connect(self.updatePrhslide)
     self.Prh_slide = QtWidgets.QSlider(QtCore.Qt.Horizontal)
@@ -24,6 +26,7 @@ class EnterRecoHyperparams(BasePage):
     Prh_layout.addWidget(self.Prh_textbox)
 
     self.Pk_label = QtWidgets.QLabel("Pk:")
+    self.Pk_label.setToolTip('Percentile to use as minimum threshold for acceptable Kmult values')
     self.Pk_textbox = QtWidgets.QLineEdit(self)
     self.Pk_textbox.textChanged.connect(self.updatePkslide)
     self.Pk_slide = QtWidgets.QSlider(QtCore.Qt.Horizontal)
@@ -40,6 +43,7 @@ class EnterRecoHyperparams(BasePage):
 
     # move on to next page
     next_button = QtWidgets.QPushButton("Display RECO RAMP Functions")
+    next_button.setToolTip('Continue')
     next_button.clicked.connect(self.next_page)
 
     main_layout = QtWidgets.QVBoxLayout(self)

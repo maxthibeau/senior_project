@@ -26,6 +26,7 @@ class SelectConfigFile(BasePage):
 
     # move on to next page
     next_button = QtWidgets.QPushButton("Select PFT")
+    next_button.setToolTip('Continue')
     next_button.clicked.connect(self.next_page)
 
     # combine elements into layout

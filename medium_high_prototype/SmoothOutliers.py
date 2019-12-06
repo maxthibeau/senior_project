@@ -42,7 +42,9 @@ class SmoothOutliers(BasePage):
 
     # give user navigation abilities
     smooth_button = QtWidgets.QPushButton("Smooth Data")
+    smooth_button.setToolTip('Remove outliers (spikes) in the flux tower GPP')
     next_page = QtWidgets.QPushButton("Next")
+    next_page.setToolTip('Contiune to Next Page')
     smooth_button.clicked.connect(self.smooth_data)
     next_page.clicked.connect(self.next_page)
     self.bottom_layout = QtWidgets.QHBoxLayout()

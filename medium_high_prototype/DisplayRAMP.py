@@ -36,6 +36,7 @@ class DisplayRAMP(BasePage):
     self.choose_graph_gpp_vs_emult = QtWidgets.QComboBox()
     self.choose_graph_gpp_vs_emult.addItems(["No", "Yes"])
     next_page = QtWidgets.QPushButton("Next")
+    next_page.setToolTip('Continue')
     next_page.clicked.connect(self.next_page)
 
     bottom_layout = QtWidgets.QHBoxLayout()
