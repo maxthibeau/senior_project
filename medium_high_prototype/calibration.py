@@ -11,6 +11,9 @@ from EnterRecoHyperparams import *
 from NumericalSpinups import *
 from SimulationStatistics import *
 
+#for Mark's Ubuntu
+#export DISPLAY=:0.0
+
 class Controller:
 
   def __init__(self):
