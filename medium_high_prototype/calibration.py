@@ -11,6 +11,9 @@ from EnterRecoHyperparams import *
 from NumericalSpinups import *
 from SimulationStatistics import *
 
+#for Mark's Ubuntu
+#export DISPLAY=:0.0
+
 class Controller:
 
   def __init__(self):
@@ -77,7 +80,7 @@ class Controller:
     self.reco_parameter_choosing.show()
 
   def show_reco_parameter_difference(self):
-    self.reco_parameter_difference = ParameterDifference(self.redisplay_reco_ramp_funcs, self.next_thing, "Differences in RECO Parameters After Otimization", self.reco_parameter_choosing.parameters_to_optimize(), "RECO")
+    self.reco_parameter_difference = ParameterDifference(self.redisplay_reco_ramp_funcs, self.redisplay_reco_ramp_funcs, "Differences in RECO Parameters After Otimization", self.reco_parameter_choosing.parameters_to_optimize(), "RECO")
     self.reco_parameter_difference.show()
 
   def redisplay_reco_ramp_funcs(self):
@@ -107,9 +110,10 @@ class Controller:
 def main(argv):
   app = QtWidgets.QApplication(sys.argv)
   controller = Controller()
-  # controller.show_opening_screen()
+  controller.show_opening_screen()
+  #controller.show_pft_selection()
   #controller.enter_reco_hyperparameters()
-  controller.plot_soc_estimation()
+  #controller.plot_soc_estimation()
   sys.exit(app.exec_())
 
 if __name__ == '__main__':

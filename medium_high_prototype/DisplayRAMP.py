@@ -16,7 +16,7 @@ class DisplayRAMP(BasePage):
       self.params.append(param)
       self.param_to_data[param] = [[random.random() for i in range(10)], [random.random() for j in range(10)]]
 
-    self.gpp_or_reco = gpp_or_reco      
+    self.gpp_or_reco = gpp_or_reco
     assert gpp_or_reco in ("GPP", "RECO")
 
     self.figure = plt.figure()
@@ -32,10 +32,11 @@ class DisplayRAMP(BasePage):
     switch_graph_layout.addWidget(prev_ramp_button)
     switch_graph_layout.addWidget(next_ramp_button)
 
-    choose_graph_gpp_vs_emult_label = QtWidgets.QLabel("Would you Like to graph " + optional_graph_name)
+    choose_graph_gpp_vs_emult_label = QtWidgets.QLabel("Would you Like to graph " + optional_graph_name + "?")
     self.choose_graph_gpp_vs_emult = QtWidgets.QComboBox()
-    self.choose_graph_gpp_vs_emult.addItems(["Yes", "No"])
+    self.choose_graph_gpp_vs_emult.addItems(["No", "Yes"])
     next_page = QtWidgets.QPushButton("Next")
+    next_page.setToolTip('Continue')
     next_page.clicked.connect(self.next_page)
 
     bottom_layout = QtWidgets.QHBoxLayout()
@@ -75,7 +76,7 @@ class DisplayRAMP(BasePage):
     ax.set_xlabel(current_param)
     ax.set_ylabel(self.gpp_or_reco)
     self.canvas.draw()
-  
+
   def next_page(self):
     choose_graph_gpp_vs_emult = str(self.choose_graph_gpp_vs_emult.currentText())
     if choose_graph_gpp_vs_emult == "Yes":

@@ -2,7 +2,7 @@ from BasePage import *
 
 class Plot():
   def __init__(self, plt, fig_num, parent):
-    
+
     self.figure = plt.figure(fig_num)
     self.canvas = FigureCanvas(self.figure)
     self.toolbar = NavigationToolbar(self.canvas, parent)    
