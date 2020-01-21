@@ -33,14 +33,3 @@ class ConfigFile():
 
   def output_hdf5_files(self):
     return self._output_hdf5_files
-
-def main(argv):
-  if len(argv) < 1:
-    print ("usage: <config file>")
-    exit(1)  
-  file_path = argv[0]
-  config_file = ConfigFile(file_path)
-  print (config_file)
-
-if __name__ == "__main__":
-  main(sys.argv[1:])

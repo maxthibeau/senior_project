@@ -1,4 +1,4 @@
-import sys
+import numpy as np
 
 class MeterologicalInput():
   
@@ -15,13 +15,3 @@ class MeterologicalInput():
 
   def site_names(self):
     return self._site_names
-
-def main(argv):
-  if len(argv < 1):
-    print "usage: <.h5 file>"
-  fname = argv[0]
-  h5_file = h5py.File(fname, 'r')
-  meterological_input = Meterological_input(h5_file)
-
-if __name__ == "__main__":
-  main(sys.argv[1:])
