@@ -4,7 +4,7 @@
 # L4C metoerological input dataset
 **placeholder for filepath**
 # Tower Fluxes dataset
-**placeholder for filepath**
+././Fluxnet2015_flux_tower_station_data
 # IGBP FAO SOC inventory dataset
 **placeholder for filepath**
 # BPLUT Table Filepath
