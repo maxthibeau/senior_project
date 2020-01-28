@@ -142,27 +142,27 @@ class Maker(QWidget):
     def flux_tower_sites_get_file(self):
       filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.txt files')
         if filename != '':
-        self._edit.setText(filename)
+        self.flux_tower_sites_edit.setText(filename)
 
     def flux_tower_sites_to_exclude_get_file(self):
       filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.txt files')
         if filename != '':
-        self._edit.setText(filename)
+        self.flux_tower_sites_to_exclude_edit.setText(filename)
 
     def last_used_nature_run_get_file(self):
       filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.txt files')
         if filename != '':
-        self._edit.setText(filename)
+        self.last_used_nature_run_edit.setText(filename)
 
     def input_hdf5_files_get_files(self):
-      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5 files')
-        if filename != '':
-        self._edit.setText(filename)
+      filenames, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5 files')
+        if filenames != '':
+        self.input_hdf5_files_edit.setText(filenames)
 
     def output_hdf5_files_get_file(self):
-      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5 files')
-        if filename != '':
-        self._edit.setText(filename)
+      filenames, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5 files')
+        if filenames != '':
+        self.output_hdf5_files_edit.setText(filenames)
 
 
 ###########################################################################################
