@@ -52,7 +52,7 @@ class ConfigFile():
     return self._flux_tower_sites
 
   def flux_tower_sites_to_exclude(self):
-    return self._flux_otwer_sites_to_exclude
+    return self._flux_tower_sites_to_exclude
 
   def last_used_nature_run(self):
     return self._last_used_nature_run
