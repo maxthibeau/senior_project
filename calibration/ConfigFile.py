@@ -1,4 +1,8 @@
 import sys
+from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtGui import QIcon
+
 class ConfigFile():
 
   def __init__(self, file_path):
@@ -57,6 +61,110 @@ class ConfigFile():
   def optimization_parameters(self):
     return self._opt_params
 
+
+
+###########################################################################################
+# GUI FOR CONFIG FILE MAKER (CLI file maker seems pointless) ##############################
+###########################################################################################
+
+class Maker(QWidget):
+
+    def __init__(self):
+      super().__init__()
+      self.title = 'Config File Creation Wizard'
+      self.left = 100
+      self.top = 100
+      self.width = 800
+      self.height = 600
+      self.initUI()
+        
+    def initUI(self):
+      # Widgets ###################
+      mandatory_label = QLabel("These Fields are Required")
+
+      reference_bplut_table_label = QLabel("Reference BPlut Table:")
+      reference_bplut_table_button = QPushButton("Select File")
+      reference_bplut_table_button.clicked.connect(self.reference_bplut_table_get_file())
+      reference_bplut_table_edit = QLineEdit()
+
+      flux_tower_sites_label = QLabel("Included Flux Tower Sites:")
+      flux_tower_sites_button = QPushButton("Select File")
+      flux_tower_sites_button.clicked.connect(self.flux_tower_sites_get_file())
+      flux_tower_sites_edit = QLineEdit()
+
+      flux_tower_sites_to_exclude_label = QLabel("Excluded Flux Tower Sites")
+      flux_tower_sites_to_exclude_button = QPushButton("Select File")
+      flux_tower_sites_to_exclude_button.clicked.connect(self.flux_tower_sites_to_exclude_get_file())
+      flux_tower_sites_to_exclude_edit = QLineEdit()
+
+      last_used_nature_run_label = QLabel("Last Used Nature Run")
+      last_used_nature_run_button = QPushButton("Select File")
+      last_used_nature_run_button_button.clicked.connect(self.last_used_nature_run_button_get_file())
+      last_used_nature_run_edit = QLineEdit()
+
+      input_hdf5_files_label = QLabel("Input HDF5 Files")
+      input_hdf5_files_button = QPushButton("Select Files")
+      input_hdf5_files_button.clicked.connect(self.input_hdf5_files_get_files())
+      input_hdf5_files_edit = QLineEdit()
+
+      output_hdf5_files_label = QLabel("Output HDF5 Files")
+      output_hdf5_files_button = QPushButton("Select Files")
+      output_hdf5_files_button.clicked.connect(self.output_hdf5_files_get_files())
+      output_hdf5_files_edit = QLineEdit()
+
+
+      optional_label = QLabel("These Fields are Optional")
+      pfts_label = QLabel("Select Plant Function Types")
+      opt_params_label = QLabel("Select Parameters to Optimize")
+
+
+      #############################
+
+      self.setWindowTitle(self.title)
+      grid = QGridLayout()
+      grid.setSpacing(7)
+      
+      
+      
+      
+      
+      
+      
+      self.setGeometry(self.left, self.top, self.width, self.height)
+      self.show()
+
+
+    def reference_bplut_table_get_file(self):
+      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.csv files')
+        if filename != '':
+        self.reference_bplut_table_edit.setText(filename)
+
+    def flux_tower_sites_get_file(self):
+      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.txt files')
+        if filename != '':
+        self._edit.setText(filename)
+
+    def flux_tower_sites_to_exclude_get_file(self):
+      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.txt files')
+        if filename != '':
+        self._edit.setText(filename)
+
+    def last_used_nature_run_get_file(self):
+      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.txt files')
+        if filename != '':
+        self._edit.setText(filename)
+
+    def input_hdf5_files_get_files(self):
+      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5 files')
+        if filename != '':
+        self._edit.setText(filename)
+
+    def output_hdf5_files_get_file(self):
+      filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5 files')
+        if filename != '':
+        self._edit.setText(filename)
+
+
 ###########################################################################################
 # TESTING #################################################################################
 ###########################################################################################
@@ -71,6 +179,9 @@ def _test_read():
 
 def _test_write():
   print("Test Write")
+  app = QApplication(sys.argv)
+  ex = Maker()
+  sys.exit(app.exec_())
   return
 
 def main():
