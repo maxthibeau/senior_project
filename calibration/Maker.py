@@ -127,14 +127,14 @@ class Maker(QWidget):
       self.last_used_nature_run_edit.setText(filename)
 
   def input_hdf5_files_get_files(self):
-    filenames, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5, *.* files')
+    filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(self, 'Choose File', '.', '*.HDF5, *.* files')
     if filenames != '':
-      self.input_hdf5_files_edit.setText(filenames)
+      self.input_hdf5_files_edit.setText(str(filenames).replace("'","").replace("[","").replace("]",""))
 
   def output_hdf5_files_get_files(self):
-    filenames, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose File', '.', '*.HDF5, *.* files')
+    filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(self, 'Choose File', '.', '*.HDF5, *.* files')
     if filenames != '':
-      self.output_hdf5_files_edit.setText(filenames)
+      self.output_hdf5_files_edit.setText(str(filenames).replace("'","").replace("[","").replace("]",""))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
