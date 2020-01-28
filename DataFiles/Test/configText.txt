@@ -14,7 +14,7 @@
 PFT:{"Plant Functional Type"}
 PAR:{"Photosynthetically Active Radiation = Input to L4C; PAR is the energy in those wavelengths of light (from the sun) that activate photosynthesis"}
 FPAR:{"Fraction of PAR absorbed = Input to L4C; fraction of total PAR absorbed by green vegetation"}
-APAR:{"Absorbed PAR = Calculated from PAR and FPAR as: PAR×FPAR; this quantity is what drives photosynthesis"}
+APAR:{"Absorbed PAR = Calculated from PAR and FPAR as: PAR*FPAR; this quantity is what drives photosynthesis"}
 SMSF:{"Surface Soil Moisture = Amount of moisture in the soil at the surface (approx. 0-5 cm depth)"}
 SMRZ:{"Root-Zone Soil Moisture =  Amount of moisture in the soil at the root zone (i.e., able to be received by plant roots)"}
 TSOIL:{"Soil Temperature"}
@@ -35,7 +35,7 @@ DBF:{"Deciduous Broadleaf"}
 SHR:{"Shrub"}
 GRS:{"Grass"}
 CCP:{"Cereal Crop"}
-BCP::{"Broadleaf Crop"}
+BCP:{"Broadleaf Crop"}
 # BPLUT Variables & Descriptions  ***variable:{type,description,default/start value}
 LUEmax:{"float","Light-Use Efficiency = the upper limit on light-use efficiency for a given PFT. Limiting environmental conditions reduce LUE from this theoretical upper limit", 0.00}
 Tmin_min_K:{"integer","Minimum Air Temperature (Minimum of) reported in Kelvin",0}
@@ -52,8 +52,8 @@ Tsoil_beta0:{"float","Measurement 1 of parameter for controlling the response of
 Tsoil_beta1:{"float","Measurement 2 of parameter for controlling the response of soil microbes to temperature",0.0}
 Tsoil_beta2:{"float","Measurement 3 of parameter for controlling the response of soil microbes to temperature",0.0}
 fraut:{"float","Autotrophic Respiration Fraction = fraction of GPP used in autotrophic (plant) respiration",0.00}
-fmet:{"float","Fraction of litterfall that enters the metabolic (“fast”) SOC pool",0.0}
-fstr:{"float","Fraction of SOC in the metabolic (“fast”) pool that enters the structural (“medium”) SOC pool",0.0}
-kopt:{"float","Metabolic SOC pool is also referred to as the “fast” pool; it is the rate at which litterfall (leaves,stems) decay",0.0}
-kstr:{"float","Decay rate for the structural SOC (or “medium”) pool is expressed as a ratio to Ropt, i.e., the decay rate is: kstr/Ropt",0.0}
-kslw:{"float","Decay rate for the recalcitrant SOC (or “slow”) pool is expressed as a ratio to Ropt, i.e., the decay rate is: krec/Ropt",0.0}
+fmet:{"float","Fraction of litterfall that enters the metabolic (fast) SOC pool",0.0}
+fstr:{"float","Fraction of SOC in the metabolic (fast) pool that enters the structural (medium) SOC pool",0.0}
+kopt:{"float","Metabolic SOC pool is also referred to as the fast pool; it is the rate at which litterfall (leaves,stems) decay",0.0}
+kstr:{"float","Decay rate for the structural SOC (or medium) pool is expressed as a ratio to Ropt, i.e., the decay rate is: kstr/Ropt",0.0}
+kslw:{"float","Decay rate for the recalcitrant SOC (or slow) pool is expressed as a ratio to Ropt, i.e., the decay rate is: krec/Ropt",0.0}
