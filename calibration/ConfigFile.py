@@ -1,12 +1,21 @@
 import sys
 from Maker import *
+import h5py
+from MeterologicalInput import *
+from FluxTowerData import *
 
 class ConfigFile():
 
   def __init__(self, file_path):
     with open(file_path) as f:
       lines = [x.strip() for x in f.readlines() if not x.startswith("#")]
-      self._reference_bplut_table, self._flux_tower_sites, self._flux_tower_sites_to_exclude, self._last_used_nature_run, self._input_hdf5_files, self._output_hdf5_files = [x.strip() for x in lines[:6]] 
+      self._reference_bplut_table, self._flux_tower_sites, self._flux_tower_sites_to_exclude, self._last_used_nature_run, self._meteorological_input, self._soc_input, self._output_hdf5_files = [x.strip() for x in lines]       
+      
+      self._meteorological_input = MeterologicalInput(h5py.File(self._meteorological_input))
+      #FIXME: insert code that excludes tower sites
+      self._flux_tower_data = FluxTowerData(self._flux_tower_sites)
+
+      '''
       self._pfts = None
       self._opt_params = None
       lines = lines[6:]
@@ -18,6 +27,7 @@ class ConfigFile():
         if x.startswith("OPTPARAM:"):
           self._opt_params = x.split(":")[1]
           break
+      '''
 
   def __str__(self):
     print (self._input_hdf5_files)
@@ -47,8 +57,11 @@ class ConfigFile():
   def last_used_nature_run(self):
     return self._last_used_nature_run
 
-  def input_hdf5_files(self):
-    return self._input_hdf5_files
+  def meteorological_input(self):
+    return self._meteorological_input
+
+  def soc_input(self):
+    return self._soc_input
 
   def output_hdf5_files(self):
     return self._output_hdf5_files
