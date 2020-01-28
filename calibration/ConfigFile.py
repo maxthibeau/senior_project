@@ -3,7 +3,7 @@ from Maker import *
 import h5py
 from MeterologicalInput import *
 from FluxTowerData import *
-
+from NewBPLUT import *
 class ConfigFile():
 
   def __init__(self, file_path):
@@ -14,7 +14,7 @@ class ConfigFile():
       self._meteorological_input = MeterologicalInput(h5py.File(self._meteorological_input))
       #FIXME: insert code that excludes tower sites
       self._flux_tower_data = FluxTowerData(self._flux_tower_sites)
-
+      self._reference_bplut_table = NewBPLUT(self._reference_bplut_table)
       '''
       self._pfts = None
       self._opt_params = None
@@ -108,4 +108,3 @@ if __name__ == '__main__':
 
 
 ##########################################################################################
-
