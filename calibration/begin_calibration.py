@@ -17,7 +17,7 @@ def main(argv):
 
   former_bplut = config_file.reference_bplut_table()
   former_bplut.load_current()
-  former_bplut.after_optimization(1,[2,5,8,10,11]) #GPP
+  former_bplut.after_optimization(pft_selected,[2,5,8,10,11]) #GPP
 
 if __name__ == "__main__":
   main(sys.argv[1:])
