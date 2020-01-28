@@ -52,8 +52,8 @@ Tsoil_beta0:{"float","Measurement 1 of parameter for controlling the response of
 Tsoil_beta1:{"float","Measurement 2 of parameter for controlling the response of soil microbes to temperature",0.0}
 Tsoil_beta2:{"float","Measurement 3 of parameter for controlling the response of soil microbes to temperature",0.0}
 fraut:{"float","Autotrophic Respiration Fraction = fraction of GPP used in autotrophic (plant) respiration",0.00}
-fmet:{"float","Fraction of litterfall that enters the metabolic (“fast”) SOC pool",0.0}
-fstr:{"float","Fraction of SOC in the metabolic (“fast”) pool that enters the structural (“medium”) SOC pool",0.0}
-kopt:{"float","Metabolic SOC pool is also referred to as the “fast” pool; it is the rate at which litterfall (leaves,stems) decay",0.0}
-kstr:{"float","Decay rate for the structural SOC (or “medium”) pool is expressed as a ratio to Ropt, i.e., the decay rate is: kstr/Ropt",0.0}
-kslw:{"float","Decay rate for the recalcitrant SOC (or “slow”) pool is expressed as a ratio to Ropt, i.e., the decay rate is: krec/Ropt",0.0}
+fmet:{"float","Fraction of litterfall that enters the metabolic (fast) SOC pool",0.0}
+fstr:{"float","Fraction of SOC in the metabolic (fast) pool that enters the structural (medium) SOC pool",0.0}
+kopt:{"float","Metabolic SOC pool is also referred to as the fast pool; it is the rate at which litterfall (leaves,stems) decay",0.0}
+kstr:{"float","Decay rate for the structural SOC (or medium) pool is expressed as a ratio to Ropt, i.e., the decay rate is: kstr/Ropt",0.0}
+kslw:{"float","Decay rate for the recalcitrant SOC (or slow) pool is expressed as a ratio to Ropt, i.e., the decay rate is: krec/Ropt",0.0}
