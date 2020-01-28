@@ -35,7 +35,7 @@ DBF:{"Deciduous Broadleaf"}
 SHR:{"Shrub"}
 GRS:{"Grass"}
 CCP:{"Cereal Crop"}
-BCP::{"Broadleaf Crop"}
+BCP:{"Broadleaf Crop"}
 # BPLUT Variables & Descriptions  ***variable:{type,description,default/start value}
 LUEmax:{"float","Light-Use Efficiency = the upper limit on light-use efficiency for a given PFT. Limiting environmental conditions reduce LUE from this theoretical upper limit", 0.00}
 Tmin_min_K:{"integer","Minimum Air Temperature (Minimum of) reported in Kelvin",0}
