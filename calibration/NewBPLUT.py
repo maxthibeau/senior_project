@@ -22,7 +22,6 @@ class NewBPLUT():
     def load_current(self):
         file = open(self._filepath)
         lines = csv.reader(row for row in file if not row.startswith('#'))
-        row_count = -1
         for row in lines:
             self._current_bplut.append(row)
         #TODO
