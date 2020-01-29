@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import * #QApplication, QWidget, QLabel, QPushButton, QLineEdit
 from PyQt5.QtGui import * # QIcon
 import sys
-
+import os
 
 ###########################################################################################
 # GUI FOR CONFIG FILE MAKER (CLI file maker seems pointless) ##############################
@@ -55,11 +55,10 @@ class Maker(QWidget):
 
 
 
-
-
+    submit_label = QLabel("Enter Filename (e.g. config.cfg):")
+    self.submit_edit = QLineEdit()
     submit_button = QPushButton("Create Config File")
-
-
+    submit_button.clicked.connect(self.submit_and_save)
 
     # Layout ####################
 
@@ -92,7 +91,9 @@ class Maker(QWidget):
     grid.addWidget(output_hdf5_files_button,7,3,1,1)
     grid.addWidget(self.output_hdf5_files_edit,7,4,1,4)
 
-    grid.addWidget(submit_button,8,1,1,7)
+    grid.addWidget(submit_label,8,1,1,2)
+    grid.addWidget(self.submit_edit,8,3,1,4)
+    grid.addWidget(submit_button,8,7,1,1)
 
 
     #grid.addWidget(,,,,)
@@ -135,6 +136,50 @@ class Maker(QWidget):
     filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(self, 'Choose File', '.', '*.HDF5, *.* files')
     if filenames != '':
       self.output_hdf5_files_edit.setText(str(filenames).replace("'","").replace("[","").replace("]",""))
+
+  def submit_and_save(self):
+    er = False
+    if self.submit_edit.text() == "":
+      er = True
+      err("")
+    if self.reference_bplut_table_edit.text() == "":
+      er = True
+      err("")
+    if self.flux_tower_sites_edit.text() == "":
+      er = True
+      err("")
+    if self.flux_tower_sites_to_exclude_edit.text() == "":
+      er = True
+      err("")
+    if self.last_used_nature_run_edit.text() == "":
+      er = True
+      err("")
+    if self.input_hdf5_files_edit.text() == "":
+      er = True
+      err("")
+    if self.output_hdf5_files_edit.text() == "":
+      er = True
+      err("")
+    print(er)
+    if not er:
+      print("made it")
+      out = ""
+      out += self.reference_bplut_table_edit.text() + "\n"
+      out += self.flux_tower_sites_edit.text() + "\n"
+      out += self.flux_tower_sites_to_exclude_edit.text() + "\n"
+      out += self.last_used_nature_run_edit.text() + "\n"
+      out += self.input_hdf5_files_edit.text() + "\n"
+      out += self.output_hdf5_files_edit.text() #+ "\n"
+
+      filename = self.submit_edit.text()
+      print(filename)
+      out_file = open(filename, 'w')
+      out_file.write(out)
+      out_file.close()
+    
+
+def err(err_message):
+  return
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
