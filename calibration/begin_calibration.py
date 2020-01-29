@@ -15,6 +15,7 @@ def main(argv):
 
   pft_selected = PFTSelector.select_pft(meteor_input)
 
+  # pft_data = PFT(pft_selected, meteor_input, reference_input)
   former_bplut = config_file.reference_bplut_table()
   former_bplut.load_current()
   former_bplut.after_optimization(pft_selected,[2,5,8,10,11]) #GPP

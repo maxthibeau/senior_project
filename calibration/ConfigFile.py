@@ -1,7 +1,7 @@
 import sys
 from Maker import *
 import h5py
-from MeterologicalInput import *
+from MeteorologicalInput import *
 from FluxTowerData import *
 from NewBPLUT import *
 class ConfigFile():
@@ -11,10 +11,11 @@ class ConfigFile():
       lines = [x.strip() for x in f.readlines() if not x.startswith("#")]
       self._reference_bplut_table, self._flux_tower_sites, self._flux_tower_sites_to_exclude, self._last_used_nature_run, self._meteorological_input, self._soc_input, self._output_hdf5_files = [x.strip() for x in lines]       
       
-      self._meteorological_input = MeterologicalInput(h5py.File(self._meteorological_input))
+      self._meteorological_input = MeteorologicalInput(self._meteorological_input)
       #FIXME: insert code that excludes tower sites
       self._flux_tower_data = FluxTowerData(self._flux_tower_sites)
       self._reference_bplut_table = NewBPLUT(self._reference_bplut_table)
+
       '''
       self._pfts = None
       self._opt_params = None
