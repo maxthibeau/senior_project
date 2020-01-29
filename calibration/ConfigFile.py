@@ -1,7 +1,7 @@
 import sys
 from Maker import *
 import h5py
-from MeterologicalInput import *
+from MeteorologicalInput import *
 from FluxTowerData import *
 from NewBPLUT import *
 class ConfigFile():
@@ -15,6 +15,7 @@ class ConfigFile():
       #FIXME: insert code that excludes tower sites
       self._flux_tower_data = FluxTowerData(self._flux_tower_sites)
       self._reference_bplut_table = NewBPLUT(self._reference_bplut_table)
+
       '''
       self._pfts = None
       self._opt_params = None
@@ -30,7 +31,6 @@ class ConfigFile():
       '''
 
   def __str__(self):
-    print (self._input_hdf5_files)
     ret_str = ""
     ret_str += "reference_bplut_table: " + self._reference_bplut_table + "\n"
     ret_str += "flux_tower_sites: " + self._flux_tower_sites + "\n"
@@ -48,8 +48,8 @@ class ConfigFile():
   def reference_bplut_table(self):
     return self._reference_bplut_table
 
-  def flux_tower_sites(self):
-    return self._flux_tower_sites
+  def flux_tower_data(self):
+    return self._flux_tower_data
 
   def flux_tower_sites_to_exclude(self):
     return self._flux_tower_sites_to_exclude
