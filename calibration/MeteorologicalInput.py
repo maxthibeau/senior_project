@@ -16,14 +16,13 @@ class MeteorologicalInput():
     # a site is "claimed" by a pft when that pft is the dominant pft in that region
     pft_to_claimed_sites = defaultdict(list)
     pft_grid_index = 0
-    print(self._pft_grids)
     for pft_grid, in zip(self._pft_grids):
       dominant_pfts = stats.mode(pft_grid)[0]
       for dominant_pft in dominant_pfts:
         pft_to_claimed_sites[dominant_pft].append(pft_grid_index)
       pft_grid_index += 1
     return pft_to_claimed_sites
-    
+
   def pfts(self):
     return self._pfts          
 
@@ -44,3 +43,6 @@ class MeteorologicalInput():
     indices_of_pft = self._pft_to_claimed_sites[pft]
     data_subsetted_by_pft = data_to_subset.take(indices = indices_of_pft, axis = axis)
     return data_subsetted_by_pft
+
+  def sites_claimed_by_pft(self, pft):
+    return self._pft_to_claimed_sites[int(pft)]
