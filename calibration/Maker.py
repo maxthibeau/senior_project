@@ -162,7 +162,6 @@ class Maker(QWidget):
       err("")
     print(er)
     if not er:
-      print("made it")
       out = ""
       out += self.reference_bplut_table_edit.text() + "\n"
       out += self.flux_tower_sites_edit.text() + "\n"
@@ -172,7 +171,6 @@ class Maker(QWidget):
       out += self.output_hdf5_files_edit.text() #+ "\n"
 
       filename = self.submit_edit.text()
-      print(filename)
       out_file = open(filename, 'w')
       out_file.write(out)
       out_file.close()
