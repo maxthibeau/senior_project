@@ -4,11 +4,12 @@ from collections import defaultdict
 from scipy import stats
 
 class MeteorologicalInput():
-  
+
   def __init__(self, h5_fname):
     self._h5_file = h5py.File(h5_fname, 'r')
     self._pft_grids = self.subset_data(['ANC', 'lc_dom']).T
     self._site_names = self.subset_data(['SUBSET', 'site_name']).ravel()
+    self._lat_long = self.subset_data(['SUBSET','site_latlon'])
     self._pfts = np.unique(self._pft_grids)
     self._pft_to_claimed_sites = self._find_pft_to_claimed_sites()
 
@@ -24,7 +25,7 @@ class MeteorologicalInput():
     return pft_to_claimed_sites
 
   def pfts(self):
-    return self._pfts          
+    return self._pfts
 
   def pft_grids(self):
     return self._pft_grids
@@ -32,7 +33,10 @@ class MeteorologicalInput():
   def site_names(self):
     return self._site_names
 
-  def subset_data(self, data_list):    
+  def lat_long(self):
+    return self._lat_long
+
+  def subset_data(self, data_list):
     subsection = self._h5_file
     for request in data_list:
       subsection = subsection[request]

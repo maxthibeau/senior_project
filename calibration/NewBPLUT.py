@@ -26,17 +26,13 @@ class NewBPLUT():
             self._current_bplut.append(row)
         #TODO
         file.close()
-        print("***BPLUT TABLE***")
-        print(self._current_bplut)
         return self._current_bplut
 
     #to be done after each optimization (GPP/RECO/SOC) step
     def after_optimization(self, index_PFT, variables_optimized):
         bplut = self._current_bplut
         pft = int(index_PFT)
-        print("edited PFT: ",bplut[pft][1])
-        print("variables optimized: ")
-        for val in variables_optimized:
-            print(self._bplut_labels[val],":",bplut[pft][val])
+        #for val in variables_optimized:
+            #print(self._bplut_labels[val],":",bplut[pft][val])
         #TODO
         return bplut

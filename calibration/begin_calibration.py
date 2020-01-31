@@ -16,8 +16,13 @@ def main(argv):
 
   pft = PFTSelector.select_pft(meteor_input)
 
+
   tower_sites = meteor_input.sites_claimed_by_pft(pft)
+  flux_lat_long = meteor_input.lat_long()
+  flux_tower_data = flux_tower_data.set_coords(flux_lat_long)
+  #print(flux_tower_data._coordinates)
   flux_tower_data_by_pft = flux_tower_data.take(tower_sites)
+
 
   # pft_data = PFT(pft_selected, meteor_input, reference_input)
   former_bplut = config_file.reference_bplut_table()
