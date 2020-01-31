@@ -20,7 +20,7 @@ def main(argv):
 
   flux_tower_data_for_pft = flux_tower_data.take(tower_site_indices)
 
-  flux_tower_data.average_data_for_day(flux_tower_data_for_pft, 1, 3))
+  flux_tower_data.average_data_for_day(flux_tower_data_for_pft, 1, 3)
   former_bplut = config_file.reference_bplut_table()
   former_bplut.load_current()
   former_bplut.after_optimization(pft,[2,5,8,10,11]) #GPP
