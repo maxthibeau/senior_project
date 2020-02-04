@@ -8,3 +8,4 @@ matplotlib
 h5py (installed from python3-pip)
 csv
 affine
+gdal (version 3.0 or above)

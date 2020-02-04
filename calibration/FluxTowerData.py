@@ -1,6 +1,7 @@
 import os
 import csv
 import affine
+from gdal import osr
 import numpy as np
 
 class FluxTowerData():
@@ -29,6 +30,7 @@ class FluxTowerData():
     return self
 
   def set_weights(self):
+    #World coordinates (longitude and latitude) to grid coordinates (EASE grid) to pixel coordinates (x,y)
     worldGrid = affine.Affine(self._coordinates)
     print(worldGrid)
     return worldGrid
