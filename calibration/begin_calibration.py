@@ -4,6 +4,7 @@ from ConfigFile import *
 from PFTSelector import *
 from NewBPLUT import *
 from FluxTowerData import *
+from gpp import *
 
 def main(argv):
   if len(argv) < 1:
@@ -26,7 +27,21 @@ def main(argv):
 
   former_bplut = config_file.reference_bplut_table()
   former_bplut.load_current()
-  former_bplut.after_optimization(pft,[2,5,8,10,11]) #GPP
+  # GPP
+  VPD = 0.0 #GMAO FP
+  SMRZ = 0.0 #SMAP L4SM
+  TMIN = 0.0 #GMAO FP
+  PAR = 0.0 #GMAO FP
+  FPAR = 0.0 #MODIS/VIIRS
+  gpp_calc = gpp.GPP(pft,former_bplut,VPD,SMRZ,TMIN,PAR,FPAR)
+  former_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
+  #RECO
+  Tsoil = 0.0 #SMAP L4SM
+  SMSF = 0.0 #SMAP L4SM
+  kmult_365 = 0.0 #from forward run
+  npp_365 = 0.0 #from forward run
+  reco_calc = reco.RECO(pft,former_bplut,gpp_calc,Tsoil,SMSF,kmult_365,npp_365)
+  former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
 
 if __name__ == "__main__":
   main(sys.argv[1:])

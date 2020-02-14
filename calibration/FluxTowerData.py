@@ -72,11 +72,11 @@ class FluxTowerData():
         while(next < len(pixel_coordinates)):
             next_val = pixel_coordinates[next]
             if(next_val[0] <= (lat+1.5) and next_val[0] >= (lat-1.5) and next_val[1] <= (long+1.5) and next_val[1] >= (long-1.5)): #same 9-km latitude and longitude as the key
-                if(self._weights[next] == 0.0 ): 
+                if(self._weights[next] == 0.0 ):
                     same_grid.append(next) #next is an index
             next += 1
         for i in range(len(same_grid)):
             tower = same_grid[i]
             if(self._weights[tower] == 0.0):
                 self._weights[tower] = round(1/len(same_grid),3)
-    print("WEIGHTS",self._weights)
+    #print("WEIGHTS",self._weights)
