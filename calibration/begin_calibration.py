@@ -1,11 +1,7 @@
 import sys
 from input_files import ConfigFile
 from PFTSelector import *
-from NewBPLUT import *
-from FluxTowerData import *
 from gpp import *
-from funcs import *
-import pandas as pd
 
 def main(argv):
   if len(argv) < 1:
@@ -23,14 +19,13 @@ def main(argv):
   flux_tower_data = flux_tower_data.set_coords(flux_lat_long)
 
   flux_tower_data_by_pft = flux_tower_data.take(tower_sites)
-  print(reference_input.subset_data(['EC', 'frozen_area']))
+  # print(reference_input.subset_data(['EC', 'frozen_area']))
   # meteor_tower_data_by_pft = meteor_input.take(tower_sites)
   # reference_data_by_pft = freference_data.take(tower_sites)
 
   tower_to_simulate = flux_tower_data_by_pft[0]
   df = pd.read_csv(tower_to_simulate)
-  # fpar, par, 
-  exit(1)
+
   # pft_data = PFT(pft_selected, meteor_input, reference_input)
 
   former_bplut = config_file.reference_bplut_table()
