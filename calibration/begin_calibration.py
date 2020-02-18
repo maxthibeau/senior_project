@@ -1,9 +1,6 @@
 import sys
-import h5py
-from ConfigFile import *
+from input_files import ConfigFile
 from PFTSelector import *
-from NewBPLUT import *
-from FluxTowerData import *
 from gpp import *
 from reco import *
 
@@ -15,13 +12,17 @@ def main(argv):
   config_file = ConfigFile(config_fname)
   meteor_input = config_file.meteorological_input()
   flux_tower_data = config_file.flux_tower_data()
-
+  reference_input = config_file.reference_input()
   pft = PFTSelector.select_pft(meteor_input)
 
   tower_sites = meteor_input.sites_claimed_by_pft(pft)
   flux_lat_long = meteor_input.lat_long()
   flux_tower_data = flux_tower_data.set_coords(flux_lat_long)
+
   flux_tower_data_by_pft = flux_tower_data.take(tower_sites)
+  # print(reference_input.subset_data(['EC', 'frozen_area']))
+  # meteor_tower_data_by_pft = meteor_input.take(tower_sites)
+  # reference_data_by_pft = freference_data.take(tower_sites)
 
   # pft_data = PFT(pft_selected, meteor_input, reference_input)
 

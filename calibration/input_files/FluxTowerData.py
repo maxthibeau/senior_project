@@ -3,7 +3,6 @@ import csv
 from affine import Affine
 from gdal import osr
 import numpy as np
-#from SingleFluxTower import *
 
 class FluxTowerData():
 

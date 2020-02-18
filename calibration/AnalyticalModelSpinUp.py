@@ -58,7 +58,7 @@ def main():
   k_str = 1
   k_rec = 1
   annie = AnalyticalModelSpinUp(k_mults, npps, f_met, f_str, r_opt, k_str, k_rec)
-  print(annie.c_mets(), annie.c_strs(), annie.c_recs(), annie.c_bars())
+  print(" c_mets: ",annie.c_mets(),"\n\n","c_strs: ", annie.c_strs(),"\n\n","c_recs: ", annie.c_recs(),"\n\n","c_bars: ", annie.c_bars())
 
 if __name__ == "__main__":
   main()
