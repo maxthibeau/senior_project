@@ -1,7 +1,8 @@
 import h5py
 import pandas as pd
-from input_files import MeteorologicalInput, FluxTowerData
-from NewBPLUT import *
+from input_files.MeteorologicalInput import *
+from input_files.FluxTowerData import *
+from input_files.NewBPLUT import *
 
 class ConfigFile():
 
@@ -14,7 +15,7 @@ class ConfigFile():
       #FIXME: insert code that excludes tower sites
       self._flux_tower_data = FluxTowerData(self._flux_tower_dir)
       self._reference_bplut_table = NewBPLUT(self._reference_bplut_table)
-      self._last_used_nature_run = ReferenceData(self._last_used_nature_run)
+      # self._last_used_nature_run = ReferenceData(self._last_used_nature_run)
 
       '''
       self._pfts = None
@@ -44,6 +45,9 @@ class ConfigFile():
       ret_str += "\nOPTPARAM:" + self._opt_params
 
     return ret_str
+
+  def reference_input(self):
+    pass
 
   def reference_bplut_table(self):
     return self._reference_bplut_table
