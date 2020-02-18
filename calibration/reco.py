@@ -11,42 +11,63 @@ import numpy as np
 import math
 from AnalyticalModelSpinUp import *
 from NumericalModelSpinUp import *
+from RampFunctions import *
 
 #The RECO class will hold variables and functions used in the RECO optimization process
 class RECO:
 
   #Initializes the RECO class
-  def __init__(self,pft,bplut,gpp_val,Tsoil_val,SMSF_val,kmult_365,npp_365):
+  def __init__(self,pft,bplut,gpp_vals,Tsoil_vals,SMSF_vals,kmult_365,npp_365):
     # RECO: 14=SMtop_min, 15=SMtop_max, 16=Tsoil_beta0, 17=Tsoil_beta1, 18=Tsoil_beta2, 19=fraut, 20=fmet, 21=fstr, 22=kopt, 23=kstr, 24=kslw
     #from input
     self.kmult_365 = kmult_365
     self.npp_365 = npp_365
-    self.Tsoil_val = Tsoil_val
-    self.SMSF_val = SMSF_val
-    self.gpp_val = gpp_val
+    self.Tsoil_vals = Tsoil_vals
+    self.SMSF_vals = SMSF_vals
+    self.gpp_vals = gpp_vals
     #from user
     self.prh = 0
     self.pk = 0
     self.set_prh_and_pk()
     #from BPLUT
-    self.f_aut = bplut[pft][19]
-    self.b_tsoil = (bplut[pft][16]+bplut[pft][17]+bplut[pft][18])/3
-    self.SMSF_min = bplut[pft][14]
-    self.SMSF_max = bplut[pft][15]
-    self.fmet = bplut[pft][20]
-    self.fstr = bplut[pft][21]
-    self.ropt = bplut[pft][22]
-    self.kstr = bplut[pft][23]
-    self.krec = bplut[pft][24]
-    self.reco_val = self.calc_reco()
+    self.f_aut = float(bplut[pft][19])
+    self.b_tsoil = (float(bplut[pft][16])+float(bplut[pft][17])+float(bplut[pft][18]))/3.0
+    self.SMSF_min = float(bplut[pft][14])
+    self.SMSF_max = float(bplut[pft][15])
+    self.fmet = float(bplut[pft][20])
+    self.fstr = float(bplut[pft][21])
+    self.ropt = float(bplut[pft][22])
+    self.kstr = float(bplut[pft][23])
+    self.krec = float(bplut[pft][24])
+    self.reco_vals = self.calc_reco()
+    #from calculations/for graphs
+    self.y_axis_bounds = [0,float(bplut[pft][5])]
+    self.TSOIL_ramp = [] #x-axis for TSOIL ramp function
+    for i in range(len(self.TSOIL_vals)):
+        x_arr = self.TSOIL_vals[i]
+        for y in range(len(x_arr)):
+            x = x_arr[y]
+            single_TSOIL = self.calc_TSOIL(x)
+            self.TSOIL_ramp.append(single_TSOIL)
+    self.SMSF_ramp = [] #x-axis for SMSF ramp function
+    for q in range(len(self.SMSF_vals)):
+        x_arr = self.SMSF_vals[q]
+        for y in range(len(x_arr)):
+            x = x_arr[y]
+            single_SMSF = self.calc_SMSF(x)
+            self.SMSF_ramp.append(single_SMSF)
 
   #Calculates RECO (if not already given)
   def calc_reco(self):
     Ra = self.f_aut * self.gpp_val
-    kmult = self.calc_kmult()
-    Rh = kmult * self.calc_cbar()
-    RECO = Ra + Rh
-    return RECO
+    kmults = self.calc_kmult()
+    cbar0 = self.calc_cbar()
+    recos = []
+    for c in range(len(kmults)):
+        Rh = kmults[c] * cbar0
+        RECO = Ra + Rh
+        recos.append(RECO)
+    return recos
 
   #Sets prh and pk
   def set_prh_and_pk(self):
@@ -67,7 +88,6 @@ class RECO:
     self.prh = prh
     self.pk = pk
 
-
   #Calculates C_bar
   def calc_cbar(self):
     fast_pool = (self.fmet * self.npp_365)/(self.ropt * self.kmult_365)
@@ -78,8 +98,14 @@ class RECO:
 
   #Calculates K_mult
   def calc_kmult(self):
-    K_mult = self.calc_TSOIL() * self.calc_SMSF(self.SMSF_val)
-    return K_mult
+    k_mults = []
+    if(len(self.TSOIL_ramp) != len(self.SMSF_ramp)):
+      print("Error in length of TSOIL and SMSF")
+    else:
+      for e in range(len(self.TSOIL_ramp)):
+          K_mult = self.TSOIL_ramp[e] * self.SMSF_ramp[e]
+          k_mults.append(K_mult)
+    return k_mults
 
   #Calculates the ramp function of TSOIL (f(TSOIL))
   def calc_TSOIL(self,x):
@@ -97,6 +123,13 @@ class RECO:
     else:
         val = (x - self.SMSF_min)/(self.SMSF_max - self.SMSF_min)
     return val
+
+  #uses RampFunction class to display the ramp function graphs
+  def display_ramps(self):
+      tsoil = RampFunction(self.TSOIL_ramp,self.y_axis_bounds)
+      print(tsoil)
+      smsf = RampFunction(self.SMSF_ramp,self.y_axis_bounds)
+      print(smsf)
 
   #The RECO optimization function with no input given (All outliers included)
   def optimize_reco(self):

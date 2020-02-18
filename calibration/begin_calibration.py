@@ -5,6 +5,7 @@ from PFTSelector import *
 from NewBPLUT import *
 from FluxTowerData import *
 from gpp import *
+from reco import *
 
 def main(argv):
   if len(argv) < 1:
@@ -22,26 +23,47 @@ def main(argv):
   flux_tower_data = flux_tower_data.set_coords(flux_lat_long)
   flux_tower_data_by_pft = flux_tower_data.take(tower_sites)
 
-
   # pft_data = PFT(pft_selected, meteor_input, reference_input)
 
   former_bplut = config_file.reference_bplut_table()
-  former_bplut.load_current()
+  bplut = former_bplut.load_current()
+  pft = int(pft)
   # GPP
-  VPD = 0.0 #GMAO FP
-  SMRZ = 0.0 #SMAP L4SM
-  TMIN = 0.0 #GMAO FP
-  PAR = 0.0 #GMAO FP
-  FPAR = 0.0 #MODIS/VIIRS
-  gpp_calc = gpp.GPP(pft,former_bplut,VPD,SMRZ,TMIN,PAR,FPAR)
+  VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,0) #meterological input MET (vpd) array
+  SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,0) #meterological input MET (smrz) array
+  TMIN = meteor_input.subset_data_by_pft(['MET','tmin'],pft,0) #meterological input MET (tmin) array
+  FPAR = meteor_input.subset_data_by_pft(['MOD','fpar'],pft,0) #meterological input MOD (fpar)
+  PAR = get_Par(flux_tower_data_by_pft) #flux tower input (par)
+  gpp_calcs = GPP(pft,bplut,VPD,SMRZ,TMIN,PAR,FPAR)
   former_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
-  Tsoil = 0.0 #SMAP L4SM
-  SMSF = 0.0 #SMAP L4SM
+  Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
+  SMSF = meteor_input.subset_data_by_pft(['MET','smsf'],pft,0) #meterological input MET (smsf)
   kmult_365 = 0.0 #from forward run
   npp_365 = 0.0 #from forward run
-  reco_calc = reco.RECO(pft,former_bplut,gpp_calc,Tsoil,SMSF,kmult_365,npp_365)
-  former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
+  #reco_calcs = RECO(pft,bplut,gpp_calcs,Tsoil,SMSF,kmult_365,npp_365)
+  #former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
+
+def get_Par(files):
+    PARs = []
+    for x in range(len(files)):
+        flux_tower = files[x]
+        flux_tower = flux_tower[:47]+'/'+flux_tower[47:]
+        file = open(flux_tower)
+        lines = csv.reader(row for row in file if not row.startswith('#'))
+        tower_par = []
+        total_par = 0
+        for row in lines:
+            par = row[11]
+            total_par = 0
+            if(par != 'NaN' and par != 'par'):
+                tower_par.append(par)
+                total_par += float(par)
+        if(len(tower_par) != 0):
+            par_val = total_par/len(tower_par)
+            PARs.append(par_val)
+        file.close()
+    return PARs
 
 if __name__ == "__main__":
   main(sys.argv[1:])
