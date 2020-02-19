@@ -1,4 +1,5 @@
 import sys
+import csv
 from input_files import ConfigFile
 from PFTSelector import *
 from gpp import *
@@ -9,7 +10,7 @@ def main(argv):
     print ("usage: <config file>")
     exit(1)
   config_fname = argv[0]
-  config_file = ConfigFile(config_fname)
+  config_file = ConfigFile.ConfigFile(config_fname)
   meteor_input = config_file.meteorological_input()
   flux_tower_data = config_file.flux_tower_data()
   reference_input = config_file.reference_input()

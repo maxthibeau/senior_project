@@ -41,7 +41,7 @@ class RECO:
     self.krec = float(bplut[pft][24])
     self.reco_vals = self.calc_reco()
     #from calculations/for graphs
-    self.y_axis_bounds = [0,float(bplut[pft][5])]
+    self.lue_vals = [0,float(bplut[pft][5])]
     self.TSOIL_ramp = [] #x-axis for TSOIL ramp function
     for i in range(len(self.TSOIL_vals)):
         x_arr = self.TSOIL_vals[i]
@@ -56,6 +56,8 @@ class RECO:
             x = x_arr[y]
             single_SMSF = self.calc_SMSF(x)
             self.SMSF_ramp.append(single_SMSF)
+    self.y_vals = self.calc_y_ramp()
+    self.display_ramps()
 
   #Calculates RECO (if not already given)
   def calc_reco(self):
@@ -124,12 +126,15 @@ class RECO:
         val = (x - self.SMSF_min)/(self.SMSF_max - self.SMSF_min)
     return val
 
+  def calc_y_ramp(self):
+      pass
+
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
-      tsoil = RampFunction(self.TSOIL_ramp,self.y_axis_bounds)
-      print(tsoil)
-      smsf = RampFunction(self.SMSF_ramp,self.y_axis_bounds)
-      print(smsf)
+      tsoil = RampFunction(self.TSOIL_ramp,self.y_vals,self.lue_vals,"TSOIL","RECO")
+      tsoil.display_ramp()
+      smsf = RampFunction(self.SMSF_ramp,self.y_vals,self.lue_vals,"SMSF","RECO")
+      smsf.display_ramp()
 
   #The RECO optimization function with no input given (All outliers included)
   def optimize_reco(self):

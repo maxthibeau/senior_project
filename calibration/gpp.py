@@ -139,10 +139,10 @@ class GPP:
   def display_ramps(self):
       vpd = RampFunction(self.VPD_ramp,self.y_vals,self.lue_vals,"VPD","GPP")
       vpd.display_ramp()
-      #tmin = RampFunction(self.TMIN_ramp,self.y_vals,self.lue_vals,"TMIN")
-      #tmin.display_ramp()
-      #smrz = RampFunction(self.SMRZ_ramp,self.y_vals,self.lue_vals,"SMRZ")
-      #smrz.display_ramp()
+      tmin = RampFunction(self.TMIN_ramp,self.y_vals,self.lue_vals,"TMIN","GPP")
+      tmin.display_ramp()
+      smrz = RampFunction(self.SMRZ_ramp,self.y_vals,self.lue_vals,"SMRZ","GPP")
+      smrz.display_ramp()
 
   def display_gpp_v_emult(self):
       pass
