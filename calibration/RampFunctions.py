@@ -22,5 +22,5 @@ class RampFunction:
         ax.scatter(self._x_axis,self._y_axis)
         ax.set_title("Ramp Function: " + self._title)
         ax.set_xlabel(self._title)
-        ax.set_ylabel(self.gpp_or_reco)
-        ax.show()
+        ax.set_ylabel(self._type)
+        plt.show()
