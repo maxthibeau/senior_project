@@ -39,7 +39,7 @@ def main(argv):
   FPAR = meteor_input.subset_data_by_pft(['MOD','fpar'],pft, 2) #meterological input MOD (fpar)
 
   PAR = get_par(flux_tower_data_by_pft) #flux tower input (par)
-  # gpp_calcs = GPP(pft,reference_bplut,VPD,SMRZ,TMIN,PAR,FPAR)
+  gpp_calcs = GPP(pft,reference_bplut,VPD,SMRZ,TMIN,PAR,FPAR)
   reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
   Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
