@@ -17,10 +17,10 @@ class RampFunction:
         if(len(self._x_axis) != len(self._y_axis)):
             print("Error: invalid coordinates for ramp function",self._title)
             exit(1) #no further code in this function
-        ax = self.figure.add_subplot(111)
-        ax.clear()
-        ax.scatter(self._x_axis,self._y_axis)
-        ax.set_title("Ramp Function: " + self._title)
-        ax.set_xlabel(self._title)
-        ax.set_ylabel(self._type)
-        plt.show()
+        #ax = self.figure.add_subplot(111)
+        #ax.clear()
+        #ax.scatter(self._x_axis,self._y_axis)
+        #ax.set_title("Ramp Function: " + self._title)
+        #ax.set_xlabel(self._title)
+        #ax.set_ylabel(self._type)
+        #ax.show()

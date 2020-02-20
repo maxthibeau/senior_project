@@ -17,6 +17,8 @@ class GPP:
 
   #Initializes the GPP class
   def __init__(self,pft,bplut,vpd,smrz,tmin,par,fpar): #,FT_mult
+    #FIXME: debug
+    epsilon_max = .95
     lue = float(bplut[pft, 'LUEmax'])
     # a tuple here is (min, max)
     vpd_min = float(bplut[pft, 'VPD_min_Pa']) #in Pa
@@ -30,6 +32,7 @@ class GPP:
     #from calculations/for graph
     self.lue_vals = [0,lue]
     e_mult = calc_e_mult(vpd, (vpd_min, vpd_max), tmin, (tmin_min, tmin_max), smrz, (smrz_min, smrz_max), 0)
+    print(type(e_mult))
     gpp = calc_gpp(fpar, par, epsilon_max, e_mult)
     # APAR = fpar * par
     y_vals = gpp / (fpar * par)
@@ -61,10 +64,10 @@ class GPP:
   def display_ramps(self):
       vpd = RampFunction(self.ramp_VPD,self.y_vals,self.lue_vals,"VPD","GPP")
       vpd.display_ramp()
-      #tmin = RampFunction(self.TMIN_ramp,self.y_vals,self.lue_vals,"TMIN")
-      #tmin.display_ramp()
-      #smrz = RampFunction(self.SMRZ_ramp,self.y_vals,self.lue_vals,"SMRZ")
-      #smrz.display_ramp()
+      tmin = RampFunction(self.TMIN_ramp,self.y_vals,self.lue_vals,"TMIN","GPP")
+      tmin.display_ramp()
+      smrz = RampFunction(self.SMRZ_ramp,self.y_vals,self.lue_vals,"SMRZ","GPP")
+      smrz.display_ramp()
 
   def display_gpp_v_emult(self):
       pass

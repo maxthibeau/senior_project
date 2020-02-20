@@ -1,5 +1,8 @@
 import sys
 from input_files.ConfigFile import *
+import csv
+import pandas as pd
+from input_files import ConfigFile
 from PFTSelector import *
 from gpp import *
 from reco import *
@@ -9,7 +12,7 @@ def main(argv):
     print ("usage: <config file>")
     exit(1)
   config_fname = argv[0]
-  config_file = ConfigFile(config_fname)
+  config_file = ConfigFile.ConfigFile(config_fname)
   meteor_input = config_file.meteorological_input()
   flux_tower_data = config_file.flux_tower_data()
   reference_input = config_file.reference_input()
@@ -29,12 +32,14 @@ def main(argv):
   reference_bplut = config_file.reference_bplut_table()
   pft = int(pft)
   # GPP
-  VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,0) #meterological input MET (vpd) array
-  SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,0) #meterological input MET (smrz) array
-  TMIN = meteor_input.subset_data_by_pft(['MET','tmin'],pft,0) #meterological input MET (tmin) array
-  FPAR = meteor_input.subset_data_by_pft(['MOD','fpar'],pft,0) #meterological input MOD (fpar)
+  VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,1) #meterological input MET (vpd) array
+  SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,1) #meterological input MET (smrz) array
+  TMIN = meteor_input.subset_data_by_pft(['MET','tmin'],pft,1) #meterological input MET (tmin) array
+  # TODO:: FPAR is 828 x 81 x n_s, why 828?
+  FPAR = meteor_input.subset_data_by_pft(['MOD','fpar'],pft, 2) #meterological input MOD (fpar)
+
   PAR = get_par(flux_tower_data_by_pft) #flux tower input (par)
-  gpp_calcs = GPP(pft,reference_bplut,VPD,SMRZ,TMIN,PAR,FPAR)
+  # gpp_calcs = GPP(pft,reference_bplut,VPD,SMRZ,TMIN,PAR,FPAR)
   reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
   Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
@@ -54,7 +59,7 @@ def get_par(flux_tower_fnames):
     tower_pars = df['par'].to_numpy()
     # find mean without nans  
     pars.append(np.nanmean(tower_pars))
-  return pars
+  return np.array(pars)
 
 if __name__ == "__main__":
   main(sys.argv[1:])
