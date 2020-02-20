@@ -127,6 +127,12 @@ class RECO:
     return val
 
   def calc_y_ramp(self):
+      RHs - []
+      kmults = self.calc_kmult()
+      cbar0 = self.calc_cbar()
+      for c in range(len(kmults)):
+          Rh = kmults[c] * cbar0
+          RHs.append(Rh)
       pass
 
   #uses RampFunction class to display the ramp function graphs

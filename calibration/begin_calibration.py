@@ -29,8 +29,13 @@ def main(argv):
 
   # pft_data = PFT(pft_selected, meteor_input, reference_input)
 
-  reference_bplut = config_file.reference_bplut_table()
+  #outlier removal
   pft = int(pft)
+  window_size = 100 #get from user (int of days)
+  outliers = Outliers(pft,flux_tower_data_by_pft,reference_input,window_size)
+
+  former_bplut = config_file.reference_bplut_table()
+  bplut = former_bplut.load_current()
   # GPP
   VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,1) #meterological input MET (vpd) array
   SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,1) #meterological input MET (smrz) array
@@ -50,14 +55,14 @@ def main(argv):
   #former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
 
 
-def get_par(flux_tower_fnames):   
+def get_par(flux_tower_fnames):
   pars = []
   for flux_tower_fname in flux_tower_fnames:
     # pandas dataframe
     df = pd.read_csv(flux_tower_fname)
     # get par as np array
     tower_pars = df['par'].to_numpy()
-    # find mean without nans  
+    # find mean without nans
     pars.append(np.nanmean(tower_pars))
   return np.array(pars)
 
