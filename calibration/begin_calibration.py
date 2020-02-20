@@ -1,5 +1,7 @@
 import sys
+from input_files.ConfigFile import *
 import csv
+import pandas as pd
 from input_files import ConfigFile
 from PFTSelector import *
 from gpp import *
@@ -35,13 +37,15 @@ def main(argv):
   former_bplut = config_file.reference_bplut_table()
   bplut = former_bplut.load_current()
   # GPP
-  VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,0) #meterological input MET (vpd) array
-  SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,0) #meterological input MET (smrz) array
-  TMIN = meteor_input.subset_data_by_pft(['MET','tmin'],pft,0) #meterological input MET (tmin) array
-  FPAR = meteor_input.subset_data_by_pft(['MOD','fpar'],pft,0) #meterological input MOD (fpar)
-  PAR = get_Par(flux_tower_data_by_pft) #flux tower input (par)
-  gpp_calcs = GPP(pft,bplut,VPD,SMRZ,TMIN,PAR,FPAR)
-  former_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
+  VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,1) #meterological input MET (vpd) array
+  SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,1) #meterological input MET (smrz) array
+  TMIN = meteor_input.subset_data_by_pft(['MET','tmin'],pft,1) #meterological input MET (tmin) array
+  # TODO:: FPAR is 828 x 81 x n_s, why 828?
+  FPAR = meteor_input.subset_data_by_pft(['MOD','fpar'],pft, 2) #meterological input MOD (fpar)
+
+  PAR = get_par(flux_tower_data_by_pft) #flux tower input (par)
+  # gpp_calcs = GPP(pft,reference_bplut,VPD,SMRZ,TMIN,PAR,FPAR)
+  reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
   Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
   SMSF = meteor_input.subset_data_by_pft(['MET','smsf'],pft,0) #meterological input MET (smsf)
@@ -50,26 +54,17 @@ def main(argv):
   #reco_calcs = RECO(pft,bplut,gpp_calcs,Tsoil,SMSF,kmult_365,npp_365)
   #former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
 
-def get_Par(files):
-    PARs = []
-    for x in range(len(files)):
-        flux_tower = files[x]
-        flux_tower = flux_tower[:47]+'/'+flux_tower[47:]
-        file = open(flux_tower)
-        lines = csv.reader(row for row in file if not row.startswith('#'))
-        tower_par = []
-        total_par = 0
-        for row in lines:
-            par = row[11]
-            total_par = 0
-            if(par != 'NaN' and par != 'par'):
-                tower_par.append(par)
-                total_par += float(par)
-        if(len(tower_par) != 0):
-            par_val = total_par/len(tower_par)
-            PARs.append(par_val)
-        file.close()
-    return PARs
+
+def get_par(flux_tower_fnames):
+  pars = []
+  for flux_tower_fname in flux_tower_fnames:
+    # pandas dataframe
+    df = pd.read_csv(flux_tower_fname)
+    # get par as np array
+    tower_pars = df['par'].to_numpy()
+    # find mean without nans
+    pars.append(np.nanmean(tower_pars))
+  return np.array(pars)
 
 if __name__ == "__main__":
   main(sys.argv[1:])

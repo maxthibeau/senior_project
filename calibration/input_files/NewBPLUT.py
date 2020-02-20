@@ -16,8 +16,16 @@ class NewBPLUT():
     #       40=Vpd_QA_Error, 41=Smrz_QA_Error, 42=Tsoil_QA_Error, 43=Smtop_QA_Error
 
     def __init__(self,filepath):
-        self._filepath = filepath
+        file = open(filepath)
+        lines = csv.reader(row for row in file if not row.startswith('#'))
+        # grabs labels from first row, could strip whitespace
+        self._labels = next(lines)
         self._current_bplut = []
+        for row in lines:
+            self._current_bplut.append(row)
+        file.close()    
+        
+        ''' 
         self._bplut_labels = ["LC_index","LC_Label","model_code","NDVItoFPAR_scale","NDVItoFPAR_offset",
         "LUEmax", "Tmin_min_K", "Tmin_max_K", "VPD_min_Pa", "VPD_max_Pa","SMrz_min","SMrz_max","FT_min",
         "FT_max","SMtop_min","SMtop_max","Tsoil_beta0","Tsoil_beta1","Tsoil_beta2", "fraut", "fmet",
@@ -26,15 +34,12 @@ class NewBPLUT():
         "FtMethod_QA_mult","FtAge_QA_Rank_min","FtAge_QA_Rank_max","FtAge_QA_Error_min",
         "FtAge_QA_Error_max","Par_QA_Error","Tmin_QA_Error","Vpd_QA_Error","Smrz_QA_Error",
         "Tsoil_QA_Error","Smtop_QA_Error"]
+        '''
 
-    #loading of BPLUT from the config file
-    def load_current(self):
-        file = open(self._filepath)
-        lines = csv.reader(row for row in file if not row.startswith('#'))
-        for row in lines:
-            self._current_bplut.append(row)
-        file.close()
-        return self._current_bplut
+    def __getitem__(self, pft_and_key):
+      pft, key = pft_and_key
+      key_index = self._labels.index(key)
+      return self._current_bplut[pft][key_index]
 
     #to be done after each optimization (GPP/RECO/SOC) step
     def after_optimization(self, index_PFT, variables_optimized):
