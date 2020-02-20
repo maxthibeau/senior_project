@@ -27,9 +27,13 @@ def main(argv):
 
   # pft_data = PFT(pft_selected, meteor_input, reference_input)
 
+  #outlier removal
+  pft = int(pft)
+  window_size = 100 #get from user (int of days)
+  outliers = Outliers(pft,flux_tower_data_by_pft,reference_input,window_size)
+
   former_bplut = config_file.reference_bplut_table()
   bplut = former_bplut.load_current()
-  pft = int(pft)
   # GPP
   VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,0) #meterological input MET (vpd) array
   SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,0) #meterological input MET (smrz) array
