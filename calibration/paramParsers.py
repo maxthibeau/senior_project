@@ -36,7 +36,7 @@ class Params_To_Optimize:
 
   def ft(self):
     return self.ft
-
+##########################################
   def toggle_lue_max(self):
     self.lue_max = not self.lue_max
 
@@ -60,3 +60,58 @@ class Params_To_Optimize:
 
   def toggle_ft(self):
     self.ft = not self.ft
+###########################################
+  def on_lue_max(self):
+    self.lue_max = True
+
+  def on_vpd_low(self):
+    self.vpd_low = True
+
+  def on_vpd_high(self):
+    self.vpd_high = True
+
+  def on_smrz_low(self):
+    self.smrz_low = True
+
+  def on_smrz_hi(self):
+    self.smrz_hi = True
+
+  def on_tmin_low(self):
+    self.tmin_low = True
+
+  def on_tmin_hi(self):
+    self.tmin_hi = True
+
+  def on_ft(self):
+    self.ft = True
+###########################################
+  def off_lue_max(self):
+    self.lue_max = False
+
+  def off_vpd_low(self):
+    self.vpd_low = False
+
+  def off_vpd_high(self):
+    self.vpd_high = False
+
+  def off_smrz_low(self):
+    self.smrz_low = False
+
+  def off_smrz_hi(self):
+    self.smrz_hi = False
+
+  def off_tmin_low(self):
+    self.tmin_low = False
+
+  def off_tmin_hi(self):
+    self.tmin_hi = False
+
+  def off_ft(self):
+    self.ft = False
+
+
+
+
+
+
+
