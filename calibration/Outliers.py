@@ -33,11 +33,31 @@ class Outliers:
 
             self.gpp_all_towers.append(gpp_single_tower)
             self.reco_all_towers.append(reco_single_tower)
-   
+
     def get_mean(self,choice):
         if(choice == "GPP"):
             self.gpp_sd = self.ref.subset_data(["GPP","gpp_std_dev"])
-            return self.ref.gpp_given_pft(self.pft) 
+            return self.ref.gpp_given_pft(self.pft)
         elif(choice == "RECO"):
             self.reco_sd = self.ref.subset_data(["RH","rh_std_dev"])
             return self.ref.reco_given_pft(self.pft)
+
+    def display_GPP(self):
+        base = np.array(list(i/100 for i in range(0,self.window_size)))
+        b = np.ones(self.window_size) / self.window_size
+        #smooth data
+        y = signal.filtfilt(b,1,self.gpp_all_towers,method='gust')
+        plt.plot(base,y,'r')
+        plt.show()
+
+    def display_RECO(self):
+        base = np.array(list(i/100 for i in range(0,self.window_size)))
+        b = np.ones(self.window_size) / self.window_size
+        #smooth data
+        y = signal.filtfilt(b,1,self.reco_all_towers,method='gust')
+        plt.plot(base,y,'r')
+        plt.show()
+
+    def display_outliers(self):
+        self.display_GPP()
+        self.display_RECO()

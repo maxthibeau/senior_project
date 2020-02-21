@@ -13,7 +13,7 @@ def main(argv):
     print ("usage: <config file>")
     exit(1)
 
-  # 
+  #
   config_fname = argv[0]
   config_file = ConfigFile.ConfigFile(config_fname)
   meteor_input = config_file.meteorological_input()
@@ -29,9 +29,9 @@ def main(argv):
 
   flux_tower_data_by_pft = flux_tower_data.take(tower_sites)
   #outlier removal
-
   window_size = 100 #get from user (int of days)
   outliers = Outliers(pft,flux_tower_data_by_pft,prev_simulation,window_size)
+  outliers.display_outliers()
 
   bplut = config_file.reference_bplut_table()
   # GPP, collect meteorological input
