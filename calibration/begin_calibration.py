@@ -58,7 +58,7 @@ def get_par(flux_tower_fnames):
     # pandas dataframe
     df = pd.read_csv(flux_tower_fname)
     # get par as np array
-    tower_pars = df['par'].to_numpy()q
+    tower_pars = df['par'].to_numpy()
     pars.append(tower_pars)
   return np.array(pars)
 
