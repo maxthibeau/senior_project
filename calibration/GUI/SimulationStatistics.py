@@ -2,8 +2,8 @@ from GUI.BasePage import *
 
 class SimulationStatistics(BasePage):
 
-   def __init__(self, next_page_function, page_title, exit_option):
-      BasePage.__init__(self, next_page_function, page_title)
+   def __init__(self, width, height, page_title):
+      BasePage.__init__(self, width, height)
       page_label = QtWidgets.QLabel("Simulation Completed")
 
       self.Rval_label = QtWidgets.QLabel("Pearson's R-Value: ")
@@ -64,7 +64,7 @@ class SimulationStatistics(BasePage):
       main_layout.addLayout(NEE_layout)
       main_layout.addLayout(button_layout)
       self.setLayout(main_layout)
-      self.setTitle(page_title)
+      self.setWindowTitle(page_title)
 
    def exit(self):
       self.hide()
