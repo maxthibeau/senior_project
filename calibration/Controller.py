@@ -83,8 +83,7 @@ class Controller:
     self._post_spin_stats.set_prev_page(self._numerical_spinups)
     self._post_spin_stats.set_next_page(self._pft_selection)
 
-    self._numerical_spinups.show()
-    # self._opening_screen.show()
+    self._opening_screen.show()
 
   def perform_numerical_spinups(self):
     self.numerical_spinups = NumericalSpinups(self.show_simulation_statistics,"Numerical Spin-Up Iterations")
@@ -108,8 +107,6 @@ def main(argv):
 
   app = QtWidgets.QApplication(sys.argv)
   controller = Controller(width, height)
-  # top = TopBarLayout(width, height)
-  # top.show()
   sys.exit(app.exec_())
 
 if __name__ == '__main__':
