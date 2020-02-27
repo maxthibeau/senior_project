@@ -11,7 +11,7 @@ from GUI.EnterRecoHyperparams import *
 from GUI.DisplaySOC import *
 from GUI.NumericalSpinups import *
 from GUI.SimulationStatistics import *
-from GUI.TopBarLayout import *
+#from GUI.TopBarLayout import *
 
 #for Mark's Ubuntu
 #export DISPLAY=:0.0
@@ -19,21 +19,22 @@ from GUI.TopBarLayout import *
 class Controller:
 
   def __init__(self, width, height):
+    self._tool_tips = self.readInDescriptions()
     self._opening_screen = OpeningScreen(width, height, "Calibration Software")
     self._select_config_file = SelectConfigFile(width, height, "Select Config File")
-    self._pft_selection = SelectPFT(width, height, "Select Plant Functional Type")
-    self._gpp_outlier_smoothing = SmoothOutliers(width, height, "Smooth GPP Outliers", "GPP")
-    self._reco_outlier_smoothing = SmoothOutliers(width, height, "Smooth RECO Outliers", "RECO")
+    self._pft_selection = SelectPFT(width, height, "Select Plant Functional Type",self._tool_tips)
+    self._gpp_outlier_smoothing = SmoothOutliers(width, height, "Smooth GPP Outliers", "GPP",self._tool_tips)
+    self._reco_outlier_smoothing = SmoothOutliers(width, height, "Smooth RECO Outliers", "RECO",self._tool_tips)
 
     self._gpp_vs_emult = DisplaySingleGraph(width, height, "GPP vs. EMult")
-    self._gpp_ramp_plots = DisplayRAMP(width, height, "RECO ramp funcs", "GPP", ["VPD", "SMRZ", "TMIN"], self._gpp_vs_emult, "GPP vs. EMult") 
-    self._select_gpp_opt_params = ParameterChoosing(width, height, "Choose GPP Optimization Params", ["LUEmax", "VPDlow", "VPDhigh", "SMRZlow", "SMRZhigh", "TMINlow", "TMINhigh", "FT"])
+    self._gpp_ramp_plots = DisplayRAMP(width, height, "RECO ramp funcs", "GPP", ["VPD", "SMRZ", "TMIN"], self._gpp_vs_emult, "GPP vs. EMult")
+    self._select_gpp_opt_params = ParameterChoosing(width, height, "Choose GPP Optimization Params", ["LUEmax", "VPD_min", "VPD_max", "SMRZ_min", "SMRZ_max", "TMIN_min", "TMIN_max", "FT"], self._tool_tips)
     self._gpp_param_diff = ParameterDifference(width, height, "Difference in GPP Parameters After Optimization", self._select_gpp_opt_params.params_to_optimize(), "GPP", self._gpp_ramp_plots)
 
     self._select_reco_hyperparams = EnterRecoHyperparams(width, height, "Enter RECO Optimziation Hyperparameters")
     self._rh_c_vs_k_mult = DisplaySingleGraph(width, height, "RH/C Vs. Kmult")
     self._reco_ramp_funcs = DisplayRAMP(width, height, "RECO RAMP funcs", "RECO", ["TSOIL", "SMSF"], self._rh_c_vs_k_mult, "Rh/C Vs. Kmult")
-    self._reco_params_to_optimize = ParameterChoosing(width, height, "Chosoe RECO Optimization Parmas", ["Faut", "BTSOIL", "SMSFmin", "SMSFmax"])
+    self._reco_params_to_optimize = ParameterChoosing(width, height, "Chosoe RECO Optimization Parmas", ["Faut", "TSOIL", "SMSF_min", "SMSF_max"],self._tool_tips)
     self._reco_param_diff = ParameterDifference(width, height, "Difference in RECO Parameters After Optimization", self._reco_params_to_optimize.params_to_optimize(), "RECO", self._reco_ramp_funcs)
     self._plot_soc_estimation = DisplaySOC(width, height, "Estimated_SOC vs. Calculated_SOC")
     self._numerical_spinups = NumericalSpinups(width, height, "Numerical Spin-Up Iterations")
@@ -48,8 +49,8 @@ class Controller:
     self._pft_selection.set_next_page(self._gpp_outlier_smoothing)
 
     self._gpp_outlier_smoothing.set_prev_page(self._pft_selection)
-    self._gpp_outlier_smoothing.set_next_page(self._reco_outlier_smoothing)      
-    
+    self._gpp_outlier_smoothing.set_next_page(self._reco_outlier_smoothing)
+
     self._reco_outlier_smoothing.set_prev_page(self._gpp_outlier_smoothing)
     self._reco_outlier_smoothing.set_next_page(self._gpp_ramp_plots)
 
@@ -58,16 +59,16 @@ class Controller:
 
     self._select_gpp_opt_params.set_prev_page(self._gpp_ramp_plots)
     self._select_gpp_opt_params.set_next_page(self._gpp_param_diff)
-  
+
     self._gpp_param_diff.set_prev_page(self._select_gpp_opt_params)
     self._gpp_param_diff.set_next_page(self._select_reco_hyperparams)
 
     self._select_reco_hyperparams.set_prev_page(self._select_gpp_opt_params)
     self._select_reco_hyperparams.set_next_page(self._reco_ramp_funcs)
-  
+
     self._reco_ramp_funcs.set_prev_page(self._select_reco_hyperparams)
     self._reco_ramp_funcs.set_next_page(self._reco_params_to_optimize)
-    
+
     self._reco_params_to_optimize.set_prev_page(self._reco_ramp_funcs)
     self._reco_params_to_optimize.set_next_page(self._reco_param_diff)
 
@@ -100,8 +101,18 @@ class Controller:
   def current_window(self):
     return ("current window")
 
+  def readInDescriptions(self):
+      tooltipDict = {}
+      with open("././DataFiles/varDescriptions.txt","r") as f:
+          for line in f:
+             if not line.startswith("#"):
+                 line = line.split(":")
+                 keys,vals = line[0],line[1].strip("\n")
+                 tooltipDict[keys] = vals
+      return tooltipDict
+
 def main(argv):
-    
+
   width = 1200
   height = 600
 

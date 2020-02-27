@@ -2,14 +2,17 @@ from GUI.BasePage import *
 
 class ParameterChoosing(BasePage):
 
-  def __init__(self, width, height, page_title, params):
+  def __init__(self, width, height, page_title, params, tooltips):
     BasePage.__init__(self, width, height)
-
+    tooltip = tooltips
     self.params = params
     self.param_checkboxes = []
 
     for param in self.params:
-      self.param_checkboxes.append(QtWidgets.QCheckBox(param))
+      checkbox = QtWidgets.QCheckBox(param)
+      if param in tooltip:
+          checkbox.setToolTip(tooltip[param])
+      self.param_checkboxes.append(checkbox)
 
     self.select_parameters_label = QtWidgets.QLabel("Select Parameters To Optimize:")
     self.select_parameters_label.setStyleSheet("text-decoration: underline;")
@@ -33,7 +36,7 @@ class ParameterChoosing(BasePage):
     main_layout.addLayout(grid_layout)
     main_layout.addWidget(self.prev_page_button)
     main_layout.addWidget(self.optimize_button)
-    self.setLayout(main_layout) 
+    self.setLayout(main_layout)
     self.setWindowTitle(page_title)
 
   def parameters_selected(self):

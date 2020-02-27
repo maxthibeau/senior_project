@@ -34,7 +34,7 @@ class DisplayRAMP(BasePage):
     if self.gpp_or_reco == "GPP":
       next_page = QtWidgets.QPushButton("Choose GPP Optimization Params")
       prev_page = QtWidgets.QPushButton("Re-Smooth RECO Outliers")
-    else:
+    else: #self.gpp_or_reco == "RECO"
       next_page = QtWidgets.QPushButton("Choose RECO Optimization Params")
       prev_page = QtWidgets.QPushButton("Prev")
 

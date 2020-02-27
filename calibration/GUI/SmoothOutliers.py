@@ -2,9 +2,9 @@ from GUI.BasePage import *
 
 class SmoothOutliers(BasePage):
 
-  def __init__(self, width, height, page_title, gpp_or_reco):
+  def __init__(self, width, height, page_title, gpp_or_reco, tooltips):
     BasePage.__init__(self, width, height)
-
+    tooltip = tooltips
     self.data_smoothed = False
 
     self.gpp_or_reco = gpp_or_reco
@@ -20,8 +20,14 @@ class SmoothOutliers(BasePage):
     self.draw_plot()
 
     # display number of outliers rmoeved
-    self.num_outliers_removed_label = QtWidgets.QLabel(self.gpp_or_reco + " # of outliers removed: 5")
+    self.outlier_label = QtWidgets.QLabel(self.gpp_or_reco)
+    if(self.gpp_or_reco == "GPP"):
+        self.outlier_label.setToolTip(tooltip["GPP"])
+    else: # self.gpp_or_reco == "RECO"
+        self.outlier_label.setToolTip(tooltip["RECO"])
+    self.num_outliers_removed_label = QtWidgets.QLabel(" # of outliers removed: 5")
     self.elements_removed_layout = QtWidgets.QHBoxLayout()
+    self.elements_removed_layout.addWidget(self.outlier_label)
     self.elements_removed_layout.addWidget(self.num_outliers_removed_label)
 
     # let user select smoothing parameters
@@ -49,7 +55,7 @@ class SmoothOutliers(BasePage):
       next_page = QtWidgets.QPushButton("Optimize GPP")
       prev_page = QtWidgets.QPushButton("Re-smooth GPP")
     else:
-      next_page = QtWidgets.QPushButton("Smooth RECO Outliers")      
+      next_page = QtWidgets.QPushButton("Smooth RECO Outliers")
       prev_page = QtWidgets.QPushButton("Re-Select PFT")
 
     smooth_button.clicked.connect(self.smooth_data)
