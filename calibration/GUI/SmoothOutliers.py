@@ -76,6 +76,7 @@ class SmoothOutliers(BasePage):
     grid_layout.addLayout(self.smoothing_selection_layout)
     grid_layout.addLayout(self.bottom_layout)
     self.setLayout(grid_layout)
+    self.setWindowTitle(page_title)
 
   def draw_plot(self):
     for ax in self.axes:
