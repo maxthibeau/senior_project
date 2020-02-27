@@ -30,7 +30,8 @@ class Outliers:
             # remove non-negative values from gpp and reco
             gpp_single_tower[gpp_single_tower < 0] = np.nan
             reco_single_tower[reco_single_tower < 0] = np.nan
-
+            gpp_single_tower = gpp_single_tower[~np.isnan(gpp_single_tower)]
+            reco_single_tower = reco_single_tower[~np.isnan(reco_single_tower)]
             self.gpp_all_towers.append(gpp_single_tower)
             self.reco_all_towers.append(reco_single_tower)
 
