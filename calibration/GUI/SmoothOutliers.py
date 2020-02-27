@@ -108,5 +108,9 @@ class SmoothOutliers(BasePage):
 
   def next_page(self):
     if self.data_smoothed:
+      self.window_size_label.setStyleSheet("color: black;")
       self.next_window.emit()
       self.close()
+    else:
+      self.window_size_label.setStyleSheet("color: red;")
+      

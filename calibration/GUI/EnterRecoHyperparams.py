@@ -63,6 +63,7 @@ class EnterRecoHyperparams(BasePage):
       return 0.0 <= float(value) and float(value) <= 1.0
     except ValueError:
       return False
+
   def valuePrhchange(self,value):
       value=value/100.0
       self.Prh_textbox.setText(str(value))
@@ -70,12 +71,12 @@ class EnterRecoHyperparams(BasePage):
       value=value/100.0
       self.Pk_textbox.setText(str(value))
   def updatePrhslide(self,value):
-      if not self.valid_value(float(value)):
+      if not self.valid_value(value):
         return False
       value=float(value)*100
       self.Prh_slide.setValue(value)
   def updatePkslide(self,value):
-      if not self.valid_value(float(value)):
+      if not self.valid_value(value):
         return False
       value=float(value)*100
       self.Pk_slide.setValue(value)
