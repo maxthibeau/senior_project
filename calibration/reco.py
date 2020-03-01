@@ -63,7 +63,7 @@ class RECO:
   def calc_reco(self):
     Ra = self.f_aut * self.gpp_val
     kmults = self.calc_kmult()
-    cbar0 = self.calc_cbar()
+    cbar0 = self.calc_cbar(kmults)
     recos = []
     for c in range(len(kmults)):
         Rh = kmults[c] * cbar0
@@ -91,7 +91,7 @@ class RECO:
     self.pk = pk
 
   #Calculates C_bar
-  def calc_cbar(self):
+  def calc_cbar(self,kmults):
     fast_pool = (self.fmet * self.npp_365)/(self.ropt * self.kmult_365)
     med_pool = ((1-self.fmet) * self.npp_365)/(self.ropt * self.kstr * self.kmult_365)
     slow_pool = (self.fstr * self.kstr * med_pool) / self.krec
@@ -107,7 +107,19 @@ class RECO:
       for e in range(len(self.TSOIL_ramp)):
           K_mult = self.TSOIL_ramp[e] * self.SMSF_ramp[e]
           k_mults.append(K_mult)
+    k_mults = self.filter_vals(k_mults)
     return k_mults
+
+  #filter out kmult below user-provided Pk, calc Rh/Kmult, and
+  def filter_vals(self,vals):
+      new_vals = []
+      percentile = np.percentile(vals,self.pk) #gets percentile of pk
+      for i in range(len(vals)):
+          if vals[i] > percentile:
+              new_vals.append(vals[i])
+      print(new_vals)
+      #need Rh/Kmult to continue
+      return new_vals
 
   #Calculates the ramp function of TSOIL (f(TSOIL))
   def calc_TSOIL(self,x):
@@ -127,7 +139,7 @@ class RECO:
     return val
 
   def calc_y_ramp(self):
-      RHs - []
+      RHs = []
       kmults = self.calc_kmult()
       cbar0 = self.calc_cbar()
       for c in range(len(kmults)):
@@ -141,6 +153,13 @@ class RECO:
       tsoil.display_ramp()
       smsf = RampFunction(self.SMSF_ramp,self.y_vals,self.lue_vals,"SMSF","RECO")
       smsf.display_ramp()
+
+  def rhc_v_kmult(self):
+      graph = RampFunction(self.calc_kmult(),self.reco,self.lue_vals,"Kmult","GPP")
+      print("Would you like to display the graph of Rh/Cbar vs Kmult?")
+      choice = char(input("Y for Yes, N for No: "))
+      if(choice.lower() == "y"):
+          graph.display_optional()
 
   #The RECO optimization function with no input given (All outliers included)
   def optimize_reco(self):
