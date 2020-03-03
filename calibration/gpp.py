@@ -16,7 +16,7 @@ from funcs.ramp_func import *
 class GPP:
 
   #Initializes the GPP class
-  def __init__(self,pft,bplut,vpd,smrz,tmin,par,fpar): #,FT_mult
+  def __init__(self,pft,bplut,vpd,smrz,tmin,par,fpar):
     #FIXME: debug
     epsilon_max = .95
     lue = float(bplut[pft, 'LUEmax'])
@@ -31,13 +31,13 @@ class GPP:
     ft_mult_max = float(bplut[pft, 'FT_max'])
     #from calculations/for graph
     self.lue_vals = [0,lue]
-    e_mult = calc_e_mult(vpd, (vpd_min, vpd_max), tmin, (tmin_min, tmin_max), smrz, (smrz_min, smrz_max), 0)
-    print(type(e_mult))
-    gpp = calc_gpp(fpar, par, epsilon_max, e_mult)
+    self.e_mult = calc_e_mult(vpd, (vpd_min, vpd_max), tmin, (tmin_min, tmin_max), smrz, (smrz_min, smrz_max), 0)
+    #print(type(self.e_mult))
+    self.gpp = calc_gpp(fpar, par, epsilon_max, self.e_mult)
     # APAR = fpar * par
-    y_vals = gpp / (fpar * par)
-    print(y_vals)
-    # self.display_ramps()
+    y_vals = self.gpp / (fpar * par)
+    #print(y_vals)
+    self.display_ramps()
 
   #Calculates the ramp function of SMRZ (f(SMRZ))
   def calc_ramp_SMRZ(self,x):
@@ -53,7 +53,7 @@ class GPP:
 
   # this is gpp
   def calc_y_ramp(self):
-      emults = self.calc_emult()
+      emults = self.emult
       y_vals = []
       for e in range(len(emults)):
           y = self.lue * emults[e]
@@ -70,7 +70,11 @@ class GPP:
       smrz.display_ramp()
 
   def display_gpp_v_emult(self):
-      pass
+      graph = RampFunction(self.e_mult,self.gpp,self.lue_vals,"Emult","GPP")
+      print("Would you like to display the graph of GPP vs Emult?")
+      choice = char(input("Y for Yes, N for No: "))
+      if(choice.lower() == "y"):
+          graph.display_optional()
 
   #The GPP optimization function with no input (All outliers included)
   def optimize_gpp(self):

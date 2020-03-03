@@ -1,0 +1,30 @@
+Flux Tower csv legend:
+year,month,day,t,nee,gpp,reco,swc,ts,vpd,ta,par,rad,precip
+--------------------------------------------------------
+Meteorological_input:
+ANC <KeysViewHDF5 ['lc_dom', 'smrz_max', 'smrz_min']> 
+
+MET <KeysViewHDF5 ['smrz', 'smsf', 'swgdn', 'tmin', 'tsoil', 'tsurf', 'vpd']> 
+
+MOD <KeysViewHDF5 ['fpar', 'fpar_clim', 'fpar_qc']> 
+
+SUBSET <KeysViewHDF5 ['date_time', 'grid_row_col', 'site_latlon', 'site_name', 'site_to_center_dist_km']> 
+--------------------------------------------------------------
+Reference Input:
+EC <KeysViewHDF5 ['emult_mean', 'frozen_area', 'tmult_mean', 'wmult_mean']> 
+
+GEO <KeysViewHDF5 ['latitude', 'longitude']> 
+
+GPP <KeysViewHDF5 ['gpp_mean', 'gpp_pft1_mean', 'gpp_pft2_mean', 'gpp_pft3_mean', 'gpp_pft4_mean', 'gpp_pft5_mean', 'gpp_pft6_mean', 'gpp_pft7_mean', 'gpp_pft8_mean', 'gpp_std_dev']> 
+
+Metadata <KeysViewHDF5 ['AcquisitionInformation', 'CRID', 'Config', 'DataQuality', 'DatasetIdentification', 'Extent', 'GridSpatialRepresentation', 'ProcessStep', 'SeriesIdentification', 'Source']> 
+
+NEE <KeysViewHDF5 ['nee_mean', 'nee_pft1_mean', 'nee_pft2_mean', 'nee_pft3_mean', 'nee_pft4_mean', 'nee_pft5_mean', 'nee_pft6_mean', 'nee_pft7_mean', 'nee_pft8_mean', 'nee_std_dev']> 
+
+QA <KeysViewHDF5 ['carbon_model_bitflag', 'nee_rmse_mean', 'nee_rmse_pft1_mean', 'nee_rmse_pft2_mean', 'nee_rmse_pft3_mean', 'nee_rmse_pft4_mean', 'nee_rmse_pft5_mean', 'nee_rmse_pft6_mean', 'nee_rmse_pft7_mean', 'nee_rmse_pft8_mean', 'qa_count', 'qa_count_pft1', 'qa_count_pft2', 'qa_count_pft3', 'qa_count_pft4', 'qa_count_pft5', 'qa_count_pft6', 'qa_count_pft7', 'qa_count_pft8']> 
+
+RH <KeysViewHDF5 ['rh_mean', 'rh_pft1_mean', 'rh_pft2_mean', 'rh_pft3_mean', 'rh_pft4_mean', 'rh_pft5_mean', 'rh_pft6_mean', 'rh_pft7_mean', 'rh_pft8_mean', 'rh_std_dev']> 
+
+SOC <KeysViewHDF5 ['soc_mean', 'soc_pft1_mean', 'soc_pft2_mean', 'soc_pft3_mean', 'soc_pft4_mean', 'soc_pft5_mean', 'soc_pft6_mean', 'soc_pft7_mean', 'soc_pft8_mean', 'soc_std_dev']> 
+
+SUBSET <KeysViewHDF5 ['grid_row_col', 'site_latlon', 'site_name', 'site_to_center_dist_km', 'year_doy']>
