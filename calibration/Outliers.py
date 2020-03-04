@@ -31,9 +31,17 @@ class Outliers:
             gpp_single_tower[gpp_single_tower < 0] = np.nan
             reco_single_tower[reco_single_tower < 0] = np.nan
             gpp_single_tower = gpp_single_tower[~np.isnan(gpp_single_tower)]
+            gpp_total_tower = 0
+            for g in range(len(gpp_single_tower)):
+                gpp_total_tower += gpp_single_tower[g]
+            gpp_for_tower = gpp_total_tower / float(len(gpp_single_tower))
             reco_single_tower = reco_single_tower[~np.isnan(reco_single_tower)]
-            self.gpp_all_towers.append(gpp_single_tower)
-            self.reco_all_towers.append(reco_single_tower)
+            reco_total_tower = 0
+            for r in range(len(reco_single_tower)):
+                reco_total_tower += reco_single_tower[r]
+            reco_for_tower = reco_total_tower / float(len(reco_single_tower))
+            self.gpp_all_towers.append(gpp_for_tower)
+            self.reco_all_towers.append(reco_for_tower)
 
     def choose_window_size(self):
         print("Choose the number of days you wish to view as your window")
@@ -54,19 +62,20 @@ class Outliers:
     def display_GPP(self):
         base = np.array(list(i/100 for i in range(0,self.window_size)))
         b = np.ones(self.window_size) / self.window_size
-        print(b)
         #smooth data
         y = signal.filtfilt(b,1,self.gpp_all_towers,method='gust')
-        plt.plot(base,y,'r')
-        plt.show()
+        #plot GPP outliers
+        #plt.plot(base,y,'r')
+        #plt.show()
 
     def display_RECO(self):
         base = np.array(list(i/100 for i in range(0,self.window_size)))
         b = np.ones(self.window_size) / self.window_size
         #smooth data
         y = signal.filtfilt(b,1,self.reco_all_towers,method='gust')
-        plt.plot(base,y,'r')
-        plt.show()
+        #plot RECO outliers
+        #plt.plot(base,y,'r')
+        #plt.show()
 
     def display_outliers(self):
         self.display_GPP()
