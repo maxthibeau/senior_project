@@ -11,7 +11,7 @@ class FluxTowerData():
     self._weights = [] #float calculated from coordinates
     self._fluxes = []
     for filename in os.listdir(flux_tower_dir):
-      filepath = flux_tower_dir + filename
+      filepath = flux_tower_dir + "/" + filename
       self._fluxes.append(filepath)
       #self._fluxes.append(SingleFluxTower(filepath))
     self._fluxes = np.array(self._fluxes)

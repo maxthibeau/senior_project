@@ -24,8 +24,8 @@ class MeteorologicalInput():
       pft_grid_index += 1
     return pft_to_claimed_sites
 
-  def pfts(self):
-    return self._pfts
+  def pfts(self,first,last):
+    return self._pfts[first:last]
 
   def pft_grids(self):
     return self._pft_grids

@@ -3,7 +3,7 @@ class PFTSelector():
 
   def select_pft(meteor_input):
     print ("possible PFTS:", end = ' ')
-    poss_pfts = meteor_input.pfts()
+    poss_pfts = meteor_input.pfts(0,8)
     # convert to string to make pft datatype flexible
     poss_pfts = list(map(str, poss_pfts))
     for pft in poss_pfts:
