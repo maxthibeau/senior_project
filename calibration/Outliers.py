@@ -28,8 +28,8 @@ class Outliers:
             reco_single_tower = df['reco'].to_numpy()
 
             # remove non-negative values from gpp and reco
-            gpp_single_tower[gpp_single_tower < 0] = np.nan
-            reco_single_tower[reco_single_tower < 0] = np.nan
+            gpp_single_tower[gpp_single_tower < 0.0] = np.nan
+            reco_single_tower[reco_single_tower < 0.0] = np.nan
             gpp_single_tower = gpp_single_tower[~np.isnan(gpp_single_tower)]
             gpp_total_tower = 0
             for g in range(len(gpp_single_tower)):
