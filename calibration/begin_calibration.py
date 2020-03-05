@@ -29,8 +29,7 @@ def main(argv):
 
   flux_tower_data_by_pft = flux_tower_data.take(tower_sites)
   #outlier removal
-  window_size = 100 #get from user (int of days)
-  outliers = Outliers(pft,flux_tower_data_by_pft,prev_simulation,window_size)
+  outliers = Outliers(pft,flux_tower_data_by_pft,prev_simulation)
   outliers.display_outliers()
 
   bplut = config_file.reference_bplut_table()

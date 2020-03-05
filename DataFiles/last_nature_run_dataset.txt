@@ -1,2 +1,0 @@
-#To Be Filled with nature run data for 2000-2019
-10,10,10,10,10
