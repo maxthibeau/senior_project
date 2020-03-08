@@ -28,14 +28,17 @@ class Outliers:
             reco_single_tower = df['reco'].to_numpy()
 
             # remove non-negative values from gpp and reco
-            gpp_single_tower[gpp_single_tower < 0.0] = np.nan
-            reco_single_tower[reco_single_tower < 0.0] = np.nan
+            with np.errstate(invalid='ignore'): #nan vals in both gpp and reco will throw RuntimeWarnings
+                gpp_single_tower[gpp_single_tower < 0.0] = np.nan
+                reco_single_tower[reco_single_tower < 0.0] = np.nan
             gpp_single_tower = gpp_single_tower[~np.isnan(gpp_single_tower)]
+            #average GPP readings for the single flux tower
             gpp_total_tower = 0
             for g in range(len(gpp_single_tower)):
                 gpp_total_tower += gpp_single_tower[g]
             gpp_for_tower = gpp_total_tower / float(len(gpp_single_tower))
             reco_single_tower = reco_single_tower[~np.isnan(reco_single_tower)]
+            #average RECO readings for the single flux tower
             reco_total_tower = 0
             for r in range(len(reco_single_tower)):
                 reco_total_tower += reco_single_tower[r]
