@@ -7,20 +7,19 @@ import numpy as np
 class FluxTowerData():
 
   def __init__(self, flux_tower_dir):
-    self._coordinates = [] #array of array of 2 elements [latitude, longitude]
-    self._weights = [] #float calculated from coordinates
+    self._coordinates = [] # array of array of 2 elements [latitude, longitude]
+    self._weights = [] # float calculated from coordinates
     self._fluxes = []
     for filename in os.listdir(flux_tower_dir):
       filepath = flux_tower_dir + "/" + filename
       self._fluxes.append(filepath)
-      #self._fluxes.append(SingleFluxTower(filepath))
     self._fluxes = np.array(self._fluxes)
 
   def __getitem__(self, key):
     return self._fluxes[key]
 
-  def take(self, keys):
-    return np.take(self._fluxes, keys)
+  def subset_by_pft(self, tower_sites_claimed_by_pft):
+    np.take(self._fluxes, tower_sites_claimed_by_pft)
 
   # day can take an int between 0 and 364
   @staticmethod
@@ -34,17 +33,14 @@ class FluxTowerData():
 
   #resets flux tower data to include the coordinates
   def set_coords(self, coord_array):
-    #print("*****coords******")
     for i in range(len(self._fluxes)):
         self._coordinates.append(coord_array[i])
-        #print(i, coord_array[i])
     self._coordinates = np.array(self._coordinates)
     for q in range(len(self._coordinates)):
         self._weights.append(0.0)
-    self._weights = self.set_weights()
-    return self
+    self._set_weights()
 
-  def set_weights(self):
+  def _set_weights(self):
     #World coordinates (longitude and latitude) to grid coordinates (EASE grid) to pixel coordinates (x,y)
     geotransform = (-17367530.45, 9000, 0, 7314540.83, 0, -9000) #x_min (lower bound of longitude), x_res (9000 is 9km), 0, y_max(upper bound of latitude), 0, y_res(same as x)
     worldGrid = Affine.from_gdal(*geotransform) #aka the EASE grid, worldGrid*(col,row) to return coords
