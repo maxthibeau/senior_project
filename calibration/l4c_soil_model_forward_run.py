@@ -12,6 +12,7 @@ from MeteorologicalInput.py import MeteorlogicalInput
 class L4C_Soil_Model_Forward_Run:
   
   def __init__(self, ropt, kstr, krec, fmet, fstr, faut, gpp1km, kmult1km, litterfall, cmet0, cstr0, crec0, ns, days, input_object_m):
+    #CONSTANT: Number of 1km cells per flux tower site
     self.CELLS = 81
     
     self.ropt = ropt
@@ -28,13 +29,13 @@ class L4C_Soil_Model_Forward_Run:
     self.kmult1km = kmult1km
     
     self.litterfall = litterfall
-    self.pft = input_object_m.pft_grids()
+    self.pft = self.input_object_m.pft_grids()
     
     self.rh1 = np.zeros([self.ns,self.CELLS])
     self.rh2 = np.zeros([self.ns,self.CELLS])
     self.rh3 = np.zeros([self.ns,self.CELLS])
     
-    self.cbar0 = np.zeros([self.ns])
+    self.cbar0 = np.zeros([self.ns,self.CELLS])
     
     self.dc1 = np.zeros([self.ns,self.CELLS])
     self.dc2 = np.zeros([self.ns,self.CELLS])
@@ -66,7 +67,7 @@ class L4C_Soil_Model_Forward_Run:
                       np.zeros([self.days,self.ns,self.CELLS]),
                       np.zeros([self.days,self.ns,self.CELLS]),
                       np.zeros([self.days,self.ns,self.CELLS])])
-    for d in self.days:
+    for d in range(self.days):
       self.cbar0 = 0*self.cbar0
       
       self.rh1 = self.ropt * self.kmult1km[d] * self.c1
