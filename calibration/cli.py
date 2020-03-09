@@ -8,7 +8,7 @@ import sys
 from os import listdir
 from gpp.py import GPP
 from reco.py import RECO
-from ramp.py import Ramp
+from RampFunctions.py import RampFunction
 
 class CLI:
   
@@ -70,7 +70,7 @@ class CLI:
   #Returns the data that has been smoothed
   #Due to change
   def smooth_outliers(self,val_list,val_name):
-    self.display_smoothing(val_list,val_name+" Before Outlier Smoothing")
+    self.display_smoothing(val_list,val_name+" Before Outlier Smoothing") #Change Later
     smoothed_data = val_list
     still_smoothing = True
     window_size = 0
@@ -80,7 +80,8 @@ class CLI:
       print("2: hanninghamming")
       print("3: bartlett")
       print("4: blackman")
-      print("5: Done Smoothing")
+      print("5: Display Changes")
+      print("6: Done Smoothing")
       try:
         choice = int(input("Enter your choice here"))
       except TypeError:
@@ -90,18 +91,21 @@ class CLI:
         window_size = self.window_size_select()
       
       if(choice == 1):
-        smoothed_data = self.smooth_data(smoothed_data,1,window_size)
+        smoothed_data = self.smooth_data(smoothed_data,1,window_size) #Change later
       elif(choice == 2):
-        smoothed_data = self.smooth_data(smoothed_data,2,window_size)
+        smoothed_data = self.smooth_data(smoothed_data,2,window_size) #Change later
       elif(choice == 3):
-        smoothed_data = self.smooth_data(smoothed_data,3,window_size)
+        smoothed_data = self.smooth_data(smoothed_data,3,window_size) #Change later
       elif(choice == 4):
-        smoothed_data = self.smooth_data(smoothed_data,4,window_size)
+        smoothed_data = self.smooth_data(smoothed_data,4,window_size) #Change later
       elif(choice == 5):
+        self.display_smoothing(smoothed_data) #Change Later
+      elif(choice == 6):
         still_smoothing = False
       else:
         print("Invalid input, please try again.\n")
     
+    print("Final Smoothed Graph:")
     self.display_smoothing(smoothed_data,val_name+" After Outlier Smoothing")    
     return smoothed_data
   
@@ -110,15 +114,15 @@ class CLI:
   #Due to change
   def show_gpp_ramps(self, ramp_1, ramp_2, ramp_3, op_ramp_4):
     deciding = True
-    self.display_ramp(ramp_1) #Change later
-    self.display_ramp(ramp_2) #Change later
-    self.display_ramp(ramp_3) #Change later
+    ramp_1.display_ramp()
+    ramp_2.display_ramp()
+    ramp_3.display_ramp()
     
     choice = input("Display GPP vs emult graph? (y/n)")
     
     while(deciding):
       if(choice == "y"):
-        self.display_ramp(op_ramp_4) #Change later
+        op_ramp_4.display_ramp()
         deciding = False
       elif(choice == "n"):
         deciding = False
@@ -136,14 +140,14 @@ class CLI:
   #Returns the users choice for whether or not they want to redisplay the GPP ramps
   #Due to change
   def gpp_difference_after_optimization(self, ramp_1, ramp_2, ramp_3, ramp_4, ramp_5, ramp_6, ramp_7, ramp_8):
-    self.display_ramp(ramp_1) #Change later
-    self.display_ramp(ramp_2) #Change later 
-    self.display_ramp(ramp_3) #Change later
-    self.display_ramp(ramp_4) #Change later
-    self.display_ramp(ramp_5) #Change later
-    self.display_ramp(ramp_6) #Change later
-    self.display_ramp(ramp_7) #Change later
-    self.display_ramp(ramp_8) #Change later
+    ramp_1.display_ramp()
+    ramp_2.display_ramp()
+    ramp_3.display_ramp()
+    ramp_4.display_ramp()
+    ramp_5.display_ramp()
+    ramp_6.display_ramp()
+    ramp_7.display_ramp()
+    ramp_8.display_ramp()
     
     deciding = True
     choice = ""
@@ -167,8 +171,8 @@ class CLI:
   #Takes in 3 ramp functions to display and a user chooses whether or not they want to see the optional 3rd ramp
   #Due to change
   def show_reco_ramps(self,ramp_1, ramp_2, op_ramp_3):
-    self.display_ramp(ramp_1) #Change later
-    self.display_ramp(ramp_2) #Change later
+    ramp_1.display_ramp() #Change later
+    ramp_2.display_ramp() #Change later
     
     deciding = True
     while(deciding):
@@ -176,7 +180,7 @@ class CLI:
       
       if(choice == "y"):
         deciding = False
-        self.display_ramp(op_ramp_3) #Change later
+        ramp_3.display_ramp() #Change later
       elif(choice == "n"):
         deciding = False
       else:
@@ -193,10 +197,10 @@ class CLI:
   #Returns the user's choice for if they want to redisplay the RECO ramp functions
   #Due to change
   def reco_differences_after_optimization(self,ramp_1,ramp_2,ramp_3,ramp_4):
-    self.display_ramp(ramp_1) #Change later
-    self.display_ramp(ramp_2) #Change later
-    self.display_ramp(ramp_3) #Change later
-    self.display_ramp(ramp_4) #Change later
+    ramp_1.display_ramp() #Change later
+    ramp_2.display_ramp() #Change later
+    ramp_3.display_ramp() #Change later
+    ramp_4.display_ramp() #Change later
     
     deciding = True
     choice = ""
@@ -212,7 +216,7 @@ class CLI:
   #Displays graph for estimated SOC vs calculated SOC
   #Due to change
   def estimated_vs_calculated_soc(self,graph):
-    self.display_ramp(graph) #Change later
+    graph.display_ramp()
   
   #Gets user input for how many iterations of the simulation they would like to run
   #Returns the number of simulations the user chose
@@ -268,7 +272,4 @@ class CLI:
     pass
   
   def smooth_data(self, val_list, smoothing_type, window_size):
-    pass
-  
-  def display_ramp(self, ramp_data):
     pass
