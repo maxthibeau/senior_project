@@ -26,6 +26,7 @@ class MeteorologicalInput():
     self._TSOIL = self._subset_data(['MET','tsoil'])
         
     self._meteor_vars = [self._VPD, self._SMRZ, self._SMSF, self._TMIN, self._TSURF, self._TSOIL, self._FPAR, self._PAR]
+
   def pfts(self,first,last):
     return self._pfts[first:last]
 
@@ -73,36 +74,39 @@ class MeteorologicalInput():
   def _is_leap_year(self, date):
     return date.year % 4 == 0
       
-  def compute_climatology(self, start_date, end_date):
+  def compute_climatological_year(self, start_date, end_date):
     first_date = datetime(2000, 1, 1)
     assert(start_date >= first_date and end_date <= datetime.now())    
-
+    # for every variable in meteorological input
     for var_index in range(len(self._meteor_vars)):
+      # 365 day climatology
       var_climatology = [[] for x in range(365)]
-      leap_year_int = 0
       date = start_date
       day_inc = timedelta(days=1)
-
+      # loop through all days between start_date and end_date
       while date <= end_date:
         # skip leap years        
         if date.month == 2 and date.day == 29:
           date += day_inc
           continue
-        # -1 for 0 indexing
+        # julian date is [1, 365], our arrays are [0, 364], hence -1
         julian_date = date.timetuple().tm_yday - 1
+        # We want march 1st on a leap year to be the 60th date, not the 61st
         if self._is_leap_year(date) and date.month > 2:
           julian_date -= 1
-        date_index = (date - first_date).days
-        var_climatology[julian_date].append(self._meteor_vars[var_index][date_index])
+        day_index = (date - first_date).days
+        var_climatology[julian_date].append(self._meteor_vars[var_index][day_index])
         date += day_inc
-      
+      # average each day's values to get a 365-day climatological year
       for day_index in range(len(var_climatology)):
         var_day_mean = np.zeros(var_climatology[day_index][0].shape)
         for var_day_val in var_climatology[day_index]:
           var_day_mean += var_day_val
         var_day_mean /= len(var_climatology[day_index])
         var_climatology[day_index] = var_day_mean
+      # use np arrays because they're cool
       var_climatology = np.array(var_climatology)
+      # update class data structure
       self._meteor_vars[var_index] = var_climatology
 
   def _subset_data(self, data_list):
