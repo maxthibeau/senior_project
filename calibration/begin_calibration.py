@@ -1,7 +1,6 @@
 import sys
 from input_files.ConfigFile import *
 import csv
-import pandas as pd
 from input_files import ConfigFile
 from PFTSelector import *
 from gpp import *
@@ -37,35 +36,21 @@ def main(argv):
   meteor_input.subset_by_pft(tower_sites_claimed_by_pft)
   reference_input.subset_by_pft(pft, tower_sites_claimed_by_pft)
   
-  # start and end dates for computing climatology
-  start_date = datetime(2000, 1, 1)
-  end_date = datetime(2014, 12, 31)
+  # compute climatological year
+  climatology_start_date = datetime(2000, 1, 1)
+  climatology_end_date = datetime(2014, 12, 31)
+  meteor_input.compute_climatological_year(climatology_start_date, climatology_end_date)
+  flux_tower_data.compute_climatological_year(climatology_start_date, climatology_end_date)
   
-  meteor_input.compute_climatology(start_date, end_date)
-  exit(1)
-  # reference_input.compute_climatology(start_date, end_date)
-  
+  # TODO: prompt user for APAR bounds
   #outlier removal
-  outliers = Outliers(pft,flux_tower_data,reference_input)
-  outliers.display_outliers()
-
-  # calculate climatological year
-  '''
-  # GPP, collect meteorological input
-  VPD = meteor_input.subset_data_by_pft(['MET','vpd'],pft,1) #meterological input MET (vpd) array
-  SMRZ = meteor_input.subset_data_by_pft(['MET','smrz'],pft,1) #meterological input MET (smrz) array
-  TMIN = meteor_input.subset_data_by_pft(['MET','tmin'],pft,1) #meterological input MET (tmin) array
-  FPAR = meteor_input.subset_data_by_pft(['MOD','fpar'],pft, 2) #meterological input MOD (fpar)
-
-  PAR = get_par(flux_tower_data_by_pft) #flux tower input (par)
-
-  # with meteorological data separated, 
-  # gpp_calcs = GPP(pft,bplut,VPD,SMRZ,TMIN,PAR,FPAR)
-  '''
-  reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
+  # outliers = Outliers(pft,flux_tower_data,reference_input)
+  # outliers.display_outliers()
+  gpp_calcs = GPP(pft, bplut, meteor_input, flux_tower_data)
+  # reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
-  Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
-  SMSF = meteor_input.subset_data_by_pft(['MET','smsf'],pft,0) #meterological input MET (smsf)
+  # Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
+  # SMSF = meteor_input.subset_data_by_pft(['MET','smsf'],pft,0) #meterological input MET (smsf)
   kmult_365 = 0.0 #from forward run
   npp_365 = 0.0 #from forward run
   #reco_calcs = RECO(pft,bplut,gpp_calcs,Tsoil,SMSF,kmult_365,npp_365)

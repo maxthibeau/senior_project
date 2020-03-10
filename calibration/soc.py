@@ -35,9 +35,9 @@ class SOC:
 
    def calc_sigmas(self): #from 10c in Procedure 3.3 in Requirements Draft Doc
        sigmas = []
+       conv_1 = (1/len(self.towers))
        for flux in range(len(self.towers)): #for each tower
-           tower = self.towers[flux]
-           conv_1 = (1/len(self.towers))
+           #tower = self.towers[flux]
            kmult_star = 0.0
            npp_star = 0.0
            for i in range(0,365):
@@ -52,7 +52,7 @@ class SOC:
         socs = []
         s = 0.001 #scaling param, results in vals with units of: (kg*C)/(m^2)
         for flux in range(len(self.towers)): #for each tower
-            tower = self.towers[flux]
+            #tower = self.towers[flux]
             part_1 = (1 - self.fmet)/self.kstr
             part_2 = (self.fstr*(1 - self.fmet))/self.krec
             big_part = (self.fmet + part_1 + part_2)

@@ -57,6 +57,7 @@ class RECO:
             single_SMSF = self.calc_SMSF(x)
             self.SMSF_ramp.append(single_SMSF)
     self.y_vals = self.calc_y_ramp()
+    self.filter_vals(self.k_mults,self.y_vals)
     self.display_ramps()
 
   #Calculates RECO (if not already given)
@@ -107,19 +108,30 @@ class RECO:
       for e in range(len(self.TSOIL_ramp)):
           K_mult = self.TSOIL_ramp[e] * self.SMSF_ramp[e]
           k_mults.append(K_mult)
-    k_mults = self.filter_vals(k_mults)
     return k_mults
 
   #filter out kmult below user-provided Pk, calc Rh/Kmult, and
-  def filter_vals(self,vals):
-      new_vals = []
+  def filter_vals(self,vals,nums): #new_vals = k_mults, nums = Rhs
+      new_vals = [] #new_vals are the kmult values filtered out above the percentile of pk
       percentile = np.percentile(vals,self.pk) #gets percentile of pk
       for i in range(len(vals)):
           if vals[i] > percentile:
               new_vals.append(vals[i])
-      print(new_vals)
       #need Rh/Kmult to continue
-      return new_vals
+      total = 0.0
+      for x in range(len(nums)):
+          total += nums[x]
+      avg = total/float(len(nums)) #avg = average RH
+      rh_div_kmult = []
+      for q in range(len(new_vals)):
+          val = avg/new_vals[q]
+          rh_div_kmult.append(val)
+      after_filter = [] #to be returned after filtering above percentile of prh
+      new_percent =  np.percentile(rh_div_kmult,self.prh)
+      for z in range(len(rh_div_kmult)):
+          if rh_div_kmult[z] > new_percent:
+              after_filter.append(rh_div_kmult[z])
+      return after_filter
 
   #Calculates the ramp function of TSOIL (f(TSOIL))
   def calc_TSOIL(self,x):
@@ -145,7 +157,7 @@ class RECO:
       for c in range(len(kmults)):
           Rh = kmults[c] * cbar0
           RHs.append(Rh)
-      pass
+      return RHs
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):

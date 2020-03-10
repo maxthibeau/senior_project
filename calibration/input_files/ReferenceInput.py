@@ -13,7 +13,7 @@ class ReferenceInput():
     self._reco = self._subset_data(["RH", reco_data_key])
 
     self._gpp = self._gpp.take(indices = tower_sites_claimed_by_pft, axis = -1)
-    self._reco = self._reco.take(indices = tower_sites_claimed_by_pft, axis = -1)    
+    self._reco = self._reco.take(indices = tower_sites_claimed_by_pft, axis = -1)
 
   def gpp(self):
     if self._gpp == None:
