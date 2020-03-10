@@ -11,16 +11,16 @@ from MeteorologicalInput.py import MeteorlogicalInput
 
 class L4C_Soil_Model_Forward_Run:
   
-  def __init__(self, ropt, kstr, krec, fmet, fstr, faut, gpp1km, kmult1km, litterfall, cmet0, cstr0, crec0, ns, days, input_object_m):
+  def __init__(self, bplut, pft, gpp1km, kmult1km, litterfall, cmet0, cstr0, crec0, ns, days, input_object_m):
     #CONSTANT: Number of 1km cells per flux tower site
     self.CELLS = 81
     
-    self.ropt = ropt
-    self.kstr = kstr
-    self.krec = krec
-    self.fmet = fmet
-    self.fstr = fstr
-    self.faut = faut
+    self.ropt = float(bplut[pft][22])
+    self.kstr = float(bplut[pft][23])
+    self.krec = float(bplut[pft][24])
+    self.fmet = float(bplut[pft][20])
+    self.fstr = float(bplut[pft][21])
+    self.faut = float(bplut[pft][19])
     self.ns = ns
     self.days = days
     self.input_object_m = input_object_m
@@ -31,15 +31,15 @@ class L4C_Soil_Model_Forward_Run:
     self.litterfall = litterfall
     self.pft = self.input_object_m.pft_grids()
     
-    self.rh1 = np.zeros([self.ns,self.CELLS])
-    self.rh2 = np.zeros([self.ns,self.CELLS])
-    self.rh3 = np.zeros([self.ns,self.CELLS])
+    self.rh1 = np.zeros((self.ns,self.CELLS))
+    self.rh2 = np.zeros((self.ns,self.CELLS))
+    self.rh3 = np.zeros((self.ns,self.CELLS))
     
-    self.cbar0 = np.zeros([self.ns,self.CELLS])
+    self.cbar0 = np.zeros((self.ns,self.CELLS))
     
-    self.dc1 = np.zeros([self.ns,self.CELLS])
-    self.dc2 = np.zeros([self.ns,self.CELLS])
-    self.dc3 = np.zeros([self.ns,self.CELLS])
+    self.dc1 = np.zeros((self.ns,self.CELLS))
+    self.dc2 = np.zeros((self.ns,self.CELLS))
+    self.dc3 = np.zeros((self.ns,self.CELLS))
     
     self.c1 = cmet0
     self.c2 = cstr0
@@ -59,14 +59,14 @@ class L4C_Soil_Model_Forward_Run:
     return valid_per_site
   
   def run_model(self):
-    dc_total = np.zeros([self.ns, self.CELLS])
-    tolerance = np.zeros([self.ns, self.CELLS])
-    track = np.array([np.zeros([self.days,self.ns,self.CELLS]),
-                      np.zeros([self.days,self.ns,self.CELLS]),
-                      np.zeros([self.days,self.ns,self.CELLS]),
-                      np.zeros([self.days,self.ns,self.CELLS]),
-                      np.zeros([self.days,self.ns,self.CELLS]),
-                      np.zeros([self.days,self.ns,self.CELLS])])
+    dc_total = np.zeros((self.ns, self.CELLS))
+    tolerance = np.zeros((self.ns, self.CELLS))
+    track = np.array([np.zeros((self.days,self.ns,self.CELLS)),
+                      np.zeros((self.days,self.ns,self.CELLS)),
+                      np.zeros((self.days,self.ns,self.CELLS)),
+                      np.zeros((self.days,self.ns,self.CELLS)),
+                      np.zeros((self.days,self.ns,self.CELLS)),
+                      np.zeros((self.days,self.ns,self.CELLS))])
     for d in range(self.days):
       self.cbar0 = 0*self.cbar0
       
@@ -100,8 +100,6 @@ class L4C_Soil_Model_Forward_Run:
       track[5,d] = tolerance
     
     return track, self.c1, self.c2, self.c3, self.cbar0
-      
-      
       
       
       
