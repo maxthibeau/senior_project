@@ -16,21 +16,29 @@ from funcs.ramp_func import *
 class GPP:
 
   #Initializes the GPP class
-  def __init__(self,pft,bplut,vpd,smrz,tmin,par,fpar):
-    #FIXME: debug
+  def __init__(self,pft,bplut,meteor_input,flux_tower_data):
+    self._flux_tower_data = flux_tower_data
+    #TODO: where does epsilon max come from?
     epsilon_max = .95
     lue = float(bplut[pft, 'LUEmax'])
     # a tuple here is (min, max)
-    vpd_min = float(bplut[pft, 'VPD_min_Pa']) #in Pa
-    vpd_max = float(bplut[pft, 'VPD_max_Pa'])
-    tmin_min = float(bplut[pft, 'Tmin_min_K']) #in K
-    tmin_max = float(bplut[pft, 'Tmin_max_K'])
-    smrz_min = float(bplut[pft, 'SMrz_min'])
-    smrz_max = float(bplut[pft, 'SMrz_max'])
-    ft_mult_min = float(bplut[pft, 'FT_min'])
-    ft_mult_max = float(bplut[pft, 'FT_max'])
+    self._vpd_min = float(bplut[pft, 'VPD_min_Pa']) #in Pa
+    self._vpd_max = float(bplut[pft, 'VPD_max_Pa'])
+    self._tmin_min = float(bplut[pft, 'Tmin_min_K']) #in K
+    self._tmin_max = float(bplut[pft, 'Tmin_max_K'])
+    self._smrz_min = float(bplut[pft, 'SMrz_min'])
+    self._smrz_max = float(bplut[pft, 'SMrz_max'])
+    self._ft_mult_min = float(bplut[pft, 'FT_min'])
+    self._ft_mult_max = float(bplut[pft, 'FT_max'])
+
+    self._VPD = meteor_input.VPD()
+    self._TMIN = meteor_input.TMIN()
+    self._SMRZ = meteor_input.SMRZ()
+    self._FPAR = meteor_input.FPAR()
+    self._PAR = meteor_input.PAR()    
     #from calculations/for graph
     self.lue_vals = [0,lue]
+    '''
     self.e_mult = calc_e_mult(vpd, (vpd_min, vpd_max), tmin, (tmin_min, tmin_max), smrz, (smrz_min, smrz_max), 0)
     #print(type(self.e_mult))
     self.gpp = calc_gpp(fpar, par, epsilon_max, self.e_mult)
@@ -38,20 +46,18 @@ class GPP:
     y_vals = self.gpp / (fpar * par)
     #print(y_vals)
     self.display_ramps()
+    '''
+  
+  def simulate_gpp(self, v):
+    
+    # gpp is fpar * par * eps_max * e_mult
+    # emult is ramp(VPD), ramp(TMIN), ramp(SMRZ), FTmult
+    e_mult = 
 
-  #Calculates the ramp function of SMRZ (f(SMRZ))
-  def calc_ramp_SMRZ(self,x):
-    return ramp_func(x, self.SMRZ_min, self.SMRZ_max)
+  def func_to_minimize(self, input_vect):
+    error = 
 
-  #Calculates the ramp function of TMIN (f(TMIN))
-  def calc_ramp_TMIN(self,x):
-    return ramp_func(x, self.TMIN_min, self.TMIN_max)
-
-  #Calculates the ramp function of VPD (f(VPD))
-  def calc_ramp_VPD(self,x):
-    return ramp_func(x, self.VPD_min, self.VPD_max)
-
-  # this is gpp
+  # this is gpp/APAR
   def calc_y_ramp(self):
       emults = self.emult
       y_vals = []
