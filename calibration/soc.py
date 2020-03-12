@@ -62,7 +62,7 @@ class SOC:
 
     def calc_estimate(self): # y values for SOC estimation
         arr = []
-        for i in range(len(self.towers)): #for each tower;s sigma * Beta_soc
+        for i in range(len(self.towers)): #for each tower: sigma * Beta_soc
             val = self.sigmas[i] * self.beta_socs[i]
             arr.append(val)
         return arr
