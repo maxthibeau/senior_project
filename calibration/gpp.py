@@ -35,7 +35,7 @@ class GPP:
     self._TMIN = meteor_input.TMIN()
     self._SMRZ = meteor_input.SMRZ()
     self._FPAR = meteor_input.FPAR()
-    self._PAR = meteor_input.PAR()    
+    self._PAR = meteor_input.PAR()
     #from calculations/for graph
     self.lue_vals = [0,lue]
     '''
@@ -47,15 +47,19 @@ class GPP:
     #print(y_vals)
     self.display_ramps()
     '''
-  
+
   def simulate_gpp(self, v):
-    
+
     # gpp is fpar * par * eps_max * e_mult
     # emult is ramp(VPD), ramp(TMIN), ramp(SMRZ), FTmult
-    e_mult = 
+    #e_mult =
+    
+    pass
 
   def func_to_minimize(self, input_vect):
-    error = 
+    #error =
+
+    pass
 
   # this is gpp/APAR
   def calc_y_ramp(self):
