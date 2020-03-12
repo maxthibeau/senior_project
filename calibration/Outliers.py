@@ -62,20 +62,20 @@ class Outliers:
             self.reco_sd = self.ref.subset_data(["RH","rh_std_dev"])
             return self.ref.reco_given_pft(self.pft)
 
-    def display_GPP(self):
+    def display_GPP(self, met):
         base = np.array(list(i/100 for i in range(0,self.window_size)))
         b = np.ones(self.window_size) / self.window_size
         #smooth data
-        y = signal.filtfilt(b,1,self.gpp_all_towers,method='gust')
+        y = signal.filtfilt(b,1,self.gpp_all_towers,method=met)
         #plot GPP outliers
         #plt.plot(base,y,'r')
         #plt.show()
 
-    def display_RECO(self):
+    def display_RECO(self, met):
         base = np.array(list(i/100 for i in range(0,self.window_size)))
         b = np.ones(self.window_size) / self.window_size
         #smooth data
-        y = signal.filtfilt(b,1,self.reco_all_towers,method='gust')
+        y = signal.filtfilt(b,1,self.reco_all_towers,method=met)
         #plot RECO outliers
         #plt.plot(base,y,'r')
         #plt.show()
