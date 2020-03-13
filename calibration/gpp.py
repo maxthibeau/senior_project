@@ -11,31 +11,42 @@ import numpy as np
 from RampFunctions import *
 from funcs.gpp_funcs import *
 from funcs.ramp_func import *
+from funcs.sse import *
 
 #The GPP class will hold variables and functions used in the GPP optimization process
 class GPP:
 
   #Initializes the GPP class
   def __init__(self,pft,bplut,meteor_input,flux_tower_data):
-    self._flux_tower_data = flux_tower_data
-    #TODO: where does epsilon max come from?
-    epsilon_max = .95
+    # from flux tower data
+    self._observed_gpp = flux_tower_data.gpp()
+    self._non_missing_obs = flux_tower_data.non_missing_observations()
+    self._tower_weights = flux_tower_data.weights()
+
+    # from BPLUT table
+    # LUE is also epsillon_max
     lue = float(bplut[pft, 'LUEmax'])
-    # a tuple here is (min, max)
     self._vpd_min = float(bplut[pft, 'VPD_min_Pa']) #in Pa
     self._vpd_max = float(bplut[pft, 'VPD_max_Pa'])
     self._tmin_min = float(bplut[pft, 'Tmin_min_K']) #in K
     self._tmin_max = float(bplut[pft, 'Tmin_max_K'])
     self._smrz_min = float(bplut[pft, 'SMrz_min'])
     self._smrz_max = float(bplut[pft, 'SMrz_max'])
-    self._ft_mult_min = float(bplut[pft, 'FT_min'])
-    self._ft_mult_max = float(bplut[pft, 'FT_max'])
+    # check what val this takes on
+    self._ft_mult_frozen = float(bplut[pft, 'FT_min'])
+    # just 1
+    self._ft_mult_thawed = float(bplut[pft, 'FT_max'])
 
+    # from meteor input
     self._VPD = meteor_input.VPD()
     self._TMIN = meteor_input.TMIN()
     self._SMRZ = meteor_input.SMRZ()
     self._FPAR = meteor_input.FPAR()
-    self._PAR = meteor_input.PAR()    
+    # FPAR is 81 length array, observed gpp is a scalar, take mean to make dimensionality matchs
+    self._FPAR = np.mean(self._FPAR, axis = 1)
+    self._PAR = meteor_input.PAR()
+    self._TSURF = meteor_input.TSURF()
+
     #from calculations/for graph
     self.lue_vals = [0,lue]
     '''
@@ -47,15 +58,12 @@ class GPP:
     #print(y_vals)
     self.display_ramps()
     '''
-  
-  def simulate_gpp(self, v):
-    
-    # gpp is fpar * par * eps_max * e_mult
-    # emult is ramp(VPD), ramp(TMIN), ramp(SMRZ), FTmult
-    e_mult = 
-
-  def func_to_minimize(self, input_vect):
-    error = 
+  #Input order: [LUE, VPD_min, VPD_max, SMRZ_min, SMRZ_max, TMIN_min, TMIN_max, FT_mult]
+  def func_to_optimize(self, input_vect):
+    lue, vpd_min, vpd_max, tmin_min, tmin_max, smrz_min, smrz_max, ft_mult = input_vect
+    e_mult = downward_ramp_func(self._VPD, (vpd_min, vpd_max)) * upward_ramp_func(self._TMIN, (tmin_min, tmin_max)) * upward_ramp_func(self._SMRZ, (smrz_min, smrz_max))
+    simulated_gpp = self._FPAR * self._PAR * lue * e_mult
+    return sse(self._observed_gpp, simulated_gpp, self._non_missing_obs, self._tower_weights)
 
   # this is gpp/APAR
   def calc_y_ramp(self):
