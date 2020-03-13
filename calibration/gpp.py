@@ -45,8 +45,8 @@ class GPP:
     # FPAR is 81 length array, observed gpp is a scalar, take mean to make dimensionality matchs
     self._FPAR = np.mean(self._FPAR, axis = 1)
     self._PAR = meteor_input.PAR()
+    #NOTE: tsurf effects ftmult, keeping around as a just in case
     self._TSURF = meteor_input.TSURF()
-
     #from calculations/for graph
     self.lue_vals = [0,lue]
     '''

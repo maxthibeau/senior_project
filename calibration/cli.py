@@ -9,6 +9,7 @@ from os import listdir
 from gpp.py import GPP
 from reco.py import RECO
 from RampFunctions.py import RampFunction
+from Outliers.py import Outliers
 
 class CLI:
   
@@ -69,19 +70,15 @@ class CLI:
   #Takes in parameters used for smoothing data and displaying the smoothed data
   #Returns the data that has been smoothed
   #Due to change
-  def smooth_outliers(self,val_list,val_name):
-    self.display_smoothing(val_list,val_name+" Before Outlier Smoothing") #Change Later
-    smoothed_data = val_list
+  def smooth_outliers(self,outlier_object):
     still_smoothing = True
     window_size = 0
     while(still_smoothing):
       print("Which method of smoothing would you like to use? (Enter a number 1-5)")
-      print("1: flat")
-      print("2: hanninghamming")
-      print("3: bartlett")
-      print("4: blackman")
-      print("5: Display Changes")
-      print("6: Done Smoothing")
+      print("1: gust")
+      print("2: pad")
+      print("3: Display Changes")
+      print("4: Done Smoothing")
       try:
         choice = int(input("Enter your choice here"))
       except TypeError:
@@ -91,16 +88,14 @@ class CLI:
         window_size = self.window_size_select()
       
       if(choice == 1):
-        smoothed_data = self.smooth_data(smoothed_data,1,window_size) #Change later
+        outlier_object.display_GPP('gust')
+        outlier_object.display_RECO('gust')
       elif(choice == 2):
-        smoothed_data = self.smooth_data(smoothed_data,2,window_size) #Change later
+        outlier_object.display_GPP('pad')
+        outlier_object.display_RECO('pad')
       elif(choice == 3):
-        smoothed_data = self.smooth_data(smoothed_data,3,window_size) #Change later
+        outlier_object.display_outlier()
       elif(choice == 4):
-        smoothed_data = self.smooth_data(smoothed_data,4,window_size) #Change later
-      elif(choice == 5):
-        self.display_smoothing(smoothed_data) #Change Later
-      elif(choice == 6):
         still_smoothing = False
       else:
         print("Invalid input, please try again.\n")

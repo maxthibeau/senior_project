@@ -6,8 +6,8 @@ class ReferenceInput():
     self._reco = None
 
   def subset_by_pft(self, pft, tower_sites_claimed_by_pft):
-    gpp_data_key = "gpp_pft" + str(pft) + "_mean"
-    reco_data_key = "rh_pft" + str(pft) + "_mean"
+    gpp_data_key = "gpp_pft" + str(pft+1) + "_mean"
+    reco_data_key = "rh_pft" + str(pft+1) + "_mean"
 
     self._gpp = self._subset_data(["GPP", gpp_data_key])
     self._reco = self._subset_data(["RH", reco_data_key])
