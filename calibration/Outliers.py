@@ -9,9 +9,9 @@ class Outliers:
     #SciPy’s filtfilt - scipy.signal.filtfilt(b, a, x, axis=-1, padtype='odd', padlen=None, method='pad', irlen=None) https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html
     #SavitzkyGolay filter - scipy.signal.savgol_filter(x, window_length, polyorder, deriv=0, delta=1.0, axis=-1, mode='interp', cval=0.0) https://docs.scipy.org/doc/scipy-0.16.1/reference/generated/scipy.signal.savgol_filter.html
     #robust spline smoothing - scipy.interpolate.UnivariateSpline(x, y, w=None, bbox=[None, None], k=3, s=None, ext=0, check_finite=False) https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.interpolate.UnivariateSpline.html
-    def __init__(self,pft,tower_fnames,reference_input):
+    def __init__(self,pft,tower_dfs,reference_input):
         self.pft = pft
-        self.tower_fnames = tower_fnames
+        self.tower_dfs = tower_dfs
         self.ref = reference_input
         self.window_size = self.choose_window_size()
         self.gpp_sd = 0.0
@@ -22,15 +22,14 @@ class Outliers:
         self.reco_all_towers = []
 
         # TODO: nans and negative vals
-        for tower_fname in self.tower_fnames:
-            df = pd.read_csv(tower_fname)
+        for df in self.tower_dfs:
             gpp_single_tower = df['gpp'].to_numpy()
             reco_single_tower = df['reco'].to_numpy()
-
             # remove non-negative values from gpp and reco
             with np.errstate(invalid='ignore'): #nan vals in both gpp and reco will throw RuntimeWarnings
                 gpp_single_tower[gpp_single_tower < 0.0] = np.nan
                 reco_single_tower[reco_single_tower < 0.0] = np.nan
+
             gpp_single_tower = gpp_single_tower[~np.isnan(gpp_single_tower)]
             #average GPP readings for the single flux tower
             gpp_total_tower = 0
@@ -45,6 +44,10 @@ class Outliers:
             reco_for_tower = reco_total_tower / float(len(reco_single_tower))
             self.gpp_all_towers.append(gpp_for_tower)
             self.reco_all_towers.append(reco_for_tower)
+        self.gpp_all_towers = np.array(self.gpp_all_towers)
+        self.reco_all_towers = np.array(self.reco_all_towers)
+        print(self.gpp_all_towers.shape)
+        print(self.reco_all_towers.shape)
 
     def choose_window_size(self):
         print("Choose the number of days you wish to view as your window")
@@ -68,8 +71,8 @@ class Outliers:
         #smooth data
         y = signal.filtfilt(b,1,self.gpp_all_towers,method='gust')
         #plot GPP outliers
-        #plt.plot(base,y,'r')
-        #plt.show()
+        plt.plot(base,y,'r')
+        plt.show()
 
     def display_RECO(self):
         base = np.array(list(i/100 for i in range(0,self.window_size)))
@@ -77,8 +80,8 @@ class Outliers:
         #smooth data
         y = signal.filtfilt(b,1,self.reco_all_towers,method='gust')
         #plot RECO outliers
-        #plt.plot(base,y,'r')
-        #plt.show()
+        plt.plot(base,y,'r')
+        plt.show()
 
     def display_outliers(self):
         self.display_GPP()
