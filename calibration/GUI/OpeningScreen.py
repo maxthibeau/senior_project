@@ -14,6 +14,8 @@ class OpeningScreen(BasePage):
     begin_calibration_button = QtWidgets.QPushButton("Begin Calibration")
     begin_calibration_button.setToolTip('Start the calibration process')
     begin_calibration_button.clicked.connect(self.next_page)
+    begin_calibration_button.setFixedSize(400,100)
+    begin_calibration_button.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
 
     # create layout
     img_layout = QtWidgets.QHBoxLayout()
@@ -21,6 +23,6 @@ class OpeningScreen(BasePage):
 
     main_layout = QtWidgets.QVBoxLayout()
     main_layout.addLayout(img_layout)
-    main_layout.addWidget(begin_calibration_button)
+    main_layout.addWidget(begin_calibration_button, alignment=Qt.AlignCenter)
     self.setLayout(main_layout)
     self.setWindowTitle(page_title)
