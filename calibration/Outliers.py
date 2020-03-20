@@ -6,7 +6,7 @@ import pandas as pd
 
 class Outliers:
     #outlier options:
-    #SciPy’s filtfilt - scipy.signal.filtfilt(b, a, x, axis=-1, padtype='odd', padlen=None, method='pad', irlen=None) https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html
+    #SciPy's filtfilt - scipy.signal.filtfilt(b, a, x, axis=-1, padtype='odd', padlen=None, method='pad', irlen=None) https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html
     #SavitzkyGolay filter - scipy.signal.savgol_filter(x, window_length, polyorder, deriv=0, delta=1.0, axis=-1, mode='interp', cval=0.0) https://docs.scipy.org/doc/scipy-0.16.1/reference/generated/scipy.signal.savgol_filter.html
     #robust spline smoothing - scipy.interpolate.UnivariateSpline(x, y, w=None, bbox=[None, None], k=3, s=None, ext=0, check_finite=False) https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.interpolate.UnivariateSpline.html
     def __init__(self,pft,tower_dfs,reference_input):
