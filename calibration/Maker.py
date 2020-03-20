@@ -184,20 +184,4 @@ if __name__ == '__main__':
     ex = Maker()
     sys.exit(app.exec_())
 
-'''
-    optional_label = QLabel("These Fields are Optional")
-
-    pfts_label = QLabel("Select Plant Function Types")
-    self.pft_selector = QtWidgets.QComboBox()
-    self.pft_selector.addItem("Evergreen Needleleaf")
-    self.pft_selector.addItem("Evergreen Broadleaf")
-    self.pft_selector.addItem("Deciduous Needleleaf")
-    self.pft_selector.addItem("Deciduous Broadleaf")
-    self.pft_selector.addItem("Shrub") 
-    self.pft_selector.addItem("Grass")
-    self.pft_selector.addItem("Cereal Crop")
-    self.pft_selector.addItem("Broadleaf Crop")
-
-    opt_params_label = QLabel("Select Parameters to Optimize")
-'''
 
