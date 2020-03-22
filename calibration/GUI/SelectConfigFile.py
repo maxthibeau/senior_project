@@ -18,6 +18,7 @@ class SelectConfigFile(BasePage):
     self.file_box.setFixedSize(400,50)
     
     cfg_file_browser = QtWidgets.QPushButton("Browse Files")
+    cfg_file_browser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     cfg_file_browser.setFixedSize(200,50)
     cfg_file_browser.clicked.connect(self.get_file)
     
@@ -34,6 +35,7 @@ class SelectConfigFile(BasePage):
 
     # next page
     next_btn = QtWidgets.QPushButton("Continue to PFT Selection Page")
+    next_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     next_btn.setToolTip('Select PFT')
     next_btn.clicked.connect(self.next_page)
     next_btn.setFont(QtGui.QFont("Times", 8, QtGui.QFont.Bold))

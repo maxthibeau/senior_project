@@ -16,6 +16,7 @@ class SelectPFT(BasePage):
     self.pft_selector_label.setToolTip("Select "+tooltip["PFT"])
     self.pft_selector_label.setFont(QtGui.QFont("Times", 12))
     self.pft_selector = QtWidgets.QComboBox()
+    self.pft_selector.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     self.pft_selector.setFixedSize(350,75)
     self.pft_selector.setFont(QtGui.QFont("Times",12))
     self.pft_selector.addItem("Choose a PFT Here")
@@ -49,12 +50,14 @@ class SelectPFT(BasePage):
 
     # give user navigation abilities
     next_page = QtWidgets.QPushButton("Proceed")
+    next_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     next_page.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
     next_page.setFixedSize(250,75)
     # next_page.setToolTip('Continue')
     next_page.clicked.connect(self.next_check)
 
     prev_page = QtWidgets.QPushButton("Choose a different config file")
+    prev_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     prev_page.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
     prev_page.setFixedSize(250,75)
     prev_page.clicked.connect(self.prev_page)
