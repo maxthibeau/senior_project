@@ -61,7 +61,7 @@ class SelectConfigFile(BasePage):
     filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Choose Config File', '.', '*.cfg files')
     if filename != '':
       self.file_box.setText(filename)
-      self.file_name.setStyleSheet("color: black;")
+      self.file_box.setStyleSheet("color: black;")
 
   def outputcheck(self,text):
      if not self.valid_name(text):
@@ -75,9 +75,9 @@ class SelectConfigFile(BasePage):
         return False
 
   def next_page(self):
-    if self.file_name.text() == 'Select Configuration File' or self.file_name.text() == 'Please select a valid config file':
-      self.file_name.setStyleSheet("color: red;")
-      self.file_name.setText("Please select a valid config file")
+    if self.file_box.text() == 'Choose a file (.cfg)' or self.file_box.text() == 'Please select a valid config file':
+      self.file_box.setStyleSheet("color: red;")
+      self.file_box.setText("Please select a valid config file")
     else:
       self.next_window.emit()
       self.hide()
