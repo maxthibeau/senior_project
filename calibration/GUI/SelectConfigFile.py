@@ -8,7 +8,7 @@ class SelectConfigFile(BasePage):
 
     # config file browser
     # NOTE: make textbox for file name
-    title = QtWidgets.QLabel("Configuration File Selection")
+    title = QtWidgets.QLabel("1. Configuration File Selection")
     title.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
     self.file_name = QtWidgets.QLabel("Please select a Configuration File: ")
     self.file_name.setFont(QtGui.QFont("Times", 13))
@@ -16,17 +16,17 @@ class SelectConfigFile(BasePage):
     self.file_box.setFont(QtGui.QFont("Times", 8, QtGui.QFont.Light))
     self.file_box.setReadOnly(True)
     self.file_box.setFixedSize(400,50)
-    
+
     cfg_file_browser = QtWidgets.QPushButton("Browse Files")
     cfg_file_browser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     cfg_file_browser.setFixedSize(200,50)
     cfg_file_browser.clicked.connect(self.get_file)
-    
+
     cfg_button_field = QtWidgets.QFormLayout()
     cfg_button_field.setFieldGrowthPolicy(QFormLayout.FieldsStayAtSizeHint)
     cfg_button_field.addRow(self.file_box,cfg_file_browser)
     cfg_button_field.setFormAlignment(Qt.AlignHCenter)
-    
+
     # layout of config file grabber
     cfg_file_browser_layout = QtWidgets.QFormLayout()
     cfg_file_browser_layout.setFieldGrowthPolicy(QFormLayout.FieldsStayAtSizeHint)
@@ -38,7 +38,7 @@ class SelectConfigFile(BasePage):
     next_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     next_btn.setToolTip('Select PFT')
     next_btn.clicked.connect(self.next_page)
-    next_btn.setFont(QtGui.QFont("Times", 8, QtGui.QFont.Bold))
+    next_btn.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
     next_btn.setFixedSize(250,75)
     # previous page
     #prev_btn = QtWidgets.QPushButton("Opening Screen")

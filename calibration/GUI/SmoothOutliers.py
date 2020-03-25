@@ -19,32 +19,36 @@ class SmoothOutliers(BasePage):
     self.toolbar = NavigationToolbar(self.canvas, self)
     self.draw_plot()
 
-    # display number of outliers rmoeved
-    self.outlier_label = QtWidgets.QLabel(self.gpp_or_reco)
+    #page label
     if(self.gpp_or_reco == "GPP"):
+        self.outlier_label = QtWidgets.QLabel("3. "+self.gpp_or_reco+" Outlier Removal")
         self.outlier_label.setToolTip(tooltip["GPP"])
     else: # self.gpp_or_reco == "RECO"
+        self.outlier_label = QtWidgets.QLabel("4. "+self.gpp_or_reco+" Outlier Removal")
         self.outlier_label.setToolTip(tooltip["RECO"])
-    self.num_outliers_removed_label = QtWidgets.QLabel(" # of outliers removed: 5")
+    self.outlier_label.setFont(QtGui.QFont("Times", 13))
+    self.outlier_label.setAlignment(Qt.AlignCenter)
+
+    # display number of outliers removed
+    self.num_outliers_removed_label = QtWidgets.QLabel("# of outliers removed: 5")
     self.elements_removed_layout = QtWidgets.QHBoxLayout()
-    self.elements_removed_layout.addWidget(self.outlier_label)
     self.elements_removed_layout.addWidget(self.num_outliers_removed_label)
 
     # let user select smoothing parameters
     self.smoothing_selection_label = QtWidgets.QLabel('Select Smoothing Parameters:')
     self.smoothing_selection_label.setStyleSheet("text-decoration: underline;")
 
-    self.window_selector_label = QtWidgets.QLabel("Window Type:")
-    self.window_selector = QtWidgets.QComboBox()
-    self.window_selector.addItems(["flat", "hanning" "hamming", "bartlett", "blackman"])
+    #self.window_selector_label = QtWidgets.QLabel("Window Type:")
+    #self.window_selector = QtWidgets.QComboBox()
+    #self.window_selector.addItems(["flat", "hanning" "hamming", "bartlett", "blackman"])
 
     self.window_size_label = QtWidgets.QLabel("Window Size (needs to be a float > 0):")
     self.window_size = QtWidgets.QLineEdit(self)
     self.window_size.setPlaceholderText("Required")
 
     self.smoothing_selection_layout = QtWidgets.QHBoxLayout()
-    self.smoothing_selection_layout.addWidget(self.window_selector_label)
-    self.smoothing_selection_layout.addWidget(self.window_selector)
+    #self.smoothing_selection_layout.addWidget(self.window_selector_label)
+    #self.smoothing_selection_layout.addWidget(self.window_selector)
     self.smoothing_selection_layout.addWidget(self.window_size_label)
     self.smoothing_selection_layout.addWidget(self.window_size)
 
@@ -69,6 +73,7 @@ class SmoothOutliers(BasePage):
 
     # combine all elements into one layout
     grid_layout = QtWidgets.QVBoxLayout()
+    grid_layout.addWidget(self.outlier_label)
     grid_layout.addWidget(self.canvas)
     grid_layout.addWidget(self.toolbar)
     grid_layout.addLayout(self.elements_removed_layout)
@@ -114,4 +119,3 @@ class SmoothOutliers(BasePage):
       self.close()
     else:
       self.window_size_label.setStyleSheet("color: red;")
-      

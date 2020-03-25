@@ -28,7 +28,7 @@ class SOC:
       self.npp_365 = npp_365 # from analytical model spin up
       self.towers = flux_towers
       self.sigmas = self.calc_sigmas()
-      self.beta_socs = self.calc_beta_socs()
+      self.beta_soc = self.calc_beta_soc() #only 1 soc for each different fmet,fstr,ropt,kstr,krec
       self.estimated_soc = self.calc_estimate()
       self.actual_soc = [] #TODO: Change to actual soc calc for each tower
       self.display_graph()
@@ -48,22 +48,18 @@ class SOC:
            sigmas.append(sigma)
         return sigmas
 
-    def calc_beta_socs(self): #from 10d in Procedure 3.3 in Requirements Draft Doc
-        socs = []
+    def calc_beta_soc(self): #from 10d in Procedure 3.3 in Requirements Draft Doc
         s = 0.001 #scaling param, results in vals with units of: (kg*C)/(m^2)
-        for flux in range(len(self.towers)): #for each tower
-            #tower = self.towers[flux]
-            part_1 = (1 - self.fmet)/self.kstr
-            part_2 = (self.fstr*(1 - self.fmet))/self.krec
-            big_part = (self.fmet + part_1 + part_2)
-            soc = s * big_part/self.ropt
-            socs.append(soc)
-        return socs
+        part_1 = (1 - self.fmet)/self.kstr
+        part_2 = (self.fstr*(1 - self.fmet))/self.krec
+        big_part = (self.fmet + part_1 + part_2)
+        soc = s * big_part/self.ropt
+        return soc #one for each bplut
 
     def calc_estimate(self): # y values for SOC estimation
         arr = []
         for i in range(len(self.towers)): #for each tower: sigma * Beta_soc
-            val = self.sigmas[i] * self.beta_socs[i]
+            val = self.sigmas[i] * self.beta_soc
             arr.append(val)
         return arr
 

@@ -22,11 +22,11 @@ class ParameterDifference(BasePage):
     self.toolbar = NavigationToolbar(self.canvas, self)
     self.plot_chosen_ramp_function()
 
-    next_param_button = QtWidgets.QPushButton("Next RAMP")
-    next_param_button.setToolTip('Go to next Ramp')
+    next_param_button = QtWidgets.QPushButton("Next RAMP Function")
+    next_param_button.setToolTip('Go to next optimized ramp function')
     next_param_button.clicked.connect(self.increment_current_param_plotted_index)
-    prev_param_button = QtWidgets.QPushButton("Previous RAMP")
-    prev_param_button.setToolTip('Go to pevious Ramp')
+    prev_param_button = QtWidgets.QPushButton("Previous RAMP Function")
+    prev_param_button.setToolTip('Go to previous optimized ramp function')
     prev_param_button.clicked.connect(self.decrement_current_param_plotted_index)
     switch_graph_layout = QtWidgets.QHBoxLayout()
     switch_graph_layout.addWidget(prev_param_button)
@@ -35,11 +35,15 @@ class ParameterDifference(BasePage):
     redisplay_ramp_button = QtWidgets.QPushButton("Redisplay " + gpp_or_reco + " RAMP functions (optional)")
     redisplay_ramp_button.clicked.connect(self.redisplay_ramp_funcs)
     if self.gpp_or_reco == "GPP":
+      self.page_label = QtWidgets.QLabel("8. "+gpp_or_reco+" Optimized Parameter Differences")
       next_page = QtWidgets.QPushButton("Optimize RECO Params")
       prev_page = QtWidgets.QPushButton("Re-select GPP Optimization Params")
     else:
+      self.page_label = QtWidgets.QLabel("12. "+gpp_or_reco+" Optimized Parameter Differences")
       next_page = QtWidgets.QPushButton("Plot empirical vs. computed SOC")
       prev_page = QtWidgets.QPushButton("Re-select RECO Optimization Params")
+    self.page_label.setFont(QtGui.QFont("Times", 13))
+    self.page_label.setAlignment(Qt.AlignCenter)
 
     next_page.clicked.connect(self.next_page)
     prev_page.clicked.connect(self.prev_page)
@@ -50,6 +54,7 @@ class ParameterDifference(BasePage):
     bottom_layout.addWidget(next_page)
 
     graph_layout = QtWidgets.QVBoxLayout()
+    graph_layout.addWidget(self.page_label)
     graph_layout.addWidget(self.canvas)
     graph_layout.addWidget(self.toolbar)
     graph_layout.addLayout(switch_graph_layout)

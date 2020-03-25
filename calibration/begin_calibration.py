@@ -35,17 +35,17 @@ def main(argv):
   flux_tower_data.subset_by_pft(tower_sites_claimed_by_pft)
   meteor_input.subset_by_pft(tower_sites_claimed_by_pft)
   reference_input.subset_by_pft(pft, tower_sites_claimed_by_pft)
-  
+
   # compute climatological year
   climatology_start_date = datetime(2000, 1, 1)
   climatology_end_date = datetime(2014, 12, 31)
   meteor_input.compute_climatological_year(climatology_start_date, climatology_end_date)
   flux_tower_data.compute_climatological_year(climatology_start_date, climatology_end_date)
-  
+
   # TODO: prompt user for APAR bounds
   #outlier removal
-  # outliers = Outliers(pft,flux_tower_data,reference_input)
-  # outliers.display_outliers()
+  #outliers = Outliers(pft,flux_tower_data,reference_input)
+  #outliers.display_outliers()
   gpp_calcs = GPP(pft, bplut, meteor_input, flux_tower_data)
   # reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO

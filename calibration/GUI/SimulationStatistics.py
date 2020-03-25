@@ -4,7 +4,11 @@ class SimulationStatistics(BasePage):
 
    def __init__(self, width, height, page_title):
       BasePage.__init__(self, width, height)
-      page_label = QtWidgets.QLabel("Simulation Completed")
+      page_label = QtWidgets.QLabel("14. Simulation Completed")
+      page_label.setFont(QtGui.QFont("Times", 13))
+      page_label.setAlignment(Qt.AlignCenter)
+
+      info_label = QtWidgets.QLabel("Simulation Statistics:")
 
       self.Rval_label = QtWidgets.QLabel("Pearson's R-Value: ")
       self.Rval_textbox = QtWidgets.QLineEdit(self)
@@ -58,6 +62,7 @@ class SimulationStatistics(BasePage):
 
       main_layout = QtWidgets.QVBoxLayout(self)
       main_layout.addWidget(page_label)
+      main_layout.addWidget(info_label)
       main_layout.addLayout(Rval_layout)
       main_layout.addLayout(GPP_layout)
       main_layout.addLayout(RECO_layout)

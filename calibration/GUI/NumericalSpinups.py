@@ -4,8 +4,12 @@ class NumericalSpinups(BasePage):
 
    def __init__(self, width, height, page_title):
       BasePage.__init__(self, width, height)
+      self.step_label = QtWidgets.QLabel("13. Numerical Spin-Up Iterations")
+      self.step_label.setFont(QtGui.QFont("Times", 13))
+      self.step_label.setAlignment(Qt.AlignCenter)
+
       self.page_label = QtWidgets.QLabel("Choose a Number of Numerical Iterations: ")
-      self.page_label.setToolTip('About 10 should do')
+      self.page_label.setToolTip('About 10 should do'
 
       self.Num_textbox = QtWidgets.QSpinBox(self)
 
@@ -17,6 +21,7 @@ class NumericalSpinups(BasePage):
       prev_button.clicked.connect(self.prev_page)
 
       main_layout = QtWidgets.QVBoxLayout(self)
+      main_layout.addWidget(self.step_label)
       main_layout.addWidget(self.page_label)
       main_layout.addWidget(self.Num_textbox)
       main_layout.addWidget(prev_button)

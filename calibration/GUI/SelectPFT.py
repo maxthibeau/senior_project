@@ -8,11 +8,11 @@ class SelectPFT(BasePage):
   def __init__(self, width, height, page_title, tooltips):
     BasePage.__init__(self, width, height)
     tooltip = tooltips
-    
-    title = QtWidgets.QLabel("Plant Functional Type (PFT) Selection Page")
+
+    title = QtWidgets.QLabel("2. Plant Functional Type (PFT) Selection Page")
     title.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
     # these widgets select a pft
-    self.pft_selector_label = QtWidgets.QLabel("Select PFT (Hover over a PFT in the dropdown box for additional information)")
+    self.pft_selector_label = QtWidgets.QLabel("Select PFT (Hover over a PFT for additional information)")
     self.pft_selector_label.setToolTip("Select "+tooltip["PFT"])
     self.pft_selector_label.setFont(QtGui.QFont("Times", 12))
     self.pft_selector = QtWidgets.QComboBox()
@@ -37,7 +37,7 @@ class SelectPFT(BasePage):
     self.pft_selector.setItemData(7,"CCP: "+tooltip["CCP"],QtCore.Qt.ToolTipRole)
     self.pft_selector.addItem("Broadleaf Crop")
     self.pft_selector.setItemData(8,"BCP: "+tooltip["BCP"],QtCore.Qt.ToolTipRole)
-    
+
     self.error_message = QtWidgets.QLabel("Please choose a PFT before proceeding")
     self.error_message.setStyleSheet("color: red;")
     self.error_message.setFont(QtGui.QFont("Times", 9))
@@ -76,7 +76,7 @@ class SelectPFT(BasePage):
     main_layout.addLayout(bottom_layout)
     self.setLayout(main_layout)
     self.setWindowTitle(page_title)
-    
+
   def next_check(self):
     if(self.pft_selector.currentIndex() == 0):
       self.error_message.setVisible(True)

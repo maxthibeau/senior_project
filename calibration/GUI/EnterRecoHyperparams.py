@@ -5,9 +5,10 @@ class EnterRecoHyperparams(BasePage):
 
   def __init__(self, width, height, page_title):
     BasePage.__init__(self, width, height)
-    page_label = QtWidgets.QLabel("Choose a Prh and Pk")
+    page_label = QtWidgets.QLabel("9. Choose a Prh and Pk (Between 0 and 1)")
     page_label.setToolTip('Prh (Percentile of RH/Kmult to use in SOC pools) and Pk (Percentile to use as minimum threshold for acceptable Kmult values)')
-    second_page_label = QtWidgets.QLabel("(Between 0 and 1)")
+    page_label.setFont(QtGui.QFont("Times", 13))
+    page_label.setAlignment(Qt.AlignCenter)
 
     self.Prh_label = QtWidgets.QLabel("Prh:")
     self.Prh_label.setToolTip('Percentile of RH/Kmult to use in SOC pools')
@@ -48,9 +49,8 @@ class EnterRecoHyperparams(BasePage):
     next_button.setToolTip('Continue')
     next_button.clicked.connect(self.next_page)
 
-    main_layout = QtWidgets.QVBoxLayout(self)
+    main_layout = QtWidgets.QVBoxLayout()
     main_layout.addWidget(page_label)
-    main_layout.addWidget(second_page_label)
     main_layout.addLayout(Prh_layout)
     main_layout.addLayout(Pk_layout)
     main_layout.addWidget(prev_button)

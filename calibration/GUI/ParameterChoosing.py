@@ -2,11 +2,18 @@ from GUI.BasePage import *
 
 class ParameterChoosing(BasePage):
 
-  def __init__(self, width, height, page_title, params, tooltips):
+  def __init__(self, width, height, page_title, params, tooltips, gpp_or_reco):
     BasePage.__init__(self, width, height)
     tooltip = tooltips
     self.params = params
     self.param_checkboxes = []
+
+    if gpp_or_reco=="GPP":
+       self.param_label = QtWidgets.QLabel("7. "+gpp_or_reco+" Optimization Parameters")
+    else:
+       self.param_label = QtWidgets.QLabel("11. "+gpp_or_reco+" Optimization Parameters")
+    self.param_label.setFont(QtGui.QFont("Times", 13))
+    self.param_label.setAlignment(Qt.AlignCenter)
 
     for param in self.params:
       checkbox = QtWidgets.QCheckBox(param)
@@ -29,13 +36,18 @@ class ParameterChoosing(BasePage):
 
     self.optimize_button = QtWidgets.QPushButton("Optimize Parameters")
     self.optimize_button.clicked.connect(self.next_page)
-    self.prev_page_button = QtWidgets.QPushButton("Re-display old RAMP funcs")
+    self.prev_page_button = QtWidgets.QPushButton("Re-display old RAMP functions")
     self.prev_page_button.clicked.connect(self.prev_page)
-    main_layout = QtWidgets.QHBoxLayout()
-    main_layout.addWidget(self.select_parameters_label)
-    main_layout.addLayout(grid_layout)
-    main_layout.addWidget(self.prev_page_button)
-    main_layout.addWidget(self.optimize_button)
+
+    choose_layout = QtWidgets.QHBoxLayout()
+    choose_layout.addWidget(self.select_parameters_label)
+    choose_layout.addLayout(grid_layout)
+    choose_layout.addWidget(self.prev_page_button)
+    choose_layout.addWidget(self.optimize_button)
+
+    main_layout = QtWidgets.QVBoxLayout()
+    main_layout.addWidget(self.param_label)
+    main_layout.addLayout(choose_layout)
     self.setLayout(main_layout)
     self.setWindowTitle(page_title)
 

@@ -18,6 +18,10 @@ class DisplaySOC(BasePage):
     ax.set_ylabel(y_axis)
     self.canvas.draw()
 
+    page_label = QtWidgets.QLabel("13. SOC Estimation Graph")
+    page_label.setFont(QtGui.QFont("Times", 13))
+    page_label.setAlignment(Qt.AlignCenter)
+
     next_button = QtWidgets.QPushButton("Perform Numerical Spinups")
     prev_button = QtWidgets.QPushButton("Review RECO Parameter Difference")
     next_button.clicked.connect(self.next_page)
@@ -26,6 +30,7 @@ class DisplaySOC(BasePage):
     bottom_layout.addWidget(prev_button)
     bottom_layout.addWidget(next_button)
     main_layout = QtWidgets.QVBoxLayout()
+    main_layout.addWidget(page_label)
     main_layout.addWidget(self.canvas)
     main_layout.addWidget(self.toolbar)
     main_layout.addLayout(bottom_layout)
