@@ -22,10 +22,10 @@ class GPP:
     self._observed_gpp = flux_tower_data.gpp()
     self._non_missing_obs = flux_tower_data.non_missing_observations()
     self._tower_weights = flux_tower_data.weights()
-
+    
     # from BPLUT table
     # LUE is also epsillon_max
-    lue = float(bplut[pft, 'LUEmax'])
+    self._lue = float(bplut[pft, 'LUEmax'])
     self._vpd_min = float(bplut[pft, 'VPD_min_Pa']) #in Pa
     self._vpd_max = float(bplut[pft, 'VPD_max_Pa'])
     self._tmin_min = float(bplut[pft, 'Tmin_min_K']) #in K
@@ -42,45 +42,59 @@ class GPP:
     self._TMIN = meteor_input.TMIN()
     self._SMRZ = meteor_input.SMRZ()
     self._FPAR = meteor_input.FPAR()
-    # FPAR is 81 length array, observed gpp is a scalar, take mean to make dimensionality matchs
+    # FPAR is 81 length array, observed gpp is a scalar, take mean to make dimensionality match
     self._FPAR = np.mean(self._FPAR, axis = 1)
     self._PAR = meteor_input.PAR()
-    #NOTE: tsurf effects ftmult, keeping around as a just in case
     self._TSURF = meteor_input.TSURF()
-    #from calculations/for graph
-    self.lue_vals = [0,lue]
-    '''
-    self.e_mult = calc_e_mult(vpd, (vpd_min, vpd_max), tmin, (tmin_min, tmin_max), smrz, (smrz_min, smrz_max), 0)
-    #print(type(self.e_mult))
-    self.gpp = calc_gpp(fpar, par, epsilon_max, self.e_mult)
-    # APAR = fpar * par
-    y_vals = self.gpp / (fpar * par)
-    #print(y_vals)
-    self.display_ramps()
-    '''
+
+    self._APAR = self._FPAR * self._PAR
+    # prompt user for APAR bounds
+    select_apar_bounds = None
+    while (select_apar_bounds not in ("y", "n")):
+      select_apar_bounds = input("would you like to specifiy APAR bounds?(y/n): ")
+    if select_apar_bounds == "y":
+      self._apar_low_bound = float(input("Input a lower bound for apar (float): "))
+      self._apar_high_bound = float(input("Input a higher bound for apar (float): "))
+    elif select_apar_bounds == "n":
+      self._apar_low_bound = np.min(self._APAR)
+      self._apar_high_bound = np.max(self._APAR)
+    # throw out all apar values that don't fall within bounds
+    invalid_apar_indices = (self._APAR < self._apar_low_bound) & (self._APAR > self._apar_high_bound)
+    self._APAR[invalid_apar_indices] = np.nan
+    # self.display_ramps()
+
+    self.func_to_optimize([self._lue, self._vpd_min, self._vpd_max, self._tmin_min, self._tmin_max, self._smrz_min, self._smrz_max, self._ft_mult_frozen])
+
   #Input order: [LUE, VPD_min, VPD_max, SMRZ_min, SMRZ_max, TMIN_min, TMIN_max, FT_mult]
+  # NOTE: simulated GPP values are much lower than observed GPP values
   def func_to_optimize(self, input_vect):
     lue, vpd_min, vpd_max, tmin_min, tmin_max, smrz_min, smrz_max, ft_mult = input_vect
-    e_mult = downward_ramp_func(self._VPD, (vpd_min, vpd_max)) * upward_ramp_func(self._TMIN, (tmin_min, tmin_max)) * upward_ramp_func(self._SMRZ, (smrz_min, smrz_max))
-    simulated_gpp = self._FPAR * self._PAR * lue * e_mult
+    # ramp funcs
+    vpd_ramp = downward_ramp_func(self._VPD, (vpd_min, vpd_max))
+    tmin_ramp = upward_ramp_func(self._TMIN, (tmin_min, tmin_max))
+    smrz_ramp = upward_ramp_func(self._SMRZ, (smrz_min, smrz_max))
+    # ft_mult
+    ft_mult = np.piecewise(self._TSURF, [self._TSURF < 273, self._TSURF >= 273], [self._ft_mult_frozen, self._ft_mult_thawed])
+    # e_mult
+    e_mult = vpd_ramp * tmin_ramp * smrz_ramp * ft_mult
+    # simulated gpp
+    simulated_gpp = self._APAR * lue * e_mult
     return sse(self._observed_gpp, simulated_gpp, self._non_missing_obs, self._tower_weights)
-
-  # this is gpp/APAR
-  def calc_y_ramp(self):
-      emults = self.emult
-      y_vals = []
-      for e in range(len(emults)):
-          y = self.lue * emults[e]
-          y_vals.append(y)
-      return y_vals
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
-      vpd = RampFunction(self.ramp_VPD,self.y_vals,self.lue_vals,"VPD","GPP")
+      # APAR = fpar * par
+      # put meteor variables through their respective ramp functions
+      VPD_ramp = downward_ramp_func(self._VPD, (self._vpd_min, self._vpd_max))
+      TMIN_ramp = upward_ramp_func(self._TMIN, (self._tmin_min, self._tmin_max))
+      SMRZ_ramp = upward_ramp_func(self._SMRZ, (self._smrz_min, self._smrz_max))
+      gpp_over_apar = self._observed_gpp / (self._FPAR * self._PAR)
+      ramp_ylim = [0, self._lue]
+      vpd = RampFunction(self._VPD, gpp_over_apar,ramp_ylim,"VPD","GPP")
       vpd.display_ramp()
-      tmin = RampFunction(self.TMIN_ramp,self.y_vals,self.lue_vals,"TMIN","GPP")
+      tmin = RampFunction(self._TMIN, gpp_over_apar,ramp_ylim,"TMIN","GPP")
       tmin.display_ramp()
-      smrz = RampFunction(self.SMRZ_ramp,self.y_vals,self.lue_vals,"SMRZ","GPP")
+      smrz = RampFunction(self._SMRZ,gpp_over_apar,ramp_ylim,"SMRZ","GPP")
       smrz.display_ramp()
 
   def display_gpp_v_emult(self):
