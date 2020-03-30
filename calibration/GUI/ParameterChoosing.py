@@ -13,7 +13,10 @@ class ParameterChoosing(BasePage):
     else:
        self.param_label = QtWidgets.QLabel("11. "+gpp_or_reco+" Optimization Parameters")
     self.param_label.setFont(QtGui.QFont("Times", 13))
-    self.param_label.setAlignment(Qt.AlignCenter)
+    self.param_label.move(0,-100)
+    self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
+    self.pft_label.setFont(QtGui.QFont("Times", 11))
+    self.pft_label.move(0,-250)
 
     for param in self.params:
       checkbox = QtWidgets.QCheckBox(param)
@@ -45,9 +48,11 @@ class ParameterChoosing(BasePage):
     choose_layout.addWidget(self.prev_page_button)
     choose_layout.addWidget(self.optimize_button)
 
-    main_layout = QtWidgets.QVBoxLayout()
-    main_layout.addWidget(self.param_label)
-    main_layout.addLayout(choose_layout)
+    main_layout = QtWidgets.QGridLayout()
+    main_layout.setSpacing(5)
+    main_layout.addWidget(self.param_label,1,0,1,0,alignment=Qt.AlignHCenter)
+    main_layout.addWidget(self.pft_label,1,0,2,0,alignment=Qt.AlignHCenter)
+    main_layout.addLayout(choose_layout,2,0,4,0)
     self.setLayout(main_layout)
     self.setWindowTitle(page_title)
 

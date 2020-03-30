@@ -6,7 +6,8 @@ class SimulationStatistics(BasePage):
       BasePage.__init__(self, width, height)
       page_label = QtWidgets.QLabel("14. Simulation Completed")
       page_label.setFont(QtGui.QFont("Times", 13))
-      page_label.setAlignment(Qt.AlignCenter)
+      self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
+      self.pft_label.setFont(QtGui.QFont("Times", 11))
 
       info_label = QtWidgets.QLabel("Simulation Statistics:")
 
@@ -60,14 +61,15 @@ class SimulationStatistics(BasePage):
       button_layout.addWidget(exit_button)
       button_layout.addWidget(next_button)
 
-      main_layout = QtWidgets.QVBoxLayout(self)
-      main_layout.addWidget(page_label)
-      main_layout.addWidget(info_label)
-      main_layout.addLayout(Rval_layout)
-      main_layout.addLayout(GPP_layout)
-      main_layout.addLayout(RECO_layout)
-      main_layout.addLayout(NEE_layout)
-      main_layout.addLayout(button_layout)
+      main_layout = QtWidgets.QGridLayout(self)
+      main_layout.addWidget(page_label,1,0,1,0,alignment=Qt.AlignHCenter)
+      main_layout.addWidget(self.pft_label,1,0,2,0,alignment=Qt.AlignHCenter)
+      main_layout.addWidget(info_label,2,0,3,0)
+      main_layout.addLayout(Rval_layout,3,0,4,0)
+      main_layout.addLayout(GPP_layout,4,0,5,0)
+      main_layout.addLayout(RECO_layout,5,0,6,0)
+      main_layout.addLayout(NEE_layout,6,0,7,0)
+      main_layout.addLayout(button_layout,7,0,8,0)
       self.setLayout(main_layout)
       self.setWindowTitle(page_title)
 

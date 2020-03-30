@@ -28,9 +28,13 @@ class SmoothOutliers(BasePage):
         self.outlier_label.setToolTip(tooltip["RECO"])
     self.outlier_label.setFont(QtGui.QFont("Times", 13))
     self.outlier_label.setAlignment(Qt.AlignCenter)
+    self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
+    self.pft_label.setFont(QtGui.QFont("Times", 11))
+    self.pft_label.setAlignment(Qt.AlignCenter)
 
     # display number of outliers removed
     self.num_outliers_removed_label = QtWidgets.QLabel("# of outliers removed: 5")
+    self.num_outliers_removed_label.setVisible(False)
     self.elements_removed_layout = QtWidgets.QHBoxLayout()
     self.elements_removed_layout.addWidget(self.num_outliers_removed_label)
 
@@ -74,6 +78,7 @@ class SmoothOutliers(BasePage):
     # combine all elements into one layout
     grid_layout = QtWidgets.QVBoxLayout()
     grid_layout.addWidget(self.outlier_label)
+    grid_layout.addWidget(self.pft_label)
     grid_layout.addWidget(self.canvas)
     grid_layout.addWidget(self.toolbar)
     grid_layout.addLayout(self.elements_removed_layout)
@@ -107,6 +112,7 @@ class SmoothOutliers(BasePage):
     return window_size_input
 
   def smooth_data(self):
+    self.num_outliers_removed_label.setVisible(True)
     if self.get_window_size() != None:
       self.data_smoothed = True
       self.data_after_outlier_removal = [random.random() for i in range(10)]

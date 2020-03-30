@@ -41,6 +41,9 @@ class DisplayRAMP(BasePage):
       prev_page = QtWidgets.QPushButton("Prev")
     self.ramp_label.setFont(QtGui.QFont("Times", 13))
     self.ramp_label.setAlignment(Qt.AlignCenter)
+    self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
+    self.pft_label.setFont(QtGui.QFont("Times", 11))
+    self.pft_label.setAlignment(Qt.AlignCenter)
 
     optional_graph_button = QtWidgets.QPushButton("Plot " + optional_graph_name + " (optional)")
     optional_graph_button.clicked.connect(self._optional_graph_widget.show)
@@ -54,6 +57,7 @@ class DisplayRAMP(BasePage):
 
     graph_layout = QtWidgets.QVBoxLayout()
     graph_layout.addWidget(self.ramp_label)
+    graph_layout.addWidget(self.pft_label)
     graph_layout.addWidget(self.canvas)
     graph_layout.addWidget(self.toolbar)
     graph_layout.addLayout(switch_graph_layout)

@@ -28,6 +28,18 @@ class BasePage(QtWidgets.QDialog):
     self.prev_window.emit()
     self.hide()
 
-  def next_page(self):
+  #def next_page(self):
+    #self.next_window.emit()
+    #self.hide()
+
+  def next_page(self,ind=-1):
+    if (ind != -1):
+        pft_ind = ind
+        print("correct pft_ind of",pft_ind)
     self.next_window.emit()
     self.hide()
+
+  def pft_chooser(self,ind):
+     pfts = ["Evergreen Needleleaf","Evergreen Broadleaf","Deciduous Needleleaf","Deciduous Broadleaf","Shrub","Grass","Cereal Crop","Broadleaf Crop"]
+     pft = pfts[ind]
+     return pft

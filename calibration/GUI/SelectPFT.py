@@ -82,4 +82,4 @@ class SelectPFT(BasePage):
       self.error_message.setVisible(True)
     else:
       self.error_message.setVisible(False)
-      self.next_page()
+      self.next_page(self.pft_selector.currentIndex()-1) #subtract 1 since first option is not a PFT

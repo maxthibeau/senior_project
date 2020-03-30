@@ -44,8 +44,8 @@ def main(argv):
 
   # TODO: prompt user for APAR bounds
   #outlier removal
-  #outliers = Outliers(pft,flux_tower_data,reference_input)
-  #outliers.display_outliers()
+  outliers = Outliers(pft,flux_tower_data,reference_input)
+  outliers.display_outliers()
   gpp_calcs = GPP(pft, bplut, meteor_input, flux_tower_data)
   # reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
