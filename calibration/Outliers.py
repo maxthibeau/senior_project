@@ -84,5 +84,5 @@ class Outliers:
         plt.show()
 
     def display_outliers(self):
-        self.display_GPP()
-        self.display_RECO()
+        self.display_GPP("gust")
+        self.display_RECO("gust")

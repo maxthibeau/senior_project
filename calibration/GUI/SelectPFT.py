@@ -37,6 +37,7 @@ class SelectPFT(BasePage):
     self.pft_selector.setItemData(7,"CCP: "+tooltip["CCP"],QtCore.Qt.ToolTipRole)
     self.pft_selector.addItem("Broadleaf Crop")
     self.pft_selector.setItemData(8,"BCP: "+tooltip["BCP"],QtCore.Qt.ToolTipRole)
+    self.pft_selector.currentIndexChanged.connect(self.update_pft)
 
     self.error_message = QtWidgets.QLabel("Please choose a PFT before proceeding")
     self.error_message.setStyleSheet("color: red;")
@@ -83,3 +84,8 @@ class SelectPFT(BasePage):
     else:
       self.error_message.setVisible(False)
       self.next_page(self.pft_selector.currentIndex()-1) #subtract 1 since first option is not a PFT
+
+  def update_pft(self,value): #value = self.pft_selector.currentIndex()
+     #GV.pft_ind = value - 1 #subtract 1 since first option is not a PFT
+     #return
+     pass
