@@ -83,20 +83,11 @@ class GPP:
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
-      # APAR = fpar * par
-      # put meteor variables through their respective ramp functions
-      VPD_ramp = downward_ramp_func(self._VPD, (self._vpd_min, self._vpd_max))
-      TMIN_ramp = upward_ramp_func(self._TMIN, (self._tmin_min, self._tmin_max))
-      SMRZ_ramp = upward_ramp_func(self._SMRZ, (self._smrz_min, self._smrz_max))
-      gpp_over_apar = self._observed_gpp / (self._FPAR * self._PAR)
-      ramp_ylim = [0, self._lue]
-      vpd = RampFunction(self._VPD, gpp_over_apar,ramp_ylim,"VPD","GPP")
-      vpd.display_ramp()
-      tmin = RampFunction(self._TMIN, gpp_over_apar,ramp_ylim,"TMIN","GPP")
-      tmin.display_ramp()
-      smrz = RampFunction(self._SMRZ,gpp_over_apar,ramp_ylim,"SMRZ","GPP")
-      smrz.display_ramp()
-
+    gpp_over_apar = self._observed_gpp / (self._APAR)
+    display_ramp(self._VPD, gpp_over_apar, downward_ramp_func, (self._vpd_min, self._vpd_max), self._lue, "VPD", "GPP/APAR")
+    display_ramp(self._TMIN, gpp_over_apar, upward_ramp_func, (self._vpd_min, self._vpd_max), self._lue, "TMIN", "GPP/APAR")
+    display_ramp(self._SMRZ, gpp_over_apar, upward_ramp_func, (self._vpd_min, self._vpd_max), self._lue, "SMRZ", "GPP/APAR")
+ 
   def display_gpp_v_emult(self):
       graph = RampFunction(self.e_mult,self.gpp,self.lue_vals,"Emult","GPP")
       print("Would you like to display the graph of GPP vs Emult?")

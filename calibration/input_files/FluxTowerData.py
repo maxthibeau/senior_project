@@ -11,31 +11,31 @@ class FluxTowerData():
   def __init__(self, flux_tower_dir):
     self._coordinates = [] # array of array of 2 elements [latitude, longitude]
     self._weights = [] # float calculated from coordinates
-    self._fluxes = []
+    self._flux_towers = []
     self._non_missing_observations = []
     for filename in os.listdir(flux_tower_dir):
       filepath = flux_tower_dir + "/" + filename
       flux_tower = SingleFluxTower(filepath)
       self._non_missing_observations.append(flux_tower.non_missing_observations())
-      self._fluxes.append(flux_tower)
+      self._flux_towers.append(flux_tower)
     self._non_missing_observations = np.array(self._non_missing_observations)
-    sample_flux_tower = self._fluxes[0]
+    sample_flux_tower = self._flux_towers[0]
     self._num_tower_vars = len(sample_flux_tower.tower_vars())
     # 365 day climatology, to be created later at the users request
     self._climatological_year = []
 
   def __getitem__(self, key):
-    return self._fluxes[key]
+    return self._flux_towers[key]
 
   def subset_by_pft(self, tower_sites_claimed_by_pft):
-    self._fluxes = [self._fluxes[site_index] for site_index in tower_sites_claimed_by_pft]
+    self._flux_towers = [self._flux_towers[site_index] for site_index in tower_sites_claimed_by_pft]
     self._weights = np.array([self._weights[site_index] for site_index in tower_sites_claimed_by_pft])
     self._coordinates = np.array([self._coordinates[site_index] for site_index in tower_sites_claimed_by_pft])
     self._non_missing_observations = np.array([self._non_missing_observations[site_index] for site_index in tower_sites_claimed_by_pft])
 
   def compute_climatological_year(self, start_date, end_date):
     # for every flux tower
-    for flux_tower in self._fluxes:
+    for flux_tower in self._flux_towers:
       self._climatological_year.append(flux_tower.climatological_year(start_date, end_date))
     self._climatological_year = np.array(self._climatological_year)
     # format to be consistent with meteor input shape
@@ -59,12 +59,30 @@ class FluxTowerData():
 
   #resets flux tower data to include the coordinates
   def set_coords(self, coord_array):
-    for i in range(len(self._fluxes)):
+    for i in range(len(self._flux_towers)):
         self._coordinates.append(coord_array[i])
     self._coordinates = np.array(self._coordinates)
     for q in range(len(self._coordinates)):
         self._weights.append(0.0)
     self._set_weights()
+
+  def smooth_gpp_outliers(self, met, window_size):
+    for tower in self._flux_towers:
+      tower.smooth_gpp_outliers(met, window_size)
+
+  def smooth_reco_outliers(self, met, window_size):
+    for tower in self._flux_towers:
+      tower.smooth_reco_outliers(met, window_size)
+
+  def display_gpp_smoothing(self, num_sites_to_randomly_select):
+    site_indices = np.random.choice(len(self._flux_towers), num_sites_to_randomly_select)
+    for site_index in site_indices:
+      self._flux_towers[site_index].display_gpp_smoothing()
+
+  def display_reco_smoothing(self, num_sites_to_randomly_select):
+    site_indices = np.random.choice(len(self._flux_towers), num_sites_to_randomly_select)
+    for site_index in site_indices:
+      self._flux_towers[site_index].display_reco_smoothing()    
 
   def _set_weights(self):
     #World coordinates (longitude and latitude) to grid coordinates (EASE grid) to pixel coordinates (x,y)
