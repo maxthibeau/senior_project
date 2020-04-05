@@ -25,7 +25,7 @@ class ParameterChoosing(BasePage):
       self.param_checkboxes.append(checkbox)
 
     self.select_parameters_label = QtWidgets.QLabel("Select Parameters To Optimize:")
-    self.select_parameters_label.setStyleSheet("text-decoration: underline;")
+    #self.select_parameters_label.setStyleSheet("text-decoration: underline;")
 
     grid_layout = QtWidgets.QGridLayout()
     for i in range(len(self.param_checkboxes)):
@@ -42,11 +42,11 @@ class ParameterChoosing(BasePage):
     self.prev_page_button = QtWidgets.QPushButton("Re-display old RAMP functions")
     self.prev_page_button.clicked.connect(self.prev_page)
 
-    choose_layout = QtWidgets.QHBoxLayout()
-    choose_layout.addWidget(self.select_parameters_label)
-    choose_layout.addLayout(grid_layout)
-    choose_layout.addWidget(self.prev_page_button)
-    choose_layout.addWidget(self.optimize_button)
+    choose_layout = QtWidgets.QGridLayout()
+    choose_layout.addWidget(self.select_parameters_label,1,1,1,2)
+    choose_layout.addLayout(grid_layout,2,1,4,2)
+    choose_layout.addWidget(self.prev_page_button,2,3,2,1)
+    choose_layout.addWidget(self.optimize_button,4,3,2,1)
 
     main_layout = QtWidgets.QGridLayout()
     main_layout.setSpacing(5)
