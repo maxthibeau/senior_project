@@ -42,25 +42,28 @@ def main(argv):
   meteor_input.compute_climatological_year(climatology_start_date, climatology_end_date)
   flux_tower_data.compute_climatological_year(climatology_start_date, climatology_end_date)
   # this works, for frontend to work we need to acquire vars and before after smoothing
-   
-  # outlier removal and display
-  flux_tower_data.smooth_gpp_outliers("gust", 10)
-  flux_tower_data.smooth_reco_outliers("gust", 10)
-  flux_tower_data.display_gpp_smoothing(0)
-  flux_tower_data.display_reco_smoothing(0)
 
+  # outlier removal and display
+  window = int(input("Please specify the number of days for the outlier smooting window size (whole number): "))
+  flux_tower_data.smooth_gpp_outliers("gust", window)
+  flux_tower_data.smooth_reco_outliers("gust", window)
+  flux_tower_data.display_gpp_smoothing(1)
+  flux_tower_data.display_reco_smoothing(1)
   # outliers = Outliers(pft,flux_tower_data,reference_input)
   # outliers.display_outliers()
+
+  # GPP optimization process
   gpp_calcs = GPP(pft, bplut, meteor_input, flux_tower_data)
   gpp_calcs.display_ramps()
-  # reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
-  #RECO
+  # bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
+
+  # RECO optimization process
   # Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
   # SMSF = meteor_input.subset_data_by_pft(['MET','smsf'],pft,0) #meterological input MET (smsf)
   kmult_365 = 0.0 #from forward run
   npp_365 = 0.0 #from forward run
   #reco_calcs = RECO(pft,bplut,gpp_calcs,Tsoil,SMSF,kmult_365,npp_365)
-  #former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
+  #bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
 
 if __name__ == "__main__":
   main(sys.argv[1:])
