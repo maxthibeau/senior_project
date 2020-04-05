@@ -7,6 +7,7 @@ from gpp import *
 from reco import *
 from Outliers import *
 from datetime import date
+from PreliminarySpinUp import *
 
 def main(argv):
   if len(argv) < 1:
@@ -52,14 +53,12 @@ def main(argv):
   # outliers = Outliers(pft,flux_tower_data,reference_input)
   # outliers.display_outliers()
   gpp_calcs = GPP(pft, bplut, meteor_input, flux_tower_data)
-  gpp_calcs.display_ramps()
+  simulated_gpp = gpp_calcs.simulated_gpp()
+  
+  # gpp_calcs.display_ramps()
   # reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
-  # Tsoil = meteor_input.subset_data_by_pft(['MET','tsoil'],pft,0) #meterological input MET (tsoil)
-  # SMSF = meteor_input.subset_data_by_pft(['MET','smsf'],pft,0) #meterological input MET (smsf)
-  kmult_365 = 0.0 #from forward run
-  npp_365 = 0.0 #from forward run
-  #reco_calcs = RECO(pft,bplut,gpp_calcs,Tsoil,SMSF,kmult_365,npp_365)
+  reco_calcs = RECO(pft, bplut, simulated_gpp, meteor_input)
   #former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
 
 if __name__ == "__main__":

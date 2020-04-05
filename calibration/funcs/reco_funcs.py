@@ -1,14 +1,13 @@
-from ramp_func import *
+from funcs.ramp_func import *
 
-def arrhenius_curve(self, beta_t_soil, t_soil):
-  # Equation 10
-  # NOTE: where are magic numbers coming from?
-  return np.exp(beta_t_soil *  (1 / 66.02 - 1 / (t_soil - 227.13) ) ) 
-
-def k_mult(t_soil, smsf):
+def kmult(t_soil, smsf, bt_soil, a, b, smsf_min, smsf_max):
   # equation_9
-  return arrhenius_curve (t_soil) * ramp_func(smsf)
+  return arrhenius_curve (t_soil, (bt_soil, a, b)) * upward_ramp_func(smsf, (smsf_min, smsf_max))
 
-def reco(f_aut, gpp, k_mult, c_bar):
+def reco(gpp, t_soil, smsf, c_bar, f_aut, bt_soil, a, b, smsf_min, smsf_max):
   # Equation 11
-  return f_aut * gpp, + k_mult * c_bar
+  return f_aut * gpp + arrhenius_curve(t_soil, (bt_soil, a, b)) * upward_ramp_func(smsf, (smsf_min, smsf_max)) * c_bar
+
+# for when kmult needs to be filtered on the reco optimization process
+def reco(gpp, kmult, c_bar, f_aut):
+  return f_aut * gpp * kmult
