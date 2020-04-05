@@ -6,7 +6,7 @@ from datetime import datetime
 from scipy import signal
 import matplotlib.pyplot as plt
 
-class SingleFluxTower():    
+class SingleFluxTower():
   def __init__(self, flux_tower_fname):
     df = pd.read_csv(flux_tower_fname)
     self._gpp = df['gpp'].to_numpy()
@@ -15,7 +15,7 @@ class SingleFluxTower():
     self._tower_vars = [self._gpp, self._reco, self._nee]
     self._tower_vars_after_smoothing = []
     self._num_tower_vars = len(self._tower_vars)
-    self._non_missing_observations = 0   
+    self._non_missing_observations = 0
 
     with np.errstate(invalid='ignore'): #nan vals in both gpp and reco will throw RuntimeWarnings
       # throw out non-physical(negative) values
@@ -29,7 +29,7 @@ class SingleFluxTower():
 
   def _is_leap_year(self, date):
     return date.year % 4 == 0
-     
+
   def climatological_year(self, start_date, end_date):
     first_date = datetime(2000, 1, 1)
     assert(start_date >= first_date and end_date <= datetime.now())
@@ -62,7 +62,7 @@ class SingleFluxTower():
     climatology_single_tower = np.array(climatology_single_tower)
     # NOTE: geting a mean of empty slice warning here
     # average all days together
-    climatology_single_tower = np.nanmean(climatology_single_tower, axis=-1)      
+    climatology_single_tower = np.nanmean(climatology_single_tower, axis=-1)
     return climatology_single_tower
 
   def smooth_gpp_outliers(self, met, window):
@@ -79,19 +79,25 @@ class SingleFluxTower():
     satisfied_with_smoothing = True
     var_no_nans = var[~self._harmonizing_mask]
     b = np.ones(window) / window
-    smoothed_var = signal.filtfilt(b, 1, var_no_nans, method = met) 
-    var[~self._harmonizing_mask] = smoothed_var
+    #can this be done?
+    if not var_no_nans.all():
+        smoothed_var = signal.filtfilt(b, 1, var_no_nans, method = met)
+        var[~self._harmonizing_mask] = smoothed_var
+    #else:
+        #print("empty var no nans")
 
   def display_gpp_smoothing(self):
     x = np.linspace(0, len(self._gpp_before_smoothing), len(self._gpp_before_smoothing))
     plt.plot(x, self._gpp_before_smoothing)
     plt.plot(x, self._gpp_after_smoothing)
+    plt.title("GPP Outliers Smoothed")
     plt.show()
 
   def display_reco_smoothing(self):
     x = np.linspace(0, len(self._reco_before_smoothing), len(self._reco_before_smoothing))
     plt.plot(x, self._reco_before_smoothing)
     plt.plot(x, self._reco_after_smoothing)
+    plt.title("RECO Outliers Smoothed")
     plt.show()
 
   def gpp(self):

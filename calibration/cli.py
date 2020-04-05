@@ -6,10 +6,10 @@ Created on Thu Feb 13 09:36:05 2020
 """
 import sys
 from os import listdir
-from gpp.py import GPP
-from reco.py import RECO
-from RampFunctions.py import RampFunction
-from Outliers.py import Outliers
+from gpp import GPP
+from reco import RECO
+from RampFunctions import RampFunction
+from Outliers import Outliers
 
 class CLI:
   

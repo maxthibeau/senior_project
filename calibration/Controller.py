@@ -121,7 +121,7 @@ class Controller:
 
   def readInDescriptions(self):
       tooltipDict = {}
-      with open("././DataFiles/varDescriptions.txt","r") as f:
+      with open("../DataFiles/varDescriptions.txt","r") as f:
           for line in f:
              if not line.startswith("#"):
                  line = line.split(":")
