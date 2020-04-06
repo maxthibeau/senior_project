@@ -17,26 +17,13 @@ from funcs.sse import *
 class GPP:
 
   #Initializes the GPP class
-  def __init__(self,pft,bplut,meteor_input,flux_tower_data):
+  def __init__(self, pft, bplut, meteor_input, flux_tower_data):
     # from flux tower data
     self._observed_gpp = flux_tower_data.gpp()
     self._non_missing_obs = flux_tower_data.non_missing_observations()
     self._tower_weights = flux_tower_data.weights()
     
-    # from BPLUT table
-    # LUE is also epsillon_max
-    self._lue = float(bplut[pft, 'LUEmax'])
-    self._vpd_min = float(bplut[pft, 'VPD_min_Pa']) #in Pa
-    self._vpd_max = float(bplut[pft, 'VPD_max_Pa'])
-    self._tmin_min = float(bplut[pft, 'Tmin_min_K']) #in K
-    self._tmin_max = float(bplut[pft, 'Tmin_max_K'])
-    self._smrz_min = float(bplut[pft, 'SMrz_min'])
-    self._smrz_max = float(bplut[pft, 'SMrz_max'])
-    # check what val this takes on
-    self._ft_mult_frozen = float(bplut[pft, 'FT_min'])
-    # just 1
-    self._ft_mult_thawed = float(bplut[pft, 'FT_max'])
-
+    self._gpp_params = bplut.gpp_params(pft)
     # from meteor input
     self._VPD = meteor_input.VPD()
     self._TMIN = meteor_input.TMIN()
@@ -47,6 +34,9 @@ class GPP:
     self._PAR = meteor_input.PAR()
     self._TSURF = meteor_input.TSURF()
 
+    self._set_apar_bounds()
+
+  def _set_apar_bounds(self):
     self._APAR = self._FPAR * self._PAR
     # prompt user for APAR bounds
     select_apar_bounds = None
@@ -60,40 +50,32 @@ class GPP:
       self._apar_high_bound = np.max(self._APAR)
     # throw out all apar values that don't fall within bounds
     invalid_apar_indices = (self._APAR < self._apar_low_bound) & (self._APAR > self._apar_high_bound)
-    self._APAR[invalid_apar_indices] = np.nan
-    # self.display_ramps()
-
-    self.func_to_optimize([self._lue, self._vpd_min, self._vpd_max, self._tmin_min, self._tmin_max, self._smrz_min, self._smrz_max, self._ft_mult_frozen])
-
+    self._APAR[invalid_apar_indices] = np.nan 
+ 
   #Input order: [LUE, VPD_min, VPD_max, SMRZ_min, SMRZ_max, TMIN_min, TMIN_max, FT_mult]
   # NOTE: simulated GPP values are much lower than observed GPP values
-  def func_to_optimize(self, input_vect):
-    lue, vpd_min, vpd_max, tmin_min, tmin_max, smrz_min, smrz_max, ft_mult = input_vect
-    # ramp funcs
-    vpd_ramp = downward_ramp_func(self._VPD, (vpd_min, vpd_max))
-    tmin_ramp = upward_ramp_func(self._TMIN, (tmin_min, tmin_max))
-    smrz_ramp = upward_ramp_func(self._SMRZ, (smrz_min, smrz_max))
-    # ft_mult
-    ft_mult = np.piecewise(self._TSURF, [self._TSURF < 273, self._TSURF >= 273], [self._ft_mult_frozen, self._ft_mult_thawed])
-    # e_mult
-    e_mult = vpd_ramp * tmin_ramp * smrz_ramp * ft_mult
-    # simulated gpp
-    simulated_gpp = self._APAR * lue * e_mult
+  def func_to_optimize(self, gpp_params):
+    simulated_gpp = gpp_apar(self._APAR, self._VPD, self._TMIN, self._SMRZ, self._TSURF, *gpp_params)
     return sse(self._observed_gpp, simulated_gpp, self._non_missing_obs, self._tower_weights)
+
+  def simulated_gpp(self):
+    # FIXME: make this simulated gpp
+    return self._observed_gpp
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
     gpp_over_apar = self._observed_gpp / (self._APAR)
-    display_ramp(self._VPD, gpp_over_apar, downward_ramp_func, (self._vpd_min, self._vpd_max), self._lue, "VPD", "GPP/APAR")
-    display_ramp(self._TMIN, gpp_over_apar, upward_ramp_func, (self._vpd_min, self._vpd_max), self._lue, "TMIN", "GPP/APAR")
-    display_ramp(self._SMRZ, gpp_over_apar, upward_ramp_func, (self._vpd_min, self._vpd_max), self._lue, "SMRZ", "GPP/APAR")
+    lue, vpd_min, vpd_max, tmin_min, tmin_max, smrz_min, smrz_max, _, _ = self._gpp_params
+    display_ramp(self._VPD, gpp_over_apar, downward_ramp_func, (vpd_min, vpd_max), lue, "VPD", "GPP/APAR")
+    display_ramp(self._TMIN, gpp_over_apar, upward_ramp_func, (tmin_min, tmin_max), lue, "TMIN", "GPP/APAR")
+    display_ramp(self._SMRZ, gpp_over_apar, upward_ramp_func, (smrz_min, smrz_max), lue, "SMRZ", "GPP/APAR")
  
   def display_gpp_v_emult(self):
-      graph = RampFunction(self.e_mult,self.gpp,self.lue_vals,"Emult","GPP")
-      print("Would you like to display the graph of GPP vs Emult?")
-      choice = char(input("Y for Yes, N for No: "))
-      if(choice.lower() == "y"):
-          graph.display_optional()
+    graph = RampFunction(self.e_mult,self.gpp,self.lue_vals,"Emult","GPP")
+    print("Would you like to display the graph of GPP vs Emult?")
+    choice = char(input("Y for Yes, N for No: "))
+    if(choice.lower() == "y"):
+      graph.display_optional()
 
   #The GPP optimization function with no input (All outliers included)
   def optimize_gpp(self):

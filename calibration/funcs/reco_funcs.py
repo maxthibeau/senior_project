@@ -1,8 +1,8 @@
 from funcs.ramp_func import *
 
-def kmult(t_soil, smsf, bt_soil, a, b, smsf_min, smsf_max):
+def kmult(t_soil, smsf, bt_soil, smsf_min, smsf_max):
   # equation_9
-  return arrhenius_curve (t_soil, (bt_soil, a, b)) * upward_ramp_func(smsf, (smsf_min, smsf_max))
+  return kmult_arrhenius_curve (t_soil, bt_soil) * upward_ramp_func(smsf, (smsf_min, smsf_max))
 
 def reco(gpp, t_soil, smsf, c_bar, f_aut, bt_soil, a, b, smsf_min, smsf_max):
   # Equation 11

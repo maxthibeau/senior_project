@@ -16,25 +16,56 @@ class NewBPLUT():
     #       40=Vpd_QA_Error, 41=Smrz_QA_Error, 42=Tsoil_QA_Error, 43=Smtop_QA_Error
 
     def __init__(self,filepath):
-        file = open(filepath)
-        lines = csv.reader(row for row in file if not row.startswith('#'))
-        # grabs labels from first row, could strip whitespace
-        self._labels = next(lines)
-        self._current_bplut = []
-        for row in lines:
-            self._current_bplut.append(row)
-        file.close()    
-        
-        ''' 
-        self._bplut_labels = ["LC_index","LC_Label","model_code","NDVItoFPAR_scale","NDVItoFPAR_offset",
-        "LUEmax", "Tmin_min_K", "Tmin_max_K", "VPD_min_Pa", "VPD_max_Pa","SMrz_min","SMrz_max","FT_min",
-        "FT_max","SMtop_min","SMtop_max","Tsoil_beta0","Tsoil_beta1","Tsoil_beta2", "fraut", "fmet",
-        "fstr", "kopt", "kstr", "kslw","Nee_QA_Rank_min","Nee_QA_Rank_max","Nee_QA_Error_min",
-        "Nee_QA_Error_max","Fpar_QA_Rank_min","Fpar_QA_Rank_max","Fpar_QA_Error_min","Fpar_QA_Error_max",
-        "FtMethod_QA_mult","FtAge_QA_Rank_min","FtAge_QA_Rank_max","FtAge_QA_Error_min",
-        "FtAge_QA_Error_max","Par_QA_Error","Tmin_QA_Error","Vpd_QA_Error","Smrz_QA_Error",
-        "Tsoil_QA_Error","Smtop_QA_Error"]
-        '''
+      file = open(filepath)
+      lines = csv.reader(row for row in file if not row.startswith('#'))
+      # grabs labels from first row
+      self._labels = next(lines)
+      # strip whitespace
+      self._labels = [label.strip() for label in self._labels]
+      self._current_bplut = []
+      for row in lines:
+          self._current_bplut.append(row)
+      file.close()    
+      
+      ''' 
+      self._bplut_labels = ["LC_index","LC_Label","model_code","NDVItoFPAR_scale","NDVItoFPAR_offset",
+      "LUEmax", "Tmin_min_K", "Tmin_max_K", "VPD_min_Pa", "VPD_max_Pa","SMrz_min","SMrz_max","FT_min",
+      "FT_max","SMtop_min","SMtop_max","Tsoil_beta0","Tsoil_beta1","Tsoil_beta2", "fraut", "fmet",
+      "fstr", "kopt", "kstr", "kslw","Nee_QA_Rank_min","Nee_QA_Rank_max","Nee_QA_Error_min",
+      "Nee_QA_Error_max","Fpar_QA_Rank_min","Fpar_QA_Rank_max","Fpar_QA_Error_min","Fpar_QA_Error_max",
+      "FtMethod_QA_mult","FtAge_QA_Rank_min","FtAge_QA_Rank_max","FtAge_QA_Error_min",
+      "FtAge_QA_Error_max","Par_QA_Error","Tmin_QA_Error","Vpd_QA_Error","Smrz_QA_Error",
+      "Tsoil_QA_Error","Smtop_QA_Error"]
+      '''
+
+    def gpp_params(self, pft):
+      param_vect = []
+      param_vect.append(float(self[pft, 'LUEmax']))
+      param_vect.append(float(self[pft, 'VPD_min_Pa'])) #in Pa
+      param_vect.append(float(self[pft, 'VPD_max_Pa']))
+      param_vect.append(float(self[pft, 'Tmin_min_K'])) #in K
+      param_vect.append(float(self[pft, 'Tmin_max_K']))
+      param_vect.append(float(self[pft, 'SMrz_min']))
+      param_vect.append(float(self[pft, 'SMrz_max']))
+      param_vect.append(float(self[pft, 'FT_min']))
+      param_vect.append(float(self[pft, 'FT_max']))
+      return param_vect
+
+    def reco_params(self, pft):
+      param_vect = []
+      param_vect.append(float(self[pft, 'fraut']))
+      param_vect.append(float(self[pft, 'Tsoil_beta0']) + float(self[pft, 'Tsoil_beta1']) + float(self[pft, 'Tsoil_beta2'])/3.0)
+      param_vect.append(float(self[pft, 'SMtop_min']))
+      param_vect.append(float(self[pft, 'SMtop_max']))
+      return param_vect
+
+    def kmult_params(self, pft):
+      param_vect = []
+      param_vect.append(float(self[pft, 'Tsoil_beta0']) + float(self[pft, 'Tsoil_beta1']) + float(self[pft, 'Tsoil_beta2'])/3.0)
+      # hyperparams for arrhenius curve
+      param_vect.append(float(self[pft, 'SMtop_min']))
+      param_vect.append(float(self[pft, 'SMtop_max']))
+      return param_vect
 
     def __getitem__(self, pft_and_key):
       pft, key = pft_and_key

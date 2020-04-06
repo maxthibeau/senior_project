@@ -6,176 +6,93 @@ Created on Sun Jan 19 22:44:33 2020
 """
 
 import sys
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as pltkm
 import numpy as np
 import math
 from AnalyticalModelSpinUp import *
 from NumericalModelSpinUp import *
+from PreliminarySpinUp import *
 from RampFunctions import *
+from funcs.ramp_func import *
+from funcs.reco_funcs import *
+from funcs.sse import *
 
 #The RECO class will hold variables and functions used in the RECO optimization process
 class RECO:
 
   #Initializes the RECO class
-  def __init__(self,pft,bplut,gpp_vals,Tsoil_vals,SMSF_vals,kmult_365,npp_365):
+  def __init__(self, pft, bplut, gpp, meteor_input, flux_tower_data):
     # RECO: 14=SMtop_min, 15=SMtop_max, 16=Tsoil_beta0, 17=Tsoil_beta1, 18=Tsoil_beta2, 19=fraut, 20=fmet, 21=fstr, 22=kopt, 23=kstr, 24=kslw
-    #from input
-    self.kmult_365 = kmult_365
-    self.npp_365 = npp_365
-    self.Tsoil_vals = Tsoil_vals
-    self.SMSF_vals = SMSF_vals
-    self.gpp_vals = gpp_vals
-    #from user
-    self.prh = 0
-    self.pk = 0
-    self.set_prh_and_pk()
-    #from BPLUT
-    self.f_aut = float(bplut[pft][19])
-    self.b_tsoil = (float(bplut[pft][16])+float(bplut[pft][17])+float(bplut[pft][18]))/3.0
-    self.SMSF_min = float(bplut[pft][14])
-    self.SMSF_max = float(bplut[pft][15])
-    self.fmet = float(bplut[pft][20])
-    self.fstr = float(bplut[pft][21])
-    self.ropt = float(bplut[pft][22])
-    self.kstr = float(bplut[pft][23])
-    self.krec = float(bplut[pft][24])
-    self.reco_vals = self.calc_reco()
-    #from calculations/for graphs
-    self.lue_vals = [0,float(bplut[pft][5])]
-    self.TSOIL_ramp = [] #x-axis for TSOIL ramp function
-    for i in range(len(self.TSOIL_vals)):
-        x_arr = self.TSOIL_vals[i]
-        for y in range(len(x_arr)):
-            x = x_arr[y]
-            single_TSOIL = self.calc_TSOIL(x)
-            self.TSOIL_ramp.append(single_TSOIL)
-    self.SMSF_ramp = [] #x-axis for SMSF ramp function
-    for q in range(len(self.SMSF_vals)):
-        x_arr = self.SMSF_vals[q]
-        for y in range(len(x_arr)):
-            x = x_arr[y]
-            single_SMSF = self.calc_SMSF(x)
-            self.SMSF_ramp.append(single_SMSF)
-    self.y_vals = self.calc_y_ramp()
-    self.filter_vals(self.k_mults,self.y_vals)
-    self.display_ramps()
 
-  #Calculates RECO (if not already given)
-  def calc_reco(self):
-    Ra = self.f_aut * self.gpp_val
-    kmults = self.calc_kmult()
-    cbar0 = self.calc_cbar(kmults)
-    recos = []
-    for c in range(len(kmults)):
-        Rh = kmults[c] * cbar0
-        RECO = Ra + Rh
-        recos.append(RECO)
-    return recos
+    self._prh = 0
+    self._pk = 0
+    self._set_prh_and_pk()
+
+    self._gpp = gpp
+    self._non_missing_obs = flux_tower_data.non_missing_observations()
+    self._tower_weights = flux_tower_data.weights()
+    # Rh = NEE
+    self._observed_r_h = flux_tower_data.nee()
+    self._observed_reco = flux_tower_data.reco()
+
+    self._TSOIL = meteor_input.TSOIL()
+    self._SMSF = meteor_input.SMSF()
+
+    self._reco_params = bplut.reco_params(pft)
+    self._lue = float(bplut[pft, 'LUEmax'])
+
+    self._kmult = None
+    self._cbar = None
+    # run reco simulation once to get data for ramp funcs 
+    self._simulate_reco(self._reco_params)
+
+    # TODO: this might be the right way to calculate cbar
+    # self._kmult_1km, self._npp_1km, _ = preliminary_spinup(pft, bplut, meteor_input)
+    # _, _, _, self._c_bar = analytical_model_spinup(pft, bplut, self._kmult_1km, self._npp_1km)
+
 
   #Sets prh and pk
-  def set_prh_and_pk(self):
+  def _set_prh_and_pk(self):
     still_choosing = True
     while(still_choosing):
       try:
-        prh = float(input("Please specify a Prh: "))
-        pk = float(input("Please specify a Pk: "))
+        self._prh = float(input("Please specify a Prh: "))
+        self._pk = float(input("Please specify a Pk: "))
       except ValueError:
-        prh = -1
-        pk = -1
-
-      if(pk <= 1 & pk >= 0 & prh <= 1 & prh >= 0):
+        self._prh = -1
+        self._pk = -1
+      if(self._pk <= 1.0 and self._pk >= 0.0 and self._prh <= 1.0 and self._prh >= 0.0):
         still_choosing = False
       else:
         print("Invalid value: please try again")
 
-    self.prh = prh
-    self.pk = pk
-
-  #Calculates C_bar
-  def calc_cbar(self,kmults):
-    fast_pool = (self.fmet * self.npp_365)/(self.ropt * self.kmult_365)
-    med_pool = ((1-self.fmet) * self.npp_365)/(self.ropt * self.kstr * self.kmult_365)
-    slow_pool = (self.fstr * self.kstr * med_pool) / self.krec
-    cbar_0 = (self.ropt * fast_pool) + (self.kstr * self.ropt * med_pool) + (self.krec * self.ropt * slow_pool)
-    return cbar_0
-
-  #Calculates K_mult
-  def calc_kmult(self):
-    k_mults = []
-    if(len(self.TSOIL_ramp) != len(self.SMSF_ramp)):
-      print("Error in length of TSOIL and SMSF")
-    else:
-      for e in range(len(self.TSOIL_ramp)):
-          K_mult = self.TSOIL_ramp[e] * self.SMSF_ramp[e]
-          k_mults.append(K_mult)
-    return k_mults
-
-  #filter out kmult below user-provided Pk, calc Rh/Kmult, and
-  def filter_vals(self,vals,nums): #new_vals = k_mults, nums = Rhs
-      new_vals = [] #new_vals are the kmult values filtered out above the percentile of pk
-      percentile = np.percentile(vals,self.pk) #gets percentile of pk
-      for i in range(len(vals)):
-          if vals[i] > percentile:
-              new_vals.append(vals[i])
-      #need Rh/Kmult to continue
-      total = 0.0
-      for x in range(len(nums)):
-          total += nums[x]
-      avg = total/float(len(nums)) #avg = average RH
-      rh_div_kmult = []
-      for q in range(len(new_vals)):
-          val = avg/new_vals[q]
-          rh_div_kmult.append(val)
-      after_filter = [] #to be returned after filtering above percentile of prh
-      new_percent =  np.percentile(rh_div_kmult,self.prh)
-      for z in range(len(rh_div_kmult)):
-          if rh_div_kmult[z] > new_percent:
-              after_filter.append(rh_div_kmult[z])
-      return after_filter
-
-  #Calculates the ramp function of TSOIL (f(TSOIL))
-  def calc_TSOIL(self,x):
-    conv = (1/66.02) - (1/(x - 227.13))
-    TSOIL = math.exp(self.b_tsoil * conv)
-    return TSOIL
-
-  #Calculates the ramp function of SMSF (f(SMSF))
-  def calc_SMSF(self,x):
-    val = 0
-    if(x >= self.SMSF_max):
-        val = 1
-    elif(x <= self.SMSF_min):
-        val = 0
-    else:
-        val = (x - self.SMSF_min)/(self.SMSF_max - self.SMSF_min)
-    return val
-
-  def calc_y_ramp(self):
-      RHs = []
-      kmults = self.calc_kmult()
-      cbar0 = self.calc_cbar()
-      for c in range(len(kmults)):
-          Rh = kmults[c] * cbar0
-          RHs.append(Rh)
-      return RHs
-
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
-      tsoil = RampFunction(self.TSOIL_ramp,self.y_vals,self.lue_vals,"TSOIL","RECO")
-      tsoil.display_ramp()
-      smsf = RampFunction(self.SMSF_ramp,self.y_vals,self.lue_vals,"SMSF","RECO")
-      smsf.display_ramp()
+    rh_over_cbar = self._observed_r_h / self._cbar
+    fraut, bt_soil, SMSF_min, SMSF_max = self._reco_params 
+    display_ramp(self._TSOIL, rh_over_cbar, kmult_arrhenius_curve, (bt_soil,), self._lue, "TSOIL", "Rh/Cbar")
+    display_ramp(self._SMSF, rh_over_cbar, upward_ramp_func, (SMSF_min, SMSF_max), self._lue, "SMSF", "Rh/Cbar")
+
+  def _simulate_reco(self, reco_params):
+    fraut, bt_soil, smsf_min, smsf_max = reco_params
+    self._kmult = kmult(self._TSOIL, self._SMSF, bt_soil, smsf_min, smsf_max)
+    # prh/pk filtering
+    min_kmult = np.percentile(self._kmult, self._pk)
+    self._kmult[self._kmult < min_kmult] = np.nan
+    rh_over_kmult = self._observed_r_h / self._kmult
+    self._cbar = np.nanpercentile(self._kmult, self._prh, axis = 0)
+    return reco(self._gpp, self._kmult, self._cbar, fraut)  
+  
+  def func_to_optimize(self, reco_params):
+    simulated_reco = self._simulate_reco(reco_params)
+    return sse(self._observed_reco, simulated_reco, self._non_missing_obs, self._tower_weights)
 
   def rhc_v_kmult(self):
-      graph = RampFunction(self.calc_kmult(),self.reco,self.lue_vals,"Kmult","GPP")
-      print("Would you like to display the graph of Rh/Cbar vs Kmult?")
-      choice = char(input("Y for Yes, N for No: "))
-      if(choice.lower() == "y"):
-          graph.display_optional()
-
-  #The RECO optimization function with no input given (All outliers included)
-  def optimize_reco(self):
-    pass
+    graph = RampFunction(self.calc_kmult(),self.reco,self.lue_vals,"Kmult","GPP")
+    print("Would you like to display the graph of Rh/Cbar vs Kmult?")
+    choice = char(input("Y for Yes, N for No: "))
+    if(choice.lower() == "y"):
+      graph.display_optional()
 
   #The RECO optimization function with a boolean list of what outliers to include
   #Input order: [f_aut, b_tsoil, SMSF_min, SMSF_max]
@@ -218,6 +135,5 @@ class RECO:
       else:
 
         print("Invalid choice, please try again (0-9): ")
-
 
       return c_list

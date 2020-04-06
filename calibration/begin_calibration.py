@@ -8,6 +8,7 @@ from reco import *
 from Outliers import *
 from datetime import date
 from PreliminarySpinUp import *
+from scipy.optimize import minimize
 
 def main(argv):
   if len(argv) < 1:
@@ -42,25 +43,29 @@ def main(argv):
   climatology_end_date = datetime(2014, 12, 31)
   meteor_input.compute_climatological_year(climatology_start_date, climatology_end_date)
   flux_tower_data.compute_climatological_year(climatology_start_date, climatology_end_date)
-  # this works, for frontend to work we need to acquire vars and before after smoothing
 
   # outlier removal and display
   window = int(input("Please specify the number of days for the outlier smooting window size (whole number): "))
   flux_tower_data.smooth_gpp_outliers("gust", window)
   flux_tower_data.smooth_reco_outliers("gust", window)
-  flux_tower_data.display_gpp_smoothing(1)
-  flux_tower_data.display_reco_smoothing(1)
-  # outliers = Outliers(pft,flux_tower_data,reference_input)
-  # outliers.display_outliers()
+  # flux_tower_data.display_gpp_smoothing(1)
+  # flux_tower_data.display_reco_smoothing(1)
 
   # GPP optimization process
-  gpp_calcs = GPP(pft, bplut, meteor_input, flux_tower_data)
-  simulated_gpp = gpp_calcs.simulated_gpp()
-  
-  # gpp_calcs.display_ramps()
+  gpp_optimizer = GPP(pft, bplut, meteor_input, flux_tower_data)
+  simulated_gpp = gpp_optimizer.simulated_gpp()
+  # gpp_optimizer.display_ramps()
+  res = minimize(gpp_optimizer.func_to_optimize, bplut.gpp_params(pft))
+  print(bplut.gpp_params(pft))
+  print(res.x)
   # reference_bplut.after_optimization(pft,[2,5,8,10,11]) #CHANGE ARRAY
   #RECO
-  reco_calcs = RECO(pft, bplut, simulated_gpp, meteor_input)
+  reco_optimizer = RECO(pft, bplut, simulated_gpp, meteor_input, flux_tower_data)
+  reco_optimizer.display_ramps()
+  res = minimize(reco_optimizer.func_to_optimize, bplut.reco_params(pft))
+  print(bplut.reco_params(pft))
+  print(res.x)
+  exit(1)
   #former_bplut.after_optimization(pft,[14,17,20]) #CHANGE ARRAY
 
 if __name__ == "__main__":
