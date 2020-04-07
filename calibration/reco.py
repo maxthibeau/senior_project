@@ -11,7 +11,7 @@ import numpy as np
 import math
 from AnalyticalModelSpinUp import *
 from NumericalModelSpinUp import *
-from PreliminarySpinUp import *
+#from PreliminarySpinUp import *
 from RampFunctions import *
 from funcs.ramp_func import *
 from funcs.reco_funcs import *
@@ -68,7 +68,7 @@ class RECO:
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
-    rh_over_cbar = abs(self._observed_r_h / self._cbar)
+    rh_over_cbar = abs(self._observed_r_h / self._cbar) #did absolute to get rid of negatives
     fraut, bt_soil, SMSF_min, SMSF_max = self._reco_params
     display_ramp(self._TSOIL, rh_over_cbar, kmult_arrhenius_curve, (bt_soil,), self._lue, "TSOIL", "Rh/Cbar")
     display_ramp(self._SMSF, rh_over_cbar, upward_ramp_func, (SMSF_min, SMSF_max), self._lue, "SMSF", "Rh/Cbar")
@@ -94,11 +94,6 @@ class RECO:
     choice = char(input("Y for Yes, N for No: "))
     if(choice.lower() == "y"):
       graph.display_optional()
-
-  #The RECO optimization function with a boolean list of what outliers to include
-  #Input order: [f_aut, b_tsoil, SMSF_min, SMSF_max]
-  def optimize_reco(self,choice_vector):
-    pass
 
   #Gets user input for what outliers to include and exclude for the use of the RECO optimization process
   #(For the use of the command line interface version of the program)
