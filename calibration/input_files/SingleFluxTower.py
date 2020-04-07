@@ -88,16 +88,20 @@ class SingleFluxTower():
 
   def display_gpp_smoothing(self):
     x = np.linspace(0, len(self._gpp_before_smoothing), len(self._gpp_before_smoothing))
-    plt.plot(x, self._gpp_before_smoothing)
-    plt.plot(x, self._gpp_after_smoothing)
+    plt.plot(x, self._gpp_before_smoothing, 'orange', label="Before Smoothing")
+    plt.plot(x, self._gpp_after_smoothing, 'blue', label="After Smoothing",linestyle='dashed')
+    plt.xlabel("GPP")
     plt.title("GPP Outliers Smoothed")
+    plt.legend()
     plt.show()
 
   def display_reco_smoothing(self):
     x = np.linspace(0, len(self._reco_before_smoothing), len(self._reco_before_smoothing))
-    plt.plot(x, self._reco_before_smoothing)
-    plt.plot(x, self._reco_after_smoothing)
+    plt.plot(x, self._reco_before_smoothing, 'orange', label="Before Smoothing")
+    plt.plot(x, self._reco_after_smoothing, 'blue', label="After Smoothing",linestyle='dashed')
+    plt.xlabel("RECO")
     plt.title("RECO Outliers Smoothed")
+    plt.legend()
     plt.show()
 
   def gpp(self):

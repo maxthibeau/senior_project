@@ -22,7 +22,7 @@ class GPP:
     self._observed_gpp = flux_tower_data.gpp()
     self._non_missing_obs = flux_tower_data.non_missing_observations()
     self._tower_weights = flux_tower_data.weights()
-    
+
     self._gpp_params = bplut.gpp_params(pft)
     # from meteor input
     self._VPD = meteor_input.VPD()
@@ -50,8 +50,8 @@ class GPP:
       self._apar_high_bound = np.max(self._APAR)
     # throw out all apar values that don't fall within bounds
     invalid_apar_indices = (self._APAR < self._apar_low_bound) & (self._APAR > self._apar_high_bound)
-    self._APAR[invalid_apar_indices] = np.nan 
- 
+    self._APAR[invalid_apar_indices] = np.nan
+
   #Input order: [LUE, VPD_min, VPD_max, SMRZ_min, SMRZ_max, TMIN_min, TMIN_max, FT_mult]
   # NOTE: simulated GPP values are much lower than observed GPP values
   def func_to_optimize(self, gpp_params):
@@ -69,7 +69,7 @@ class GPP:
     display_ramp(self._VPD, gpp_over_apar, downward_ramp_func, (vpd_min, vpd_max), lue, "VPD", "GPP/APAR")
     display_ramp(self._TMIN, gpp_over_apar, upward_ramp_func, (tmin_min, tmin_max), lue, "TMIN", "GPP/APAR")
     display_ramp(self._SMRZ, gpp_over_apar, upward_ramp_func, (smrz_min, smrz_max), lue, "SMRZ", "GPP/APAR")
- 
+
   def display_gpp_v_emult(self):
     graph = RampFunction(self.e_mult,self.gpp,self.lue_vals,"Emult","GPP")
     print("Would you like to display the graph of GPP vs Emult?")

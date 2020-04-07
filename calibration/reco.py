@@ -43,7 +43,7 @@ class RECO:
 
     self._kmult = None
     self._cbar = None
-    # run reco simulation once to get data for ramp funcs 
+    # run reco simulation once to get data for ramp funcs
     self._simulate_reco(self._reco_params)
 
     # TODO: this might be the right way to calculate cbar
@@ -56,8 +56,8 @@ class RECO:
     still_choosing = True
     while(still_choosing):
       try:
-        self._prh = float(input("Please specify a Prh: "))
-        self._pk = float(input("Please specify a Pk: "))
+        self._prh = float(input("Please specify a Prh (decimal between 0 and 1): "))
+        self._pk = float(input("Please specify a Pk (decimal between 0 and 1): "))
       except ValueError:
         self._prh = -1
         self._pk = -1
@@ -68,8 +68,8 @@ class RECO:
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
-    rh_over_cbar = self._observed_r_h / self._cbar
-    fraut, bt_soil, SMSF_min, SMSF_max = self._reco_params 
+    rh_over_cbar = abs(self._observed_r_h / self._cbar)
+    fraut, bt_soil, SMSF_min, SMSF_max = self._reco_params
     display_ramp(self._TSOIL, rh_over_cbar, kmult_arrhenius_curve, (bt_soil,), self._lue, "TSOIL", "Rh/Cbar")
     display_ramp(self._SMSF, rh_over_cbar, upward_ramp_func, (SMSF_min, SMSF_max), self._lue, "SMSF", "Rh/Cbar")
 
@@ -79,10 +79,11 @@ class RECO:
     # prh/pk filtering
     min_kmult = np.percentile(self._kmult, self._pk)
     self._kmult[self._kmult < min_kmult] = np.nan
+    #can get divide by zero encountered RuntimeWarning here
     rh_over_kmult = self._observed_r_h / self._kmult
     self._cbar = np.nanpercentile(self._kmult, self._prh, axis = 0)
-    return reco(self._gpp, self._kmult, self._cbar, fraut)  
-  
+    return reco(self._gpp, self._kmult, self._cbar, fraut)
+
   def func_to_optimize(self, reco_params):
     simulated_reco = self._simulate_reco(reco_params)
     return sse(self._observed_reco, simulated_reco, self._non_missing_obs, self._tower_weights)

@@ -5,8 +5,8 @@ Note: class is not vigorously tested
 '''
 class NumericalModelSpinUp():
 
-  def __init__(self, gpps_1km, kmults_1km, litterfalls, pfts, r_opt, k_str, k_rec, f_met, f_str, f_aut, analytical_model_spin_up, num_iterations):
-    
+  def __init__(self, gpps_1km, kmults_1km, litterfalls, pfts, r_opt, k_str, k_rec, f_met, f_str, f_aut, analytical_model_spin_up):
+
     # inputs
     self._gpps_1km = gpps_1km
     self._kmults_1km = kmults_1km
@@ -26,9 +26,15 @@ class NumericalModelSpinUp():
     self._c2_list = []
     self._c3_list = []
 
+    num_iterations = self.set_iterations()
     for i in range(num_iterations):
       self._forward_run()
-      
+
+    print("C_Bar: ",self._cbar_list)
+    print("C1 (Slow Pool): ",self._c1_list)
+    print("C2 (Medium Pool): ",self._c2_list)
+    print("C3 (Fast Pool): ",self._c3_list)
+
   def _forward_run(self):
 
     dimensions = self._gpps_1km.shape
@@ -44,7 +50,7 @@ class NumericalModelSpinUp():
     reco = np.zeros(dimensions)
     nee = np.zeros(dimensions)
     tolernace = np.zeros(dimensions)
-    
+
     # Initialize state matrices that are [Ns x 81] in size with zeros
     rh1 = np.zeros((n_s, cells_per_site))
     rh2 = np.zeros((n_s, cells_per_site))
@@ -67,7 +73,7 @@ class NumericalModelSpinUp():
 
       # kmult1km is a [T x Ns x 81] matrix
       rh1 = self._r_opt * self._kmults_1km[:,day,:] * c1
-      rh2 = self._r_opt * self._k_str * self._kmults_1km[:,day,:] * c2 
+      rh2 = self._r_opt * self._k_str * self._kmults_1km[:,day,:] * c2
       rh3 = self._r_opt * self._k_rec * self._kmults_1km[:,day,:] * c3
 
       # Accumulate cbar0
@@ -85,20 +91,20 @@ class NumericalModelSpinUp():
       c1 = c1 + dc1
       c2 = c2 + dc2
       c3 = c3 + dc3
-      
+
       # Calculate total change across all 3 pools, explicity by site, 1-km cell
-      dc_total = dc1 + dc2 + dc3    
-      
+      dc_total = dc1 + dc2 + dc3
+
       # And we keep track of this fine-scale change as model move forward
       tolerance += dc_total
-    
+
       # Keep track of state on each day
       rh_total[:,day,:] = rh1 + rh2 + rh3
       c_total[:,day,:] = c1 + c2 + c3
       ra[:,day,:] = self._f_aut * self._gpps_1km[:,day,:]
       reco[:,day,:] = ra[:,day,:] + rh_total[:,day,:]
       nee[:,day,:] = reco[:,day,:] - self._gpps_1km[:,day,:]
-          
+
     # Keep a record of cpools
     self._c1_list.append(c1)
     self._c2_list.append(c2)
@@ -107,7 +113,7 @@ class NumericalModelSpinUp():
 
   def c1_list(self):
     return self._c1_list
-    
+
   def c2_list(self):
     return self._c2_list
 
@@ -116,6 +122,20 @@ class NumericalModelSpinUp():
 
   def cbar_list(self):
     return self._cbar_list
+
+  def set_iterations(self):
+      still_choosing = True
+      iterations = -1
+      while(still_choosing):
+          try:
+            iterations = int(input("Please specify the number of iterations (whole number): "))
+          except ValueError:
+            iterations = 0
+          if(iterations > 0):
+            still_choosing = False
+          else:
+            print("Invalid value: please try again")
+      return iterations
 
 def main():
   # tuple indexing gotes site, day, and grid loc.
@@ -134,7 +154,7 @@ def main():
   f_aut = 1
 
   annie = AnalyticalModelSpinUp(k_mults_1km, npps_1km, f_met, f_str, r_opt, k_str, k_rec)
-  nummy = NumericalModelSpinUp(gpps_1km, k_mults_1km, litterfalls_1km, pfts, r_opt, k_str, k_rec, f_met, f_str, f_aut, annie, 1)
+  nummy = NumericalModelSpinUp(gpps_1km, k_mults_1km, litterfalls_1km, pfts, r_opt, k_str, k_rec, f_met, f_str, f_aut, annie)
 
 if __name__ == "__main__":
   main()

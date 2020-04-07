@@ -10,3 +10,6 @@ csv
 affine
 gdal (version 3.0 or above, install with command "sudo apt-get install libgdal-dev")
 scipy
+
+#for Ubuntu displays
+# export DISPLAY=:0.0

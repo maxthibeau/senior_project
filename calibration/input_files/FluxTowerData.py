@@ -66,6 +66,20 @@ class FluxTowerData():
         self._weights.append(0.0)
     self._set_weights()
 
+  def smooth_outliers(self, met):
+     still_choosing = True
+     while(still_choosing):
+       try:
+         window = int(input("Please specify the number of days for the outlier smooting window size (whole number): "))
+       except ValueError:
+         window = 0
+       if(window > 0):
+         still_choosing = False
+       else:
+         print("Invalid value: please try again")
+     self.smooth_gpp_outliers(met,window)
+     self.smooth_reco_outliers(met,window)
+
   def smooth_gpp_outliers(self, met, window_size):
     for tower in self._flux_towers:
       tower.smooth_gpp_outliers(met, window_size)
@@ -73,6 +87,20 @@ class FluxTowerData():
   def smooth_reco_outliers(self, met, window_size):
     for tower in self._flux_towers:
       tower.smooth_reco_outliers(met, window_size)
+
+  def display_smoothing(self):
+      still_choosing = True
+      while(still_choosing):
+        try:
+          num_towers = int(input("Please specify the number of flux tower sites to randomly choose from (whole number, enter 0 to pass): "))
+        except ValueError:
+          num_towers = -1
+        if(num_towers >= 0):
+          still_choosing = False
+        else:
+          print("Invalid value: please try again")
+      self.display_gpp_smoothing(num_towers)
+      self.display_reco_smoothing(num_towers)
 
   def display_gpp_smoothing(self, num_sites_to_randomly_select):
     site_indices = np.random.choice(len(self._flux_towers), num_sites_to_randomly_select)
@@ -82,7 +110,7 @@ class FluxTowerData():
   def display_reco_smoothing(self, num_sites_to_randomly_select):
     site_indices = np.random.choice(len(self._flux_towers), num_sites_to_randomly_select)
     for site_index in site_indices:
-      self._flux_towers[site_index].display_reco_smoothing()    
+      self._flux_towers[site_index].display_reco_smoothing()
 
   def _set_weights(self):
     #World coordinates (longitude and latitude) to grid coordinates (EASE grid) to pixel coordinates (x,y)
