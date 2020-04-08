@@ -18,15 +18,17 @@ def main(argv):
 
   # read in input files
   config_fname = argv[0]
-  config_file = ConfigFile.ConfigFile(config_fname)
 
   # while loop to allow continuation of optimizing for multiple PFTs
+  pfts_optimized = []
   allow_pft = True
   updated = False
   while(allow_pft):
      #read in from config file
+     config_file = ConfigFile.ConfigFile(config_fname)
      meteor_input = config_file.meteorological_input()
      flux_tower_data = config_file.flux_tower_data()
+     print("init: ",str(flux_tower_data))
      reference_input = config_file.prev_simulation()
      if(updated): #check if the bplut has been optimized
          bplut = bplut
@@ -38,7 +40,7 @@ def main(argv):
      flux_tower_data.set_coords(flux_lat_long)
 
      # select a pft
-     pft = int(PFTSelector.select_pft(meteor_input))
+     pft = int(PFTSelector.select_pft(meteor_input,pfts_optimized))
 
      # find tower sites claimed by pft
      tower_sites_claimed_by_pft = meteor_input.sites_claimed_by_pft(pft)
@@ -79,13 +81,11 @@ def main(argv):
      bplut.after_optimization("RECO",pft,res.x)
 
      #SOC calculation
-     print("SIM GPP: ",gpp_optimizer.simulated_gpp())
-     npp_calc = flux_tower_data.gpp() - ( bplut[pft,'fraut'] * flux_tower_data.gpp())
-     print("npp initial: ",npp_calc)
-     analytical_spin = AnalyticalModelSpinUp(reco_optimizer.get_kmult(), npp_calc, float(bplut[pft,'fmet']), float(bplut[pft,'fstr']), float(bplut[pft,'kopt']), float(bplut[pft,'kstr']), float(bplut[pft,'kslw']))
-     print("KMULTS: ",analytical_spin.summed_kmults())
-     print("NPPS: ",analytical_spin.summed_npps())
+     analytical_spin = AnalyticalModelSpinUp(reco_optimizer.get_kmult(), flux_tower_data.gpp(), float(bplut[pft,'fmet']), float(bplut[pft,'fstr']), float(bplut[pft,'kopt']), float(bplut[pft,'kstr']), float(bplut[pft,'kslw']),float(bplut[pft,'fraut']))
      soc_calc = SOC(pft,bplut,flux_tower_data.towers(),analytical_spin.summed_kmults(),analytical_spin.summed_npps())
+
+     #pfts optimized
+     pfts_optimized.append(pft)
 
      try:
          choice = input("Would you like to optimize another PFT? (y/n): ").lower()

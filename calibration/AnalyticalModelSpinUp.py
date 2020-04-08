@@ -1,8 +1,11 @@
 import numpy as np
+import math
 
 class AnalyticalModelSpinUp():
 
-  def __init__(self, k_mults, npps, f_met, f_str, r_opt, k_str, k_rec):
+  def __init__(self, k_mults, towers_gpp, f_met, f_str, r_opt, k_str, k_rec, fraut):
+
+    npps = self.calc_npp(towers_gpp,fraut)
 
     self._c_mets = []
     self._c_strs = []
@@ -28,17 +31,25 @@ class AnalyticalModelSpinUp():
       self._c_strs.append(c_str)
       self._c_recs.append(c_rec)
       self._c_bars.append(c_bar)
-  
-    
+
+  def calc_npp(self,tower_gpp,fraut):
+      npps = []
+      for i in tower_gpp:
+          for val in i:
+              if not math.isnan(val):
+                  npp = val - (fraut * val)
+                  npps.append(npp)
+      return npps
+
   def c_mets(self):
     return self._c_mets
 
   def c_strs(self):
     return self._c_strs
-  
+
   def c_recs(self):
     return self._c_recs
-  
+
   def c_bars(self):
     return self._c_bars
 
