@@ -95,6 +95,9 @@ class RECO:
     if(choice.lower() == "y"):
       graph.display_optional()
 
+  def get_kmult(self):
+      return self._kmult
+
   #Gets user input for what outliers to include and exclude for the use of the RECO optimization process
   #(For the use of the command line interface version of the program)
   def cli_get_input(self):

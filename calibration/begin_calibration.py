@@ -5,6 +5,7 @@ from input_files import ConfigFile
 from PFTSelector import *
 from gpp import *
 from reco import *
+from soc import *
 from Outliers import *
 from datetime import date
 #from PreliminarySpinUp import *
@@ -55,12 +56,12 @@ def main(argv):
 
      # outlier removal and display
      flux_tower_data.smooth_outliers("gust")
-     flux_tower_data.display_smoothing()
+     #flux_tower_data.display_smoothing()
 
      # GPP optimization process
      gpp_optimizer = GPP(pft, bplut, meteor_input, flux_tower_data)
      simulated_gpp = gpp_optimizer.simulated_gpp()
-     gpp_optimizer.display_ramps()
+     #gpp_optimizer.display_ramps()
      res = minimize(gpp_optimizer.func_to_optimize, bplut.gpp_params(pft)) #new optimized GPP parameter array
      print("*** PFT ",pft, " ***")
      print("GPP: ",bplut.gpp_params(pft))
@@ -70,12 +71,21 @@ def main(argv):
 
      # RECO optimization process
      reco_optimizer = RECO(pft, bplut, simulated_gpp, meteor_input, flux_tower_data)
-     reco_optimizer.display_ramps()
+     #reco_optimizer.display_ramps()
      res = minimize(reco_optimizer.func_to_optimize, bplut.reco_params(pft)) #new optimized RECO parameter array
      print("RECO: ",bplut.reco_params(pft))
      print("Optimized RECO: ",res.x)
      #actual updating of RECO vals in BPLUT for pft
      bplut.after_optimization("RECO",pft,res.x)
+
+     #SOC calculation
+     print("SIM GPP: ",gpp_optimizer.simulated_gpp())
+     npp_calc = flux_tower_data.gpp() - ( bplut[pft,'fraut'] * flux_tower_data.gpp())
+     print("npp initial: ",npp_calc)
+     analytical_spin = AnalyticalModelSpinUp(reco_optimizer.get_kmult(), npp_calc, float(bplut[pft,'fmet']), float(bplut[pft,'fstr']), float(bplut[pft,'kopt']), float(bplut[pft,'kstr']), float(bplut[pft,'kslw']))
+     print("KMULTS: ",analytical_spin.summed_kmults())
+     print("NPPS: ",analytical_spin.summed_npps())
+     soc_calc = SOC(pft,bplut,flux_tower_data.towers(),analytical_spin.summed_kmults(),analytical_spin.summed_npps())
 
      try:
          choice = input("Would you like to optimize another PFT? (y/n): ").lower()

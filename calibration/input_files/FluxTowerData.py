@@ -54,6 +54,9 @@ class FluxTowerData():
   def weights(self):
     return self._weights
 
+  def towers(self):
+    return self._flux_towers
+
   def non_missing_observations(self):
     return self._non_missing_observations
 

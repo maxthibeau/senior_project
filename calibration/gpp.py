@@ -55,12 +55,12 @@ class GPP:
   #Input order: [LUE, VPD_min, VPD_max, SMRZ_min, SMRZ_max, TMIN_min, TMIN_max, FT_mult]
   # NOTE: simulated GPP values are much lower than observed GPP values
   def func_to_optimize(self, gpp_params):
-    simulated_gpp = gpp_apar(self._APAR, self._VPD, self._TMIN, self._SMRZ, self._TSURF, *gpp_params)
-    return sse(self._observed_gpp, simulated_gpp, self._non_missing_obs, self._tower_weights)
+    self._simulated_gpp = gpp_apar(self._APAR, self._VPD, self._TMIN, self._SMRZ, self._TSURF, *gpp_params)
+    return sse(self._observed_gpp, self._simulated_gpp, self._non_missing_obs, self._tower_weights)
 
   def simulated_gpp(self):
     # FIXME: make this simulated gpp
-    return self._observed_gpp
+    return self._observed_gpp #self._simulated_gpp
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
@@ -76,7 +76,7 @@ class GPP:
     choice = char(input("Y for Yes, N for No: "))
     if(choice.lower() == "y"):
       graph.display_optional()
-      
+
   #Gets user input for what outliers to include and exclude for the use of the GPP optimization process
   #(For the use of the command line interface version of the program)
   def cli_get_input(self):

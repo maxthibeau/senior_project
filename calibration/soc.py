@@ -18,37 +18,38 @@ from scipy import stats
 class SOC:
 
   #Initializes the SOC class
-  def __init__(self,flux_towers,pft,bplut,kmult_365,npp_365):
-      self.fmet = float(bplut[pft][20])
-      self.fstr = float(bplut[pft][21])
-      self.ropt = float(bplut[pft][22])
-      self.kstr = float(bplut[pft][23])
-      self.krec = float(bplut[pft][24])
+  def __init__(self,pft,bplut,flux_towers,kmult_365,npp_365):
+      self.fmet = float(bplut[pft,'fmet'])
+      self.fstr = float(bplut[pft,'fstr'])
+      self.ropt = float(bplut[pft,'kopt'])
+      self.kstr = float(bplut[pft,'kstr'])
+      self.krec = float(bplut[pft,'kslw'])
       self.kmult_365 = kmult_365 #from analytical model spin up
       self.npp_365 = npp_365 # from analytical model spin up
       self.towers = flux_towers
       self.sigmas = self.calc_sigmas()
       self.beta_soc = self.calc_beta_soc() #only 1 soc for each different fmet,fstr,ropt,kstr,krec
       self.estimated_soc = self.calc_estimate()
+      print("SOC : ",self.estimated_soc)
       self.actual_soc = [] #TODO: Change to actual soc calc for each tower
-      self.display_graph()
+      #self.display_graph()
 
-   def calc_sigmas(self): #from 10c in Procedure 3.3 in Requirements Draft Doc
-       sigmas = []
-       conv_1 = (1/len(self.towers))
-       for flux in range(len(self.towers)): #for each tower
-           #tower = self.towers[flux]
-           kmult_star = 0.0
-           npp_star = 0.0
-           for i in range(0,365):
-               kmult_star += self.kmult_365[i]
-               npp_star += self.npp_365[i]
-           conv_2 = npp_star/kmult_star
-           sigma = conv_1 * conv_2
-           sigmas.append(sigma)
-        return sigmas
+  def calc_sigmas(self): #from 10c in Procedure 3.3 in Requirements Draft Doc
+      sigmas = []
+      conv_1 = (1/len(self.towers))
+      for flux in range(len(self.towers)): #for each tower
+          #tower = self.towers[flux]
+          kmult_star = 0.0
+          npp_star = 0.0
+          for i in range(0,365):
+             kmult_star += self.kmult_365[i]
+             npp_star += self.npp_365[i]
+          conv_2 = npp_star/kmult_star
+          sigma = conv_1 * conv_2
+          sigmas.append(sigma)
+      return sigmas
 
-    def calc_beta_soc(self): #from 10d in Procedure 3.3 in Requirements Draft Doc
+  def calc_beta_soc(self): #from 10d in Procedure 3.3 in Requirements Draft Doc
         s = 0.001 #scaling param, results in vals with units of: (kg*C)/(m^2)
         part_1 = (1 - self.fmet)/self.kstr
         part_2 = (self.fstr*(1 - self.fmet))/self.krec
@@ -56,14 +57,14 @@ class SOC:
         soc = s * big_part/self.ropt
         return soc #one for each bplut
 
-    def calc_estimate(self): # y values for SOC estimation
+  def calc_estimate(self): # y values for SOC estimation
         arr = []
         for i in range(len(self.towers)): #for each tower: sigma * Beta_soc
             val = self.sigmas[i] * self.beta_soc
             arr.append(val)
         return arr
 
-    def display_graph(self):
+  def display_graph(self):
          x = self.actual_soc
          y = self.estimated_soc
          self.r_val = stats.pearsonr(x,y) #for display of r-val on graph
