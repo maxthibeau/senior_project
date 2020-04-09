@@ -98,7 +98,10 @@ class MeteorologicalInput():
         if self._is_leap_year(date) and date.month > 2:
           julian_date -= 1
         day_index = (date - first_date).days
-        var_climatology[julian_date].append(self._meteor_vars[var_index][day_index])
+        try:
+          var_climatology[julian_date].append(self._meteor_vars[var_index][day_index])
+        except IndexError:
+          print("Encountered an index Error\n\n")
         date += day_inc
       # average each day's values to get a 365-day climatological year
       for day_index in range(len(var_climatology)):
