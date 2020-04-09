@@ -8,3 +8,7 @@ sudo -H python3 -m pip install numpy
 sudo -H python3 -m pip install h5py
 sudo -H python3 -m pip install affine
 sudo apt-get install python3-gdal -y
+
+cd DataFiles
+chmod +x get_data_files.sh
+./get_data_files.sh
