@@ -22,11 +22,10 @@ class MeteorologicalInput():
     self._TMIN = self._subset_data(['MET', 'tmin'])
     self._TSURF = self._subset_data(['MET', 'tsurf'])
     self._FPAR = self._subset_data(['MOD', 'fpar'])
-    # this data doesn't exist
-    #self._PAR = self._subset_data(['MET', 'par'])
+    self._PAR = self._subset_data(['MET', 'par'])
     self._TSOIL = self._subset_data(['MET','tsoil'])
 
-    self._meteor_vars = [self._VPD, self._SMRZ, self._SMSF, self._TMIN, self._TSURF, self._TSOIL, self._FPAR] #, self._PAR]
+    self._meteor_vars = [self._VPD, self._SMRZ, self._SMSF, self._TMIN, self._TSURF, self._TSOIL, self._FPAR, self._PAR]
 
   def pfts(self,first,last):
     return self._pfts[first:last]
@@ -61,10 +60,8 @@ class MeteorologicalInput():
   def FPAR(self):
     return self._meteor_vars[6]
 
-  '''
   def PAR(self):
     return self._meteor_vars[7]
-  '''
 
   def sites_claimed_by_pft(self, pft):
     return self._pft_to_claimed_sites[int(pft)]
@@ -101,7 +98,7 @@ class MeteorologicalInput():
         try:
           var_climatology[julian_date].append(self._meteor_vars[var_index][day_index])
         except IndexError:
-          print("Encountered an index Error\n\n")
+          print("INDEX ERROR")
         date += day_inc
       # average each day's values to get a 365-day climatological year
       for day_index in range(len(var_climatology)):
