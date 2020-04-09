@@ -37,7 +37,7 @@ class DisplayRAMP(BasePage):
     if self.gpp_or_reco == "GPP":
       self.ramp_label = QtWidgets.QLabel("6. "+self.gpp_or_reco+" Ramp Functions")
       next_page = QtWidgets.QPushButton("Proceed")
-      prev_page = QtWidgets.QPushButton("Re-Smooth RECO Outliers")
+      prev_page = QtWidgets.QPushButton("Back")
     else: #self.gpp_or_reco == "RECO"
       self.ramp_label = QtWidgets.QLabel("10. "+self.gpp_or_reco+" Ramp Functions")
       next_page = QtWidgets.QPushButton("Proceed")
