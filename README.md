@@ -1,16 +1,18 @@
 # esm-calibration
+Run the setup.sh script to get started.
 
+### CLI
+calibration$ python3 begin_calibration.py
 
-#DEPENDENCIES
-Python3
-PyQt
+### GUI
+calibration$ python3 Controller.py
+
+## DEPENDENCIES
+python3
+python-pyqt5
 matplotlib
-h5py (installed from python3-pip)
-csv
+h5py
 affine
-gdal (version 3.0 or above, install with command "sudo apt-get install libgdal-dev")
+python3-gdal
 scipy
-math
-
-#for Ubuntu displays
-# export DISPLAY=:0.0
+numpy
