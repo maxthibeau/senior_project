@@ -28,7 +28,6 @@ def main(argv):
      config_file = ConfigFile.ConfigFile(config_fname)
      meteor_input = config_file.meteorological_input()
      flux_tower_data = config_file.flux_tower_data()
-     print("init: ",str(flux_tower_data))
      reference_input = config_file.prev_simulation()
      if(updated): #check if the bplut has been optimized
          bplut = bplut
@@ -58,12 +57,12 @@ def main(argv):
 
      # outlier removal and display
      flux_tower_data.smooth_outliers("gust")
-     #flux_tower_data.display_smoothing()
+     flux_tower_data.display_smoothing()
 
      # GPP optimization process
      gpp_optimizer = GPP(pft, bplut, meteor_input, flux_tower_data)
      simulated_gpp = gpp_optimizer.simulated_gpp()
-     #gpp_optimizer.display_ramps()
+     gpp_optimizer.display_ramps()
      res = minimize(gpp_optimizer.func_to_optimize, bplut.gpp_params(pft)) #new optimized GPP parameter array
      print("*** PFT ",pft, " ***")
      print("GPP: ",bplut.gpp_params(pft))
@@ -73,7 +72,7 @@ def main(argv):
 
      # RECO optimization process
      reco_optimizer = RECO(pft, bplut, simulated_gpp, meteor_input, flux_tower_data)
-     #reco_optimizer.display_ramps()
+     reco_optimizer.display_ramps()
      res = minimize(reco_optimizer.func_to_optimize, bplut.reco_params(pft)) #new optimized RECO parameter array
      print("RECO: ",bplut.reco_params(pft))
      print("Optimized RECO: ",res.x)
@@ -81,8 +80,10 @@ def main(argv):
      bplut.after_optimization("RECO",pft,res.x)
 
      #SOC calculation
+     config_file.get_soc()
      analytical_spin = AnalyticalModelSpinUp(reco_optimizer.get_kmult(), flux_tower_data.gpp(), float(bplut[pft,'fmet']), float(bplut[pft,'fstr']), float(bplut[pft,'kopt']), float(bplut[pft,'kstr']), float(bplut[pft,'kslw']),float(bplut[pft,'fraut']))
      soc_calc = SOC(pft,bplut,flux_tower_data.towers(),analytical_spin.summed_kmults(),analytical_spin.summed_npps())
+     #numerical_spin =  NumericalModelSpinUp(simulated_gpp, analytical_spin.summed_kmults(), soc_calc.get_litterfall(), pft, float(bplut[pft,'kopt']),float(bplut[pft,'kstr']), float(bplut[pft,'kslw']), float(bplut[pft,'fmet']), float(bplut[pft,'fstr']),float(bplut[pft,'fraut']), analytical_spin)
 
      #pfts optimized
      pfts_optimized.append(pft)

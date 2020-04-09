@@ -65,8 +65,11 @@ class ConfigFile():
   def meteorological_input(self):
     return self._meteorological_input
 
-  def soc_input(self):
-    return self._soc_input
+  def get_soc(self):
+      # encoding = "ISO-8859-1"
+      print("ACTUAL SOC: ")
+      for line in open(self._soc_input, encoding = "ISO-8859-1"):
+          print(line)
 
   def output_hdf5_files(self):
     return self._output_hdf5_files

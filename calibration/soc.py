@@ -26,31 +26,33 @@ class SOC:
       self.krec = float(bplut[pft,'kslw'])
       self.kmult_365 = kmult_365 #from analytical model spin up
       self.npp_365 = npp_365 # from analytical model spin up
+      self.avg_litterfall = 0.0 #updated in calc_sigmas()
       self.towers = flux_towers
       self.sigmas = self.calc_sigmas()
       self.beta_soc = self.calc_beta_soc() #only 1 soc for each different fmet,fstr,ropt,kstr,krec
       self.estimated_soc = self.calc_estimate()
-      print("SOC : ",self.estimated_soc)
-      print("SOC length: ", len(self.estimated_soc))
-      self.actual_soc = [] #TODO: Change to actual soc calc for each tower
+      print("Calculated SOC: ",self.estimated_soc)
+      self.actual_soc = actual_soc #TODO: Change to actual soc calc for each tower
       #self.display_graph()
 
   def calc_sigmas(self): #from 10c in Procedure 3.3 in Requirements Draft Doc
       sigmas = []
       conv_1 = (1/len(self.towers))
-      kmult_star = 0.0
-      for k in self.kmult_365:
-         if not math.isnan(k):
-             kmult_star += k
       npp_star = 0.0
-      for n in self.npp_365:
-         if not math.isnan(n):
-             npp_star += n
       for flux in self.towers: #for each tower
           #tower = self.towers[flux]
+          kmult_star = 0.0
+          for k in self.kmult_365:
+             if not math.isnan(k):
+                 kmult_star += k
+
+          for n in self.npp_365:
+             if not math.isnan(n):
+                 npp_star += n
           conv_2 = npp_star/kmult_star
           sigma = conv_1 * conv_2
           sigmas.append(sigma)
+      self.avg_litterfall = npp_star/(len(self.npp_365)) #avg litterfall for npps
       return sigmas
 
   def calc_beta_soc(self): #from 10d in Procedure 3.3 in Requirements Draft Doc
@@ -67,6 +69,9 @@ class SOC:
             val = self.sigmas[i] * self.beta_soc
             arr.append(val)
         return arr
+
+  def get_litterfall(self):
+      return self.avg_litterfall
 
   def display_graph(self):
          x = self.actual_soc

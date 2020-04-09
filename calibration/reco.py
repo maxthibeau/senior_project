@@ -44,7 +44,7 @@ class RECO:
     self._kmult = None
     self._cbar = None
     # run reco simulation once to get data for ramp funcs
-    self._simulate_reco(self._reco_params)
+    self.reco = self._simulate_reco(self._reco_params)
 
     # TODO: this might be the right way to calculate cbar
     # self._kmult_1km, self._npp_1km, _ = preliminary_spinup(pft, bplut, meteor_input)
@@ -97,6 +97,9 @@ class RECO:
 
   def get_kmult(self):
       return self._kmult
+
+  def get_reco(self):
+      return self.reco
 
   #Gets user input for what outliers to include and exclude for the use of the RECO optimization process
   #(For the use of the command line interface version of the program)

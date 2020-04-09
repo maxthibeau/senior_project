@@ -11,7 +11,7 @@ class NumericalModelSpinUp():
     self._gpps_1km = gpps_1km
     self._kmults_1km = kmults_1km
     self._litterfalls = litterfalls
-    self._pfts = pfts
+    self._pft = pfts
     self._r_opt = r_opt
     self._k_str = k_str
     self._k_rec = k_rec
