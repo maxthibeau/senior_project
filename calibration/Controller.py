@@ -13,7 +13,7 @@ from GUI.NumericalSpinups import *
 from GUI.SimulationStatistics import *
 #from GUI.TopBarLayout import *
 
-#for Mark's Ubuntu
+#for Mark's Ubuntu (Windows)
 #export DISPLAY=:0.0
 
 class Controller:
