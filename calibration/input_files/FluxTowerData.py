@@ -8,11 +8,12 @@ from input_files.SingleFluxTower import *
 
 class FluxTowerData():
 
-  def __init__(self, flux_tower_dir):
+  def __init__(self, flux_tower_dir, actual_soc):
     self._coordinates = [] # array of array of 2 elements [latitude, longitude]
     self._weights = [] # float calculated from coordinates
     self._flux_towers = []
     self._non_missing_observations = []
+    self._actual_soc = actual_soc
     for filename in os.listdir(flux_tower_dir):
       filepath = flux_tower_dir + "/" + filename
       flux_tower = SingleFluxTower(filepath)
@@ -32,6 +33,10 @@ class FluxTowerData():
     self._weights = np.array([self._weights[site_index] for site_index in tower_sites_claimed_by_pft])
     self._coordinates = np.array([self._coordinates[site_index] for site_index in tower_sites_claimed_by_pft])
     self._non_missing_observations = np.array([self._non_missing_observations[site_index] for site_index in tower_sites_claimed_by_pft])
+    self._actual_soc = [self._actual_soc[site_index] for site_index in tower_sites_claimed_by_pft]
+    for i in range(len(self._actual_soc)):
+        if(self._actual_soc[i] < 0):
+            self._actual_soc[i] = 0
 
   def compute_climatological_year(self, start_date, end_date):
     # for every flux tower
@@ -56,6 +61,9 @@ class FluxTowerData():
 
   def towers(self):
     return self._flux_towers
+
+  def socs(self):
+    return self._actual_soc
 
   def non_missing_observations(self):
     return self._non_missing_observations

@@ -18,7 +18,7 @@ from scipy import stats
 class SOC:
 
   #Initializes the SOC class
-  def __init__(self,pft,bplut,flux_towers,kmult_365,npp_365):
+  def __init__(self,pft,bplut,flux_towers,kmult_365,npp_365,actual_soc):
       self.fmet = float(bplut[pft,'fmet'])
       self.fstr = float(bplut[pft,'fstr'])
       self.ropt = float(bplut[pft,'kopt'])
@@ -32,20 +32,20 @@ class SOC:
       self.beta_soc = self.calc_beta_soc() #only 1 soc for each different fmet,fstr,ropt,kstr,krec
       self.estimated_soc = self.calc_estimate()
       print("Calculated SOC: ",self.estimated_soc)
-      #self.actual_soc = actual_soc #TODO: Change to actual soc calc for each tower
-      #self.display_graph()
+      self.actual_soc = actual_soc
+      print("Actual SOC: ",self.actual_soc)
+      self.display_graph()
 
   def calc_sigmas(self): #from 10c in Procedure 3.3 in Requirements Draft Doc
       sigmas = []
       conv_1 = (1/len(self.towers))
-      npp_star = 0.0
       for flux in self.towers: #for each tower
           #tower = self.towers[flux]
           kmult_star = 0.0
           for k in self.kmult_365:
              if not math.isnan(k):
                  kmult_star += k
-
+          npp_star = 0.0
           for n in self.npp_365:
              if not math.isnan(n):
                  npp_star += n
@@ -77,12 +77,13 @@ class SOC:
          x = self.actual_soc
          y = self.estimated_soc
          self.r_val = stats.pearsonr(x,y) #for display of r-val on graph
-         text = "Pearson's r-val = "+round(self.r_val,2)
+         text = "Pearson's r-val = "+str(self.r_val)
+         self.figure = plt.figure()
          ax = self.figure.add_subplot(111)
          ax.clear()
          ax.scatter(x,y)
          ax.set_title("SOC Estimation")
          ax.set_xlabel("IGBP SOC [kg C m^-2]") #ground truth SOC
          ax.set_ylabel("Estimated SOC [kg C m^-2]") #estimated/calculated SOC
-         ax.text(0.05, 0.95,text,fontsize=14,transform=ax.transAxes,verticalalignment='top',bbox=props)
-         ax.show()
+         ax.text(0.05, 0.95,text,fontsize=14,transform=ax.transAxes,verticalalignment='top')
+         plt.show()

@@ -15,7 +15,8 @@ class ConfigFile():
 
       self._meteorological_input = MeteorologicalInput(self._meteorological_input)
       #FIXME: insert code that excludes tower sites
-      self._flux_tower_data = FluxTowerData(self._flux_tower_dir)
+      self._actual_soc = self.get_soc()
+      self._flux_tower_data = FluxTowerData(self._flux_tower_dir,self._actual_soc)
       self._reference_bplut_table = NewBPLUT(self._reference_bplut_table)
       self._prev_simulation = ReferenceInput(self._last_used_nature_run)
 
@@ -68,11 +69,9 @@ class ConfigFile():
 
   def get_soc(self):
       #soc = np.fromfile(self._soc_input, dtype = np.float32).reshape((1624, 3856))
-      #Fixme: will need to be reshaped 
+      #Fixme: will need to be reshaped
       soc = np.fromfile(self._soc_input, dtype = np.float32)
-      print("ACTUAL SOC: ")
-      for x in soc:
-          print(x)
+      return soc
 
   def output_hdf5_files(self):
     return self._output_hdf5_files
