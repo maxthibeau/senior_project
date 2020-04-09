@@ -80,7 +80,7 @@ def main(argv):
      bplut.after_optimization("RECO",pft,res.x)
 
      #SOC calculation
-     config_file.get_soc()
+     #config_file.get_soc()
      analytical_spin = AnalyticalModelSpinUp(reco_optimizer.get_kmult(), flux_tower_data.gpp(), float(bplut[pft,'fmet']), float(bplut[pft,'fstr']), float(bplut[pft,'kopt']), float(bplut[pft,'kstr']), float(bplut[pft,'kslw']),float(bplut[pft,'fraut']))
      soc_calc = SOC(pft,bplut,flux_tower_data.towers(),analytical_spin.summed_kmults(),analytical_spin.summed_npps())
      #numerical_spin =  NumericalModelSpinUp(simulated_gpp, analytical_spin.summed_kmults(), soc_calc.get_litterfall(), pft, float(bplut[pft,'kopt']),float(bplut[pft,'kstr']), float(bplut[pft,'kslw']), float(bplut[pft,'fmet']), float(bplut[pft,'fstr']),float(bplut[pft,'fraut']), analytical_spin)

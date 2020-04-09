@@ -32,7 +32,7 @@ class SOC:
       self.beta_soc = self.calc_beta_soc() #only 1 soc for each different fmet,fstr,ropt,kstr,krec
       self.estimated_soc = self.calc_estimate()
       print("Calculated SOC: ",self.estimated_soc)
-      self.actual_soc = actual_soc #TODO: Change to actual soc calc for each tower
+      #self.actual_soc = actual_soc #TODO: Change to actual soc calc for each tower
       #self.display_graph()
 
   def calc_sigmas(self): #from 10c in Procedure 3.3 in Requirements Draft Doc

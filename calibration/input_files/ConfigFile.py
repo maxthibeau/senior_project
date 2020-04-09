@@ -68,7 +68,7 @@ class ConfigFile():
   def get_soc(self):
       # encoding = "ISO-8859-1"
       print("ACTUAL SOC: ")
-      for line in open(self._soc_input, encoding = "ISO-8859-1"):
+      for line in open(self._soc_input,encoding = "ISO-8859-1"):
           print(line)
 
   def output_hdf5_files(self):
