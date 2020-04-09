@@ -41,6 +41,7 @@ class ParameterChoosing(BasePage):
     grid_layout.setHorizontalSpacing(20)
     for i in range(len(self.param_checkboxes)):
       param_checkbox = self.param_checkboxes[i]
+      param_checkbox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
       num_checkboxes = len(self.param_checkboxes)
       param_checkbox.setChecked(True)
       if i < num_checkboxes / 2:
@@ -56,11 +57,14 @@ class ParameterChoosing(BasePage):
     self.optimize_button = QtWidgets.QPushButton("Optimize Parameters")
     self.optimize_button.setFixedSize(250,75)
     self.optimize_button.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
+    self.optimize_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     self.optimize_button.clicked.connect(self.next_page)
+    
     self.prev_page_button = QtWidgets.QPushButton("Re-display old RAMP functions")
     self.prev_page_button.setFixedSize(250,75)
     self.prev_page_button.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
     self.prev_page_button.clicked.connect(self.prev_page)
+    self.prev_page_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
     button_layout = QtWidgets.QHBoxLayout()
     button_layout.addWidget(self.prev_page_button)

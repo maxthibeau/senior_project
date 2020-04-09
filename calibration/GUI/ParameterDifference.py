@@ -27,11 +27,13 @@ class ParameterDifference(BasePage):
     next_param_button.setToolTip('Go to next optimized ramp function')
     next_param_button.setFont(QtGui.QFont("Times", 12, QtGui.QFont.Bold))
     next_param_button.clicked.connect(self.increment_current_param_plotted_index)
+    next_param_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     prev_param_button = QtWidgets.QPushButton("<")
     prev_param_button.setFont(QtGui.QFont("Times", 12, QtGui.QFont.Bold))
     prev_param_button.setFixedSize(50,275)
     prev_param_button.setToolTip('Go to previous optimized ramp function')
     prev_param_button.clicked.connect(self.decrement_current_param_plotted_index)
+    prev_param_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     
     switch_graph_layout = QtWidgets.QHBoxLayout()
     switch_graph_layout.addWidget(prev_param_button)
@@ -42,6 +44,8 @@ class ParameterDifference(BasePage):
     redisplay_ramp_button.clicked.connect(self.redisplay_ramp_funcs)
     redisplay_ramp_button.setFixedSize(250,75)
     redisplay_ramp_button.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
+    redisplay_ramp_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+    
     if self.gpp_or_reco == "GPP":
       self.page_label = QtWidgets.QLabel("8. "+gpp_or_reco+" Optimized Parameter Differences")
       next_page = QtWidgets.QPushButton("Proceed")
@@ -55,6 +59,9 @@ class ParameterDifference(BasePage):
     prev_page.setFixedSize(250,75)
     next_page.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
     prev_page.setFont(QtGui.QFont("Times", 8, QtGui.QFont.Bold))
+    next_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+    prev_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+    
     self.page_label.setFont(QtGui.QFont("Times", 13))
     self.page_label.setAlignment(Qt.AlignCenter)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
