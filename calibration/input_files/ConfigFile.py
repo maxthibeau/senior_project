@@ -4,6 +4,7 @@ from input_files.MeteorologicalInput import *
 from input_files.FluxTowerData import *
 from input_files.NewBPLUT import *
 from input_files.ReferenceInput import *
+import numpy as np
 
 class ConfigFile():
 
@@ -66,10 +67,12 @@ class ConfigFile():
     return self._meteorological_input
 
   def get_soc(self):
-      # encoding = "ISO-8859-1"
+      #soc = np.fromfile(self._soc_input, dtype = np.float32).reshape((1624, 3856))
+      #Fixme: will need to be reshaped 
+      soc = np.fromfile(self._soc_input, dtype = np.float32)
       print("ACTUAL SOC: ")
-      for line in open(self._soc_input,encoding = "ISO-8859-1"):
-          print(line)
+      for x in soc:
+          print(x)
 
   def output_hdf5_files(self):
     return self._output_hdf5_files
