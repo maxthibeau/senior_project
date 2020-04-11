@@ -9,11 +9,11 @@ class SelectConfigFile(BasePage):
     # config file browser
     # NOTE: make textbox for file name
     title = QtWidgets.QLabel("1. Configuration File Selection")
-    title.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
+    title.setFont(QtGui.QFont("SansSerif", 18, QtGui.QFont.Bold))
     self.file_name = QtWidgets.QLabel("Please select a Configuration File: ")
-    self.file_name.setFont(QtGui.QFont("Times", 13))
+    self.file_name.setFont(QtGui.QFont("SansSerif", 13))
     self.file_box = QtWidgets.QLineEdit("Choose a file (.cfg)")
-    self.file_box.setFont(QtGui.QFont("Times", 8, QtGui.QFont.Light))
+    self.file_box.setFont(QtGui.QFont("SansSerif", 8, QtGui.QFont.Light))
     self.file_box.setReadOnly(True)
     self.file_box.setFixedSize(400,50)
 
@@ -38,7 +38,7 @@ class SelectConfigFile(BasePage):
     next_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     next_btn.setToolTip('Select PFT')
     next_btn.clicked.connect(self.next_page)
-    next_btn.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
+    next_btn.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
     next_btn.setFixedSize(250,75)
     # previous page
     #prev_btn = QtWidgets.QPushButton("Opening Screen")

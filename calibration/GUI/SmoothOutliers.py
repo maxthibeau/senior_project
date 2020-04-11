@@ -26,23 +26,23 @@ class SmoothOutliers(BasePage):
     else: # self.gpp_or_reco == "RECO"
         self.outlier_label = QtWidgets.QLabel("4. "+self.gpp_or_reco+" Outlier Removal")
         self.outlier_label.setToolTip(tooltip["RECO"])
-    self.outlier_label.setFont(QtGui.QFont("Times", 13))
+    self.outlier_label.setFont(QtGui.QFont("SansSerif", 13))
     self.outlier_label.setAlignment(Qt.AlignCenter)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
-    self.pft_label.setFont(QtGui.QFont("Times", 11))
+    self.pft_label.setFont(QtGui.QFont("SansSerif", 11))
     self.pft_label.setAlignment(Qt.AlignCenter)
 
     # display number of outliers removed
     self.num_outliers_removed_label = QtWidgets.QLabel("# of outliers removed: 5")
     self.num_outliers_removed_label.setVisible(False)
-    self.num_outliers_removed_label.setFont(QtGui.QFont("Times", 8, QtGui.QFont.Bold))
+    self.num_outliers_removed_label.setFont(QtGui.QFont("SansSerif", 8, QtGui.QFont.Bold))
     self.elements_removed_layout = QtWidgets.QHBoxLayout()
     self.elements_removed_layout.addWidget(self.num_outliers_removed_label)
 
     # let user select smoothing parameters
     self.smoothing_selection_label = QtWidgets.QLabel('Select Smoothing Parameters:')
     self.smoothing_selection_label.setStyleSheet("text-decoration: underline;")
-    self.smoothing_selection_label.setFont(QtGui.QFont("Times", 10, QtGui.QFont.Bold))
+    self.smoothing_selection_label.setFont(QtGui.QFont("SansSerif", 10, QtGui.QFont.Bold))
 
     #self.window_selector_label = QtWidgets.QLabel("Window Type:")
     #self.window_selector = QtWidgets.QComboBox()
@@ -51,15 +51,15 @@ class SmoothOutliers(BasePage):
     self.window_size_label = QtWidgets.QLabel("Window Size (needs to be a float > 0):")
     self.window_size = QtWidgets.QLineEdit(self)
     self.window_size.setPlaceholderText("Required")
-    self.window_size.setFont(QtGui.QFont("Times", 10))
+    self.window_size.setFont(QtGui.QFont("SansSerif", 10))
     self.window_size.setFixedSize(225,50)
-    self.window_size_label.setFont(QtGui.QFont("Times", 10))
+    self.window_size_label.setFont(QtGui.QFont("SansSerif", 10))
     
     # give user navigation abilities
     smooth_button = QtWidgets.QPushButton("Smooth Data")
     smooth_button.setToolTip('Remove outliers (spikes) in the flux tower GPP')
     smooth_button.setFixedSize(250,50)
-    smooth_button.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
+    smooth_button.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
     smooth_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     
     self.smoothing_selection_layout = QtWidgets.QHBoxLayout()
@@ -78,8 +78,8 @@ class SmoothOutliers(BasePage):
     
     next_page.setFixedSize(250,75)
     prev_page.setFixedSize(250,75)
-    next_page.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
-    prev_page.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
+    next_page.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
+    prev_page.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
     next_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     prev_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     
