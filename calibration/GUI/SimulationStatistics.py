@@ -5,9 +5,9 @@ class SimulationStatistics(BasePage):
    def __init__(self, width, height, page_title):
       BasePage.__init__(self, width, height)
       page_label = QtWidgets.QLabel("14. Simulation Completed")
-      page_label.setFont(QtGui.QFont("Times", 13))
+      page_label.setFont(QtGui.QFont("SansSerif", 13))
       self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
-      self.pft_label.setFont(QtGui.QFont("Times", 11))
+      self.pft_label.setFont(QtGui.QFont("SansSerif", 11))
 
       info_label = QtWidgets.QLabel("Simulation Statistics:")
 
@@ -53,9 +53,15 @@ class SimulationStatistics(BasePage):
       #gives user option to continue to exit the program
       exit_button = QtWidgets.QPushButton("Exit")
       exit_button.setToolTip('Quits the Program')
+      exit_button.setFixedSize(250,75)
+      exit_button.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
+      exit_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
       exit_button.clicked.connect(self.exit)
       # move on to next page
       next_button = QtWidgets.QPushButton("Select Next PFT")
+      next_button.setFixedSize(250,75)
+      next_button.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
+      next_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
       next_button.clicked.connect(self.next_page)
       button_layout = QtWidgets.QHBoxLayout()
       button_layout.addWidget(exit_button)

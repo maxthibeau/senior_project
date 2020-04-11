@@ -16,7 +16,7 @@ class OpeningScreen(BasePage):
     begin_calibration_button.setToolTip('Start the calibration process')
     begin_calibration_button.clicked.connect(self.next_page)
     begin_calibration_button.setFixedSize(400,100)
-    begin_calibration_button.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
+    begin_calibration_button.setFont(QtGui.QFont("SansSerif", 18, QtGui.QFont.Bold))
 
     # create layout
     img_layout = QtWidgets.QHBoxLayout()

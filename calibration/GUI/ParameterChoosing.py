@@ -12,10 +12,10 @@ class ParameterChoosing(BasePage):
        self.param_label = QtWidgets.QLabel("7. "+gpp_or_reco+" Optimization Parameters")
     else:
        self.param_label = QtWidgets.QLabel("11. "+gpp_or_reco+" Optimization Parameters")
-    self.param_label.setFont(QtGui.QFont("Times", 18))
+    self.param_label.setFont(QtGui.QFont("SansSerif", 18))
     #self.param_label.move(0,-100)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
-    self.pft_label.setFont(QtGui.QFont("Times", 15))
+    self.pft_label.setFont(QtGui.QFont("SansSerif", 15))
     
     self.top_layout = QtWidgets.QVBoxLayout()
     self.top_layout.addWidget(self.param_label,alignment=Qt.AlignCenter)
@@ -24,7 +24,7 @@ class ParameterChoosing(BasePage):
 
     for param in self.params:
       checkbox = QtWidgets.QCheckBox(param)
-      checkbox.setFont(QtGui.QFont("Times", 10))
+      checkbox.setFont(QtGui.QFont("SansSerif", 10))
       #Source: https://stackoverflow.com/questions/41784184/how-to-resize-qcheckbox
       checkbox.setStyleSheet("QCheckBox::indicator { width: 25px; height: 25px; }") #May have to change the check image to an image of a higher resolution
       if param in tooltip:
@@ -32,7 +32,7 @@ class ParameterChoosing(BasePage):
       self.param_checkboxes.append(checkbox)
 
     self.select_parameters_label = QtWidgets.QLabel("Select Parameters To Optimize")
-    self.select_parameters_label.setFont(QtGui.QFont("Times", 11,QtGui.QFont.Bold))
+    self.select_parameters_label.setFont(QtGui.QFont("SansSerif", 11,QtGui.QFont.Bold))
     self.select_parameters_label.setAlignment(Qt.AlignHCenter)
     #self.select_parameters_label.setStyleSheet("text-decoration: underline;")
 
@@ -56,13 +56,13 @@ class ParameterChoosing(BasePage):
     
     self.optimize_button = QtWidgets.QPushButton("Optimize Parameters")
     self.optimize_button.setFixedSize(250,75)
-    self.optimize_button.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
+    self.optimize_button.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
     self.optimize_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     self.optimize_button.clicked.connect(self.next_page)
     
     self.prev_page_button = QtWidgets.QPushButton("Re-display old RAMP functions")
     self.prev_page_button.setFixedSize(250,75)
-    self.prev_page_button.setFont(QtGui.QFont("Times", 9, QtGui.QFont.Bold))
+    self.prev_page_button.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
     self.prev_page_button.clicked.connect(self.prev_page)
     self.prev_page_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
