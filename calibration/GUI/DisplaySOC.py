@@ -19,7 +19,7 @@ class DisplaySOC(BasePage):
     self.canvas.draw()
 
     page_label = QtWidgets.QLabel("13. SOC Estimation Graph")
-    page_label.setFont(QtGui.QFont("SansSerif", 13))
+    page_label.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
     page_label.setAlignment(Qt.AlignCenter)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1))
     self.pft_label.setFont(QtGui.QFont("SansSerif", 11))

@@ -9,16 +9,17 @@ class SelectConfigFile(BasePage):
     # config file browser
     # NOTE: make textbox for file name
     title = QtWidgets.QLabel("1. Configuration File Selection")
-    title.setFont(QtGui.QFont("SansSerif", 18, QtGui.QFont.Bold))
+    title.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
     self.file_name = QtWidgets.QLabel("Please select a Configuration File: ")
-    self.file_name.setFont(QtGui.QFont("SansSerif", 13))
+    self.file_name.setFont(QtGui.QFont("SansSerif", 12))
     self.file_box = QtWidgets.QLineEdit("Choose a file (.cfg)")
-    self.file_box.setFont(QtGui.QFont("SansSerif", 8, QtGui.QFont.Light))
+    self.file_box.setFont(QtGui.QFont("SansSerif", 11, QtGui.QFont.Light))
     self.file_box.setReadOnly(True)
     self.file_box.setFixedSize(400,50)
 
     cfg_file_browser = QtWidgets.QPushButton("Browse Files")
     cfg_file_browser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+    cfg_file_browser.setFont(QtGui.QFont("SansSerif", 11))
     cfg_file_browser.setFixedSize(200,50)
     cfg_file_browser.clicked.connect(self.get_file)
 

@@ -50,7 +50,7 @@ class DisplayRAMP(BasePage):
     next_page.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
     prev_page.setFont(QtGui.QFont("SansSerif", 9, QtGui.QFont.Bold))
     
-    self.ramp_label.setFont(QtGui.QFont("SansSerif", 13))
+    self.ramp_label.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
     self.ramp_label.setAlignment(Qt.AlignCenter)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
     self.pft_label.setFont(QtGui.QFont("SansSerif", 11))

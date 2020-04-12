@@ -62,7 +62,7 @@ class ParameterDifference(BasePage):
     next_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     prev_page.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     
-    self.page_label.setFont(QtGui.QFont("SansSerif", 13))
+    self.page_label.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
     self.page_label.setAlignment(Qt.AlignCenter)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
     self.pft_label.setFont(QtGui.QFont("SansSerif", 11))

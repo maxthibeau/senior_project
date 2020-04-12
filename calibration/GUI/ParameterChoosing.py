@@ -12,10 +12,10 @@ class ParameterChoosing(BasePage):
        self.param_label = QtWidgets.QLabel("7. "+gpp_or_reco+" Optimization Parameters")
     else:
        self.param_label = QtWidgets.QLabel("11. "+gpp_or_reco+" Optimization Parameters")
-    self.param_label.setFont(QtGui.QFont("SansSerif", 18))
+    self.param_label.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
     #self.param_label.move(0,-100)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
-    self.pft_label.setFont(QtGui.QFont("SansSerif", 15))
+    self.pft_label.setFont(QtGui.QFont("SansSerif", 11))
     
     self.top_layout = QtWidgets.QVBoxLayout()
     self.top_layout.addWidget(self.param_label,alignment=Qt.AlignCenter)
@@ -24,7 +24,7 @@ class ParameterChoosing(BasePage):
 
     for param in self.params:
       checkbox = QtWidgets.QCheckBox(param)
-      checkbox.setFont(QtGui.QFont("SansSerif", 10))
+      checkbox.setFont(QtGui.QFont("SansSerif", 11))
       #Source: https://stackoverflow.com/questions/41784184/how-to-resize-qcheckbox
       checkbox.setStyleSheet("QCheckBox::indicator { width: 25px; height: 25px; }") #May have to change the check image to an image of a higher resolution
       if param in tooltip:

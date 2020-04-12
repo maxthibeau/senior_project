@@ -26,7 +26,7 @@ class SmoothOutliers(BasePage):
     else: # self.gpp_or_reco == "RECO"
         self.outlier_label = QtWidgets.QLabel("4. "+self.gpp_or_reco+" Outlier Removal")
         self.outlier_label.setToolTip(tooltip["RECO"])
-    self.outlier_label.setFont(QtGui.QFont("SansSerif", 13))
+    self.outlier_label.setFont(QtGui.QFont("SansSerif", 13,QtGui.QFont.Bold))
     self.outlier_label.setAlignment(Qt.AlignCenter)
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
     self.pft_label.setFont(QtGui.QFont("SansSerif", 11))
