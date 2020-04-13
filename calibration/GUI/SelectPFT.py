@@ -10,15 +10,15 @@ class SelectPFT(BasePage):
     tooltip = tooltips
 
     title = QtWidgets.QLabel("2. Plant Functional Type (PFT) Selection Page")
-    title.setFont(QtGui.QFont("SansSerif", 18, QtGui.QFont.Bold))
+    title.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
     # these widgets select a pft
     self.pft_selector_label = QtWidgets.QLabel("Select PFT (Hover over a PFT for additional information)")
     self.pft_selector_label.setToolTip("Select "+tooltip["PFT"])
-    self.pft_selector_label.setFont(QtGui.QFont("SansSerif", 12))
+    self.pft_selector_label.setFont(QtGui.QFont("SansSerif", 11))
     self.pft_selector = QtWidgets.QComboBox()
     self.pft_selector.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
     self.pft_selector.setFixedSize(350,75)
-    self.pft_selector.setFont(QtGui.QFont("SansSerif",12))
+    self.pft_selector.setFont(QtGui.QFont("SansSerif",11))
     self.pft_selector.addItem("Choose a PFT Here")
     self.pft_selector.setItemData(0,"Please select a pft from the list below",QtCore.Qt.ToolTipRole)
     self.pft_selector.addItem("Evergreen Needleleaf")
@@ -41,7 +41,7 @@ class SelectPFT(BasePage):
 
     self.error_message = QtWidgets.QLabel("Please choose a PFT before proceeding")
     self.error_message.setStyleSheet("color: red;")
-    self.error_message.setFont(QtGui.QFont("SansSerif", 9))
+    self.error_message.setFont(QtGui.QFont("SansSerif", 11))
     self.error_message.setVisible(False)
     # combine pft selection widgets into a layout
     top_layout = QtWidgets.QHBoxLayout()
