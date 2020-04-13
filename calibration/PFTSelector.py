@@ -7,7 +7,7 @@ class PFTSelector():
     # convert to string to make pft datatype flexible
     poss_pfts = list(map(str, poss_pfts))
     for pft in poss_pfts:
-      print(pft, end = ' ')
+      print(str(int(pft)+1), end = ' ')
     if not prev_pfts:
         print()
     else:
@@ -17,4 +17,5 @@ class PFTSelector():
     while pft_selected not in poss_pfts:
       print ("That's an invalid pft")
       pft_selected = input("Select a PFT:")
-    return pft_selected
+    pft_0_ind = (pft_selected - 1)
+    return pft_0_ind

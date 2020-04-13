@@ -30,25 +30,26 @@ class SOC:
       self.towers = flux_towers
       self.sigmas = self.calc_sigmas()
       self.beta_soc = self.calc_beta_soc() #only 1 soc for each different fmet,fstr,ropt,kstr,krec
+      print("SIGMAS: ",self.sigmas)
       self.estimated_soc = self.calc_estimate()
       print("Calculated SOC: ",self.estimated_soc)
       self.actual_soc = actual_soc
       print("Actual SOC: ",self.actual_soc)
-      self.display_graph()
+      if (len(self.towers)>1):
+          self.display_graph()
 
   def calc_sigmas(self): #from 10c in Procedure 3.3 in Requirements Draft Doc
       sigmas = []
       conv_1 = (1/len(self.towers))
-      for flux in self.towers: #for each tower
-          #tower = self.towers[flux]
-          kmult_star = 0.0
-          for k in self.kmult_365:
-             if not math.isnan(k):
-                 kmult_star += k
+      kmult_star = 0.0
+      for k in self.kmult_365:
+         if not math.isnan(k):
+             kmult_star += k
+      for i in range(len(self.towers)):
           npp_star = 0.0
-          for n in self.npp_365:
+          for n in self.npp_365[i]:
              if not math.isnan(n):
-                 npp_star += n
+                 npp_star += n #npp* for each tower
           conv_2 = npp_star/kmult_star
           sigma = conv_1 * conv_2
           sigmas.append(sigma)
@@ -67,6 +68,7 @@ class SOC:
         arr = []
         for i in range(len(self.towers)): #for each tower: sigma * Beta_soc
             val = self.sigmas[i] * self.beta_soc
+            print("(sigmas[i] = ",self.sigmas[i],") * (self.beta_soc = ",self.beta_soc,")")
             arr.append(val)
         return arr
 
@@ -76,7 +78,7 @@ class SOC:
   def display_graph(self):
          x = self.actual_soc
          y = self.estimated_soc
-         self.r_val = stats.pearsonr(x,y) #for display of r-val on graph
+         self.r_val = stats.pearsonr(round(x,3),round(y,3)) #for display of r-val on graph
          text = "Pearson's r-val = "+str(self.r_val)
          self.figure = plt.figure()
          ax = self.figure.add_subplot(111)

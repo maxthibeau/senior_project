@@ -106,10 +106,13 @@ class NewBPLUT():
             for val in vars_optimized:
                 label = self._gpp_labels[g]
                 print("Current ",label,": ",self[pft,label])
-                print("New Value: ",val)
                 old_val = self[pft,label]
                 self[pft,label] = val #updates cell in BPLUT
-                self.display_difference(old_val,val,label)
+                if(round(old_val,5) == round(val,5)):
+                    print("New Value: ",val," (No Difference)")
+                else:
+                    print("New Value: ",val)
+                #self.display_difference(old_val,val,label)
                 g+=1
         else: #gpp_or_reco == "RECO"
             print("BPLUT RECO Parameters")
@@ -117,16 +120,19 @@ class NewBPLUT():
             for val in vars_optimized:
                 label = self._reco_labels[r]
                 print("Current ",label,": ",self[pft,label])
-                print("New Value: ",val)
                 old_val = self[pft,label]
+                if(round(old_val,5) == round(val,5)):
+                    print("New Value: ",val," (No Difference)")
+                else:
+                    print("New Value: ",val)
                 if(r==2):
                   avg = val/3
                   self[pft,self._reco_labels[2]] = avg #updates Tsoil in BPLUT
                   self[pft,self._reco_labels[3]] = avg
                   self[pft,self._reco_labels[4]] = avg
-                  self.display_difference(old_val,val,"Tsoil")
+                  #self.display_difference(old_val,val,"Tsoil")
                   r = 5
                 else:
                   self[pft,label] = val  #updates cell in BPLUT
-                  self.display_difference(old_val,val,label)
+                  #self.display_difference(old_val,val,label)
                   r+=1

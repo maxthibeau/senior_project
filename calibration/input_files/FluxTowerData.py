@@ -81,7 +81,7 @@ class FluxTowerData():
      still_choosing = True
      while(still_choosing):
        try:
-         window = int(input("Please specify the number of days for the outlier smooting window size (whole number): "))
+         window = int(input("Please specify the number of days for the outlier smoothing window size (whole number): "))
        except ValueError:
          window = 0
        if(window > 0):
