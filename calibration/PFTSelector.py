@@ -14,8 +14,9 @@ class PFTSelector():
         print(" Previously Optimized PFTs:",prev_pfts)
 
     pft_selected = input("Select a PFT: ")
-    while pft_selected not in poss_pfts:
+    pft_0 = int(pft_selected) - 1
+    while str(pft_0) not in poss_pfts:
       print ("That's an invalid pft")
       pft_selected = input("Select a PFT:")
-    pft_0_ind = (pft_selected - 1)
-    return pft_0_ind
+      pft_0 = int(pft_selected) - 1
+    return pft_0

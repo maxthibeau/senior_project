@@ -68,10 +68,27 @@ class RECO:
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
-    rh_over_cbar = abs(self._observed_r_h / self._cbar) #did absolute to get rid of negatives
+    #rh_over_cbar = abs(self._observed_r_h / self._cbar) #did absolute to get rid of negatives
+    rh_over_cbar = self._observed_r_h / self._cbar
+    for i in range(len(rh_over_cbar)):
+        for val in rh_over_cbar[i]:
+            if(val<0):
+                rh_over_cbar[i] = 0
     fraut, bt_soil, SMSF_min, SMSF_max = self._reco_params
-    display_ramp(self._TSOIL, rh_over_cbar, kmult_arrhenius_curve, (bt_soil,), self._lue, "TSOIL", "Rh/Cbar")
-    display_ramp(self._SMSF, rh_over_cbar, upward_ramp_func, (SMSF_min, SMSF_max), self._lue, "SMSF", "Rh/Cbar")
+    choose = True
+    while choose:
+        try:
+          char = input("Would you like to view RECO Ramp Functions with the current BPLUT values? (y/n): ")
+        except ValueError:
+          char = -1
+        if(char=='n'):
+          choose = False
+        elif(char=='y'):
+          display_ramp(self._TSOIL, rh_over_cbar, kmult_arrhenius_curve, (bt_soil,), self._lue, "TSOIL", "Rh/Cbar")
+          display_ramp(self._SMSF, rh_over_cbar, upward_ramp_func, (SMSF_min, SMSF_max), self._lue, "SMSF", "Rh/Cbar")
+          choose = False
+        else:
+          print("Invalid value: please try again")
 
   def _simulate_reco(self, reco_params):
     fraut, bt_soil, smsf_min, smsf_max = reco_params
@@ -89,17 +106,40 @@ class RECO:
     return sse(self._observed_reco, simulated_reco, self._non_missing_obs, self._tower_weights)
 
   def rhc_v_kmult(self):
-    graph = RampFunction(self.calc_kmult(),self.reco,self.lue_vals,"Kmult","GPP")
-    print("Would you like to display the graph of Rh/Cbar vs Kmult?")
-    choice = char(input("Y for Yes, N for No: "))
-    if(choice.lower() == "y"):
-      graph.display_optional()
+    rh_over_cbar = self._observed_r_h / self._cbar
+    graph = RampFunction(self.get_kmult(),rh_over_cbar,self.lue_vals,"Kmult","GPP")
+    choose = True
+    while choose:
+        try:
+           choice = input("Would you like to display the optional graph of Rh/Cbar vs Kmult? (y/n):")
+        except ValueError:
+           choice = -1
+        if(choice=='n'):
+           choose = False
+        elif(choice=='y'):
+           graph.display_optional()
+           choose = False
+        else:
+           print("Invalid value: please try again")
 
   def get_kmult(self):
       return self._kmult
 
   def get_reco(self):
       return self.reco
+
+  def display_optimized_ramps(self,pft,new_bplut):
+    reco_params = new_bplut.reco_params(pft)
+    #rh_over_cbar = abs(self._observed_r_h / self._cbar) #did absolute to get rid of negatives
+    new_reco = self._simulate_reco(reco_params)
+    rh_over_cbar = self._observed_r_h / self._cbar
+    for i in range(len(rh_over_cbar)):
+        for val in rh_over_cbar[i]:
+            if(val<0):
+                rh_over_cbar[i] = 0
+    fraut, bt_soil, SMSF_min, SMSF_max = reco_params
+    display_ramp(self._TSOIL, rh_over_cbar, kmult_arrhenius_curve, (bt_soil,), self._lue, "TSOIL", "Rh/Cbar")
+    display_ramp(self._SMSF, rh_over_cbar, upward_ramp_func, (SMSF_min, SMSF_max), self._lue, "SMSF", "Rh/Cbar")
 
   #Gets user input for what outliers to include and exclude for the use of the RECO optimization process
   #(For the use of the command line interface version of the program)

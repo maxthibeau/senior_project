@@ -8,6 +8,7 @@ Created on Wed Jan 15 08:38:29 2020
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 from RampFunctions import *
 from funcs.gpp_funcs import *
 from funcs.ramp_func import *
@@ -20,6 +21,10 @@ class GPP:
   def __init__(self, pft, bplut, meteor_input, flux_tower_data):
     # from flux tower data
     self._observed_gpp = flux_tower_data.gpp()
+    #for val in self._observed_gpp: #getting rid of nans in observed GPP
+    #    for i in range(len(val)):
+    #        if math.isnan(self._observed_gpp[val][i]):
+    #            self._observed_gpp[val][i] = 0
     self._non_missing_obs = flux_tower_data.non_missing_observations()
     self._tower_weights = flux_tower_data.weights()
 
@@ -36,12 +41,14 @@ class GPP:
 
     self._set_apar_bounds()
 
+    self._simulated_gpp = gpp_apar(self._APAR, self._VPD, self._TMIN, self._SMRZ, self._TSURF, *bplut.gpp_params(pft))
+
   def _set_apar_bounds(self):
     self._APAR = self._FPAR * self._PAR
     # prompt user for APAR bounds
     select_apar_bounds = None
     while (select_apar_bounds not in ("y", "n")):
-      select_apar_bounds = input("would you like to specifiy APAR bounds?(y/n): ")
+      select_apar_bounds = input("Would you like to specifiy APAR bounds? (y/n): ")
     if select_apar_bounds == "y":
       self._apar_low_bound = float(input("Input a lower bound for apar (float): "))
       self._apar_high_bound = float(input("Input a higher bound for apar (float): "))
@@ -59,23 +66,56 @@ class GPP:
     return sse(self._observed_gpp, self._simulated_gpp, self._non_missing_obs, self._tower_weights)
 
   def simulated_gpp(self):
-    # FIXME: make this simulated gpp
-    return self._observed_gpp #self._simulated_gpp
+    return self._simulated_gpp
 
   #uses RampFunction class to display the ramp function graphs
   def display_ramps(self):
     gpp_over_apar = self._observed_gpp / (self._APAR)
     lue, vpd_min, vpd_max, tmin_min, tmin_max, smrz_min, smrz_max, _, _ = self._gpp_params
-    display_ramp(self._VPD, gpp_over_apar, downward_ramp_func, (vpd_min, vpd_max), lue, "VPD", "GPP/APAR")
-    display_ramp(self._TMIN, gpp_over_apar, upward_ramp_func, (tmin_min, tmin_max), lue, "TMIN", "GPP/APAR")
-    display_ramp(self._SMRZ, gpp_over_apar, upward_ramp_func, (smrz_min, smrz_max), lue, "SMRZ", "GPP/APAR")
+    choose = True
+    while choose:
+        try:
+          char = input("Would you like to view GPP Ramp Functions with the current BPLUT values? (y/n): ")
+        except ValueError:
+          char = -1
+        if(char=='n'):
+          choose = False
+        elif(char=='y'):
+          display_ramp(self._VPD, gpp_over_apar, downward_ramp_func, (vpd_min, vpd_max), lue, "VPD", "GPP/APAR")
+          display_ramp(self._TMIN, gpp_over_apar, upward_ramp_func, (tmin_min, tmin_max), lue, "TMIN", "GPP/APAR")
+          display_ramp(self._SMRZ, gpp_over_apar, upward_ramp_func, (smrz_min, smrz_max), lue, "SMRZ", "GPP/APAR")
+          choose = False
+        else:
+          print("Invalid value: please try again")
 
-  def display_gpp_v_emult(self):
-    graph = RampFunction(self.e_mult,self.gpp,self.lue_vals,"Emult","GPP")
-    print("Would you like to display the graph of GPP vs Emult?")
-    choice = char(input("Y for Yes, N for No: "))
-    if(choice.lower() == "y"):
-      graph.display_optional()
+  def gpp_v_emult(self,pft,bplut,gpp_params):
+    emults = emult(self._VPD, self._TMIN, self._SMRZ,  self._TSURF, *gpp_params)
+    print("EMULTS: ",emults)
+    graph = RampFunction(emults,self._observed_gpp,bplut[pft,"LUEmax"],"Emult","GPP")
+    choose = True
+    while choose:
+        try:
+           choice = input("Would you like to display the optional graph of GPP vs Emult? (y/n): ")
+        except ValueError:
+          choice = -1
+        if(choice == 'n'):
+          choose = False
+        elif(choice == 'y'):
+          graph.display_optional()
+          choose = False
+        else:
+          print("Invalid value: please try again")
+
+  def display_optimized_ramps(self,pft,new_bplut):
+    print("OBSERVED GPP: ",self._observed_gpp)
+    print("SIMMED GPP: ",self._simulated_gpp)
+    gpp_params = new_bplut.gpp_params(pft)
+    #can get RuntimeWarning here
+    sim_gpp_over_apar = self._simulated_gpp / (self._APAR)
+    lue, vpd_min, vpd_max, tmin_min, tmin_max, smrz_min, smrz_max, _, _ = gpp_params
+    display_ramp(self._VPD, sim_gpp_over_apar, downward_ramp_func, (vpd_min, vpd_max), lue, "VPD", "GPP/APAR")
+    display_ramp(self._TMIN, sim_gpp_over_apar, upward_ramp_func, (tmin_min, tmin_max), lue, "TMIN", "GPP/APAR")
+    display_ramp(self._SMRZ, sim_gpp_over_apar, upward_ramp_func, (smrz_min, smrz_max), lue, "SMRZ", "GPP/APAR")
 
   #Gets user input for what outliers to include and exclude for the use of the GPP optimization process
   #(For the use of the command line interface version of the program)

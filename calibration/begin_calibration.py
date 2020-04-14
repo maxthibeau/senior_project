@@ -11,6 +11,9 @@ from datetime import date
 #from PreliminarySpinUp import *
 from scipy.optimize import minimize
 
+#for Ubuntu (Windows) dispalys
+#export DISPLAY=:0.0
+
 def main(argv):
   if len(argv) < 1:
     print ("usage: <config file>")
@@ -61,26 +64,26 @@ def main(argv):
 
      # GPP optimization process
      gpp_optimizer = GPP(pft, bplut, meteor_input, flux_tower_data)
-     simulated_gpp = gpp_optimizer.simulated_gpp()
      gpp_optimizer.display_ramps()
+     #gpp_optimizer.gpp_v_emult(pft, bplut, bplut.gpp_params(pft))
+     simulated_gpp = gpp_optimizer.simulated_gpp()
      res = minimize(gpp_optimizer.func_to_optimize, bplut.gpp_params(pft)) #new optimized GPP parameter array
-     print("*** PFT ",pft, " ***")
-     print("GPP: ",bplut.gpp_params(pft))
-     print("Optimized GPP: ",res.x)
+     print("*** PFT ",(pft+1), " ***")
+     print("Number of Tower Sites that are PFT",(pft+1),"Dominant : ",len(flux_tower_data.towers()))
      #actual updating of GPP vals in BPLUT for pft
      bplut.after_optimization("GPP",pft,res.x)
+     gpp_optimizer.display_optimized_ramps(pft,bplut)
 
      # RECO optimization process
      reco_optimizer = RECO(pft, bplut, simulated_gpp, meteor_input, flux_tower_data)
      reco_optimizer.display_ramps()
+     #reco_optimizer.rhc_v_kmult()
      res = minimize(reco_optimizer.func_to_optimize, bplut.reco_params(pft)) #new optimized RECO parameter array
-     print("RECO: ",bplut.reco_params(pft))
-     print("Optimized RECO: ",res.x)
      #actual updating of RECO vals in BPLUT for pft
      bplut.after_optimization("RECO",pft,res.x)
+     reco_optimizer.display_optimized_ramps(pft,bplut)
 
      #SOC calculation
-     # soc = np.fromfile("../DataFiles/igbp_soc_M09smapMergedCalVal.flt32", dtype=np.float32)
      analytical_spin = AnalyticalModelSpinUp(reco_optimizer.get_kmult(), simulated_gpp, float(bplut[pft,'fmet']), float(bplut[pft,'fstr']), float(bplut[pft,'kopt']), float(bplut[pft,'kstr']), float(bplut[pft,'kslw']),float(bplut[pft,'fraut']))
      soc_calc = SOC(pft,bplut,flux_tower_data.towers(),analytical_spin.summed_kmults(),analytical_spin.get_npps(),flux_tower_data.socs())
      #numerical_spin =  NumericalModelSpinUp(simulated_gpp, analytical_spin.summed_kmults(), soc_calc.get_litterfall(), pft, float(bplut[pft,'kopt']),float(bplut[pft,'kstr']), float(bplut[pft,'kslw']), float(bplut[pft,'fmet']), float(bplut[pft,'fstr']),float(bplut[pft,'fraut']), analytical_spin)

@@ -30,11 +30,11 @@ class SOC:
       self.towers = flux_towers
       self.sigmas = self.calc_sigmas()
       self.beta_soc = self.calc_beta_soc() #only 1 soc for each different fmet,fstr,ropt,kstr,krec
-      print("SIGMAS: ",self.sigmas)
+      self.max_soc = 0.0
       self.estimated_soc = self.calc_estimate()
-      print("Calculated SOC: ",self.estimated_soc)
+      #print("Calculated SOC: ",self.estimated_soc)
       self.actual_soc = actual_soc
-      print("Actual SOC: ",self.actual_soc)
+      #print("Actual SOC: ",self.actual_soc)
       if (len(self.towers)>1):
           self.display_graph()
 
@@ -68,8 +68,17 @@ class SOC:
         arr = []
         for i in range(len(self.towers)): #for each tower: sigma * Beta_soc
             val = self.sigmas[i] * self.beta_soc
-            print("(sigmas[i] = ",self.sigmas[i],") * (self.beta_soc = ",self.beta_soc,")")
+            if val > self.max_soc:
+                self.max_soc = val
             arr.append(val)
+        if(self.max_soc < 1.0):
+            self.max_soc = 1.0
+        elif(self.max_soc < 10.0):
+            self.max_soc = 10.0
+        elif(self.max_soc < 50.0):
+            self.max_soc = 50.0
+        elif(self.max_soc < 100.0):
+            self.max_soc = 100.0
         return arr
 
   def get_litterfall(self):
@@ -78,8 +87,8 @@ class SOC:
   def display_graph(self):
          x = self.actual_soc
          y = self.estimated_soc
-         self.r_val = stats.pearsonr(round(x,3),round(y,3)) #for display of r-val on graph
-         text = "Pearson's r-val = "+str(self.r_val)
+         self.r_val = stats.pearsonr(x,y) #for display of r-val on graph, return r and p-val
+         text = "R = "+str(round(self.r_val[1],3))
          self.figure = plt.figure()
          ax = self.figure.add_subplot(111)
          ax.clear()
@@ -88,4 +97,5 @@ class SOC:
          ax.set_xlabel("IGBP SOC [kg C m^-2]") #ground truth SOC
          ax.set_ylabel("Estimated SOC [kg C m^-2]") #estimated/calculated SOC
          ax.text(0.05, 0.95,text,fontsize=14,transform=ax.transAxes,verticalalignment='top')
+         ax.set_ylim(-0.5,self.max_soc)
          plt.show()

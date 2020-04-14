@@ -105,7 +105,7 @@ class NewBPLUT():
             g = 0
             for val in vars_optimized:
                 label = self._gpp_labels[g]
-                print("Current ",label,": ",self[pft,label])
+                print("Current",label,": ",self[pft,label])
                 old_val = self[pft,label]
                 self[pft,label] = val #updates cell in BPLUT
                 if(round(old_val,5) == round(val,5)):
@@ -119,7 +119,7 @@ class NewBPLUT():
             r = 0
             for val in vars_optimized:
                 label = self._reco_labels[r]
-                print("Current ",label,": ",self[pft,label])
+                print("Current",label,": ",self[pft,label])
                 old_val = self[pft,label]
                 if(round(old_val,5) == round(val,5)):
                     print("New Value: ",val," (No Difference)")
