@@ -111,6 +111,11 @@ class NumericalModelSpinUp():
     self._c3_list.append(c3)
     self._cbar_list.append(cbar0)
 
+    print("Slow Pool Calculations: ",self._c1_list)
+    print("Medium Pool Calculations: ",self._c2_list)
+    print("Fast Pool Calculations: ",self._c3_list)
+    print("Initial CBar: ",self._cbar_list)
+
   def c1_list(self):
     return self._c1_list
 

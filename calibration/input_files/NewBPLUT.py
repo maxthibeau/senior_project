@@ -99,7 +99,7 @@ class NewBPLUT():
 
     #to be done after each optimization (GPP/RECO) steps
     def after_optimization(self, gpp_or_reco, pft, vars_optimized):
-        print("PFT = ",pft)
+        #print("PFT = ",pft)
         if(gpp_or_reco == "GPP"):
             print("BPLUT GPP Parameters")
             g = 0

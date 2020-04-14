@@ -84,6 +84,9 @@ class SOC:
   def get_litterfall(self):
       return self.avg_litterfall
 
+  def get_rval(self):
+      return self.r_val
+
   def display_graph(self):
          x = self.actual_soc
          y = self.estimated_soc

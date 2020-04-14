@@ -21,23 +21,24 @@ class GPP:
   def __init__(self, pft, bplut, meteor_input, flux_tower_data):
     # from flux tower data
     self._observed_gpp = flux_tower_data.gpp()
-    #for val in self._observed_gpp: #getting rid of nans in observed GPP
-    #    for i in range(len(val)):
-    #        if math.isnan(self._observed_gpp[val][i]):
-    #            self._observed_gpp[val][i] = 0
+    self._observed_gpp = self.clean_nans(self._observed_gpp)
     self._non_missing_obs = flux_tower_data.non_missing_observations()
     self._tower_weights = flux_tower_data.weights()
 
     self._gpp_params = bplut.gpp_params(pft)
     # from meteor input
     self._VPD = meteor_input.VPD()
+    self._VPD = self.clean_nans(self._VPD)
     self._TMIN = meteor_input.TMIN()
+    self._TMIN = self.clean_nans(self._TMIN)
     self._SMRZ = meteor_input.SMRZ()
+    self._SMRZ = self.clean_nans(self._SMRZ)
     self._FPAR = meteor_input.FPAR()
     # FPAR is 81 length array, observed gpp is a scalar, take mean to make dimensionality match
     self._FPAR = np.mean(self._FPAR, axis = 1)
     self._PAR = meteor_input.PAR()
     self._TSURF = meteor_input.TSURF()
+    self._TSURF = self.clean_nans(self._TSURF)
 
     self._set_apar_bounds()
 
@@ -116,6 +117,14 @@ class GPP:
     display_ramp(self._VPD, sim_gpp_over_apar, downward_ramp_func, (vpd_min, vpd_max), lue, "VPD", "GPP/APAR")
     display_ramp(self._TMIN, sim_gpp_over_apar, upward_ramp_func, (tmin_min, tmin_max), lue, "TMIN", "GPP/APAR")
     display_ramp(self._SMRZ, sim_gpp_over_apar, upward_ramp_func, (smrz_min, smrz_max), lue, "SMRZ", "GPP/APAR")
+
+  def clean_nans(self,array): #array input
+    for i in range(len(array)): #getting rid of nans in observed GPP
+        arr = array[i]
+        for x in range(len(arr)):
+          if math.isnan(arr[x]) or arr[x]<0:
+              arr[x] = 0
+    return array
 
   #Gets user input for what outliers to include and exclude for the use of the GPP optimization process
   #(For the use of the command line interface version of the program)

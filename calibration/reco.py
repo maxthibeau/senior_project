@@ -134,9 +134,10 @@ class RECO:
     new_reco = self._simulate_reco(reco_params)
     rh_over_cbar = self._observed_r_h / self._cbar
     for i in range(len(rh_over_cbar)):
-        for val in rh_over_cbar[i]:
-            if(val<0):
-                rh_over_cbar[i] = 0
+        arr = rh_over_cbar[i]
+        for val in range(len(arr)):
+            if(arr[val]<0):
+                arr[val] = 0
     fraut, bt_soil, SMSF_min, SMSF_max = reco_params
     display_ramp(self._TSOIL, rh_over_cbar, kmult_arrhenius_curve, (bt_soil,), self._lue, "TSOIL", "Rh/Cbar")
     display_ramp(self._SMSF, rh_over_cbar, upward_ramp_func, (SMSF_min, SMSF_max), self._lue, "SMSF", "Rh/Cbar")
