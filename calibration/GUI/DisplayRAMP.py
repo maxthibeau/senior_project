@@ -4,7 +4,8 @@ class DisplayRAMP(BasePage):
 
   def __init__(self, width, height, page_title, gpp_or_reco, params_to_graph, optional_graph_widget, optional_graph_name):
     BasePage.__init__(self, width, height)
-
+    
+    self.pft = ""
     self._optional_graph_widget = optional_graph_widget
 
     self.param_to_data = {}
@@ -119,4 +120,9 @@ class DisplayRAMP(BasePage):
     ax.set_xlabel(current_param)
     ax.set_ylabel(self.gpp_or_reco)
     self.canvas.draw()
+  
+  def set_pft(self,pft):
+    self.pft = pft
+    self.pft_label.setText("Current PFT: "+self.pft)
+    self.next_page_ob.set_pft(pft)
     

@@ -4,7 +4,8 @@ class ParameterDifference(BasePage):
 
   def __init__(self, width, height, page_title, optimized_params, gpp_or_reco, ramp_page):
     BasePage.__init__(self, width, height)
-
+    
+    self.pft = ""
     self.optimized_params = optimized_params
     self._ramp_page = ramp_page
     self.param_to_data = {}
@@ -123,3 +124,8 @@ class ParameterDifference(BasePage):
   def redisplay_ramp_funcs(self):
     self._ramp_page.show()
     self.hide()
+  
+  def set_pft(self,pft):
+    self.pft = pft
+    self.pft_label.setText("Current PFT: "+self.pft)
+    self.next_page_ob.set_pft(pft)

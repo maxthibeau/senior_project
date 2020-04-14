@@ -83,6 +83,8 @@ class SelectPFT(BasePage):
       self.error_message.setVisible(True)
     else:
       self.error_message.setVisible(False)
+      #print(self.pft_selector.itemText(1))
+      self.next_page_ob.set_pft(self.pft_selector.itemText(self.pft_selector.currentIndex()))
       self.next_page(self.pft_selector.currentIndex()-1) #subtract 1 since first option is not a PFT
 
   def update_pft(self,value): #value = self.pft_selector.currentIndex()
