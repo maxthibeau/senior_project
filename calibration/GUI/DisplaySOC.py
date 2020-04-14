@@ -6,6 +6,7 @@ class DisplaySOC(BasePage):
     BasePage.__init__(self, width, height)
 
     data = [[random.random() for i in range(10)], [random.random() for j in range(10)]]
+    self.pft = ""
     self.figure = plt.figure()
     self.canvas = FigureCanvas(self.figure)
     self.toolbar = NavigationToolbar(self.canvas, self)
@@ -46,3 +47,8 @@ class DisplaySOC(BasePage):
     main_layout.addLayout(bottom_layout)
     self.setLayout(main_layout)
     self.setWindowTitle(page_title)
+  
+  def set_pft(self,pft):
+    self.pft = pft
+    self.pft_label.setText("Current PFT: "+self.pft)
+    self.next_page_ob.set_pft(pft)

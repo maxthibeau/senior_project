@@ -5,6 +5,7 @@ class ParameterChoosing(BasePage):
   def __init__(self, width, height, page_title, params, tooltips, gpp_or_reco):
     BasePage.__init__(self, width, height)
     tooltip = tooltips
+    self.pft = ""
     self.params = params
     self.param_checkboxes = []
 
@@ -97,3 +98,8 @@ class ParameterChoosing(BasePage):
       self.select_parameters_label.setStyleSheet("color: red; text-decoration: underline;")
     else:
       BasePage.next_page(self)
+  
+  def set_pft(self,pft):
+    self.pft = pft
+    self.pft_label.setText("Current PFT: "+self.pft)
+    self.next_page_ob.set_pft(pft)

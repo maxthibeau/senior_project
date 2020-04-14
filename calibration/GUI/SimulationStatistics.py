@@ -6,6 +6,7 @@ class SimulationStatistics(BasePage):
       BasePage.__init__(self, width, height)
       page_label = QtWidgets.QLabel("14. Simulation Completed")
       page_label.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
+      self.pft = ""
       self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
       self.pft_label.setFont(QtGui.QFont("SansSerif", 11))
 
@@ -104,5 +105,10 @@ class SimulationStatistics(BasePage):
       self.hide()
       exit()
    def next_page(self):
+      self.next_window.connect(self.next_page_ob.show)
       self.next_window.emit()
       self.hide()
+   
+   def set_pft(self,pft):
+    self.pft = pft
+    self.pft_label.setText("Current PFT: "+self.pft)

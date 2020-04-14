@@ -8,6 +8,7 @@ class EnterRecoHyperparams(BasePage):
     page_label = QtWidgets.QLabel("9. Choose a Prh and Pk (Between 0 and 1)")
     page_label.setToolTip('Prh (Percentile of RH/Kmult to use in SOC pools) and Pk (Percentile to use as minimum threshold for acceptable Kmult values)')
     page_label.setFont(QtGui.QFont("SansSerif", 13,QtGui.QFont.Bold))
+    self.pft = ""
     self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
     self.pft_label.setFont(QtGui.QFont("SansSerif", 11))
 
@@ -125,5 +126,11 @@ class EnterRecoHyperparams(BasePage):
       self.Pk_error_label.setVisible(False)
       
     if self.valid_value(Prh) and self.valid_value(Pk):
+      self.next_window.connect(self.next_page_ob.show)
       self.next_window.emit()
       self.hide()
+  
+  def set_pft(self,pft):
+    self.pft = pft
+    self.pft_label.setText("Current PFT: "+self.pft)
+    self.next_page_ob.set_pft(pft)

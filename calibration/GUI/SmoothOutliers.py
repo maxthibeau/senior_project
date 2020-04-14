@@ -6,6 +6,7 @@ class SmoothOutliers(BasePage):
     BasePage.__init__(self, width, height)
     tooltip = tooltips
     self.data_smoothed = False
+    self.pft = ""
 
     self.gpp_or_reco = gpp_or_reco
     assert self.gpp_or_reco in ("GPP", "RECO")
@@ -28,7 +29,7 @@ class SmoothOutliers(BasePage):
         self.outlier_label.setToolTip(tooltip["RECO"])
     self.outlier_label.setFont(QtGui.QFont("SansSerif", 13,QtGui.QFont.Bold))
     self.outlier_label.setAlignment(Qt.AlignCenter)
-    self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
+    self.pft_label = QtWidgets.QLabel("Current PFT: ") #TODO: change to get correct pft ind
     self.pft_label.setFont(QtGui.QFont("SansSerif", 11))
     self.pft_label.setAlignment(Qt.AlignCenter)
 
@@ -137,7 +138,13 @@ class SmoothOutliers(BasePage):
   def next_page(self):
     if self.data_smoothed:
       self.window_size_label.setStyleSheet("color: black;")
+      self.next_window.connect(self.next_page_ob.show)
       self.next_window.emit()
       self.close()
     else:
       self.window_size_label.setStyleSheet("color: red;")
+      
+  def set_pft(self,pft):
+    self.pft = pft
+    self.pft_label.setText("Current PFT: "+self.pft)
+    self.next_page_ob.set_pft(pft)

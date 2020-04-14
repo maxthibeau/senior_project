@@ -82,5 +82,6 @@ class SelectConfigFile(BasePage):
       self.file_box.setStyleSheet("color: red;")
       self.file_box.setText("Please select a valid config file")
     else:
+      self.next_window.connect(self.next_page_ob.show)
       self.next_window.emit()
       self.hide()

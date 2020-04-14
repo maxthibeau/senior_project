@@ -4,6 +4,7 @@ class NumericalSpinups(BasePage):
 
    def __init__(self, width, height, page_title):
       BasePage.__init__(self, width, height)
+      self.pft = ""
       self.step_label = QtWidgets.QLabel("13. Numerical Spin-Up Iterations")
       self.step_label.setFont(QtGui.QFont("SansSerif", 13, QtGui.QFont.Bold))
       self.pft_label = QtWidgets.QLabel("Current PFT: "+self.pft_chooser(1)) #TODO: change to get correct pft ind
@@ -61,5 +62,11 @@ class NumericalSpinups(BasePage):
         self.page_label.setStyleSheet("color: red;")
 
       if self.valid_value(num):
+        self.next_window.connect(self.next_page_ob.show)
         self.next_window.emit()
         self.hide()
+  
+   def set_pft(self,pft):
+     self.pft = pft
+     self.pft_label.setText("Current PFT: "+self.pft)
+     self.next_page_ob.set_pft(pft)
