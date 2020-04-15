@@ -2,10 +2,10 @@
 Run the setup.sh script to get started.
 
 ### CLI
-calibration$ python3 begin_calibration.py
+../calibration $ python3 begin_calibration.py
 
 ### GUI
-calibration$ python3 Controller.py
+../calibration $ python3 Controller.py
 
 ## DEPENDENCIES
 python3
