@@ -17,4 +17,8 @@ class Ramp():
 def Arrhenious(tsoil,b_tsoil):
   # (1/66.02) = 0.0151469252
   return math.exp(b_tsoil*(0.0151469252-(1/(tsoil-227.13))))
+
+# Root Mean Square Error
+def rmse(predicted_data, target_data):
+    return np.sqrt(((predicted_data - target_data) ** 2).mean())
   
