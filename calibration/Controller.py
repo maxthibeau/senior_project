@@ -13,7 +13,7 @@ from GUI.NumericalSpinups import *
 from GUI.SimulationStatistics import *
 #from GUI.TopBarLayout import *
 
-#for Mark's Ubuntu (Windows)
+#for Ubuntu (Windows)
 #export DISPLAY=:0.0
 
 class Controller:
@@ -128,7 +128,7 @@ class Controller:
                  keys,vals = line[0],line[1].strip("\n")
                  tooltipDict[keys] = vals
       return tooltipDict
-  
+
 def main(argv):
 
   width = 800
